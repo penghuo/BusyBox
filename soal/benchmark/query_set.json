@@ -1,0 +1,139 @@
+{
+    "name": "http_log_direct_query",
+    "description": "HTTP log direct query performance test",
+    "conf": "",
+    "test": [
+        {
+            "id": 1,
+            "operation": "sql",
+            "iterations": 1,
+            "query": "SELECT COUNT(*) FROM soal.http_logs_100M;"
+        },
+        {
+            "id": 2,
+            "operation": "sql",
+            "iterations": 1,
+            "query": "SELECT COUNT(*) FROM soal.http_logs_100M WHERE status <> 0;"
+        },
+        {
+            "id": 3,
+            "operation": "sql",
+            "iterations": 1,
+            "query": "SELECT COUNT(*), AVG(size) FROM soal.http_logs_100M;"
+        },
+        {
+            "id": 4,
+            "operation": "sql",
+            "iterations": 1,
+            "query": "SELECT AVG(CAST(size AS BIGINT)) FROM soal.http_logs_100M;"
+        },
+        {
+            "id": 5,
+            "operation": "sql",
+            "iterations": 1,
+            "query": "SELECT COUNT(DISTINCT clientip) FROM soal.http_logs_100M;"
+        },
+        {
+            "id": 6,
+            "operation": "sql",
+            "iterations": 1,
+            "query": "SELECT COUNT(DISTINCT request) FROM soal.http_logs_100M;"
+        },
+        {
+            "id": 7,
+            "operation": "sql",
+            "iterations": 1,
+            "query": "SELECT MIN(`@timestamp`), MAX(`@timestamp`) FROM soal.http_logs_100M;"
+        },
+        {
+            "id": 8,
+            "operation": "sql",
+            "iterations": 1,
+            "query": "SELECT status, COUNT(*) FROM soal.http_logs_100M WHERE status <> 0 GROUP BY status ORDER BY COUNT(*) DESC;"
+        },
+        {
+            "id": 9,
+            "operation": "sql",
+            "iterations": 1,
+            "query": "SELECT year, month, day, COUNT(DISTINCT clientip) AS u FROM soal.http_logs_100M GROUP BY year, month, day ORDER BY u DESC LIMIT 10;"
+        },
+        {
+            "id": 10,
+            "operation": "sql",
+            "iterations": 1,
+            "query": "SELECT year, month, day, COUNT(*) AS c, AVG(size), COUNT(DISTINCT clientip) FROM soal.http_logs_100M GROUP BY year, month, day ORDER BY c DESC LIMIT 10;"
+        },
+        {
+            "id": 11,
+            "operation": "sql",
+            "iterations": 1,
+            "query": "SELECT clientip, COUNT(DISTINCT clientip) AS u FROM soal.http_logs_100M WHERE clientip <> '' GROUP BY clientip ORDER BY u DESC LIMIT 10;"
+        },
+        {
+            "id": 12,
+            "operation": "sql",
+            "iterations": 1,
+            "query": "SELECT request, COUNT(DISTINCT clientip) AS u FROM soal.http_logs_100M WHERE request <> '' GROUP BY request ORDER BY u DESC LIMIT 10;"
+        },
+        {
+            "id": 13,
+            "operation": "sql",
+            "iterations": 1,
+            "query": "SELECT request, COUNT(*) AS c FROM soal.http_logs_100M WHERE request <> '' GROUP BY request ORDER BY c DESC LIMIT 10;"
+        },
+        {
+            "id": 14,
+            "operation": "sql",
+            "iterations": 1,
+            "query": "SELECT clientip, COUNT(*) FROM soal.http_logs_100M GROUP BY clientip ORDER BY COUNT(*) DESC LIMIT 10;"
+        },
+        {
+            "id": 15,
+            "operation": "sql",
+            "iterations": 1,
+            "query": "SELECT clientip, request, COUNT(*) FROM soal.http_logs_100M GROUP BY clientip, request ORDER BY COUNT(*) DESC LIMIT 10;"
+        },
+        {
+            "id": 16,
+            "operation": "sql",
+            "iterations": 1,
+            "query": "SELECT * FROM soal.http_logs_100M ORDER BY `@timestamp` LIMIT 10;"
+        },
+        {
+            "id": 17,
+            "operation": "sql",
+            "iterations": 1,
+            "query": "SELECT COUNT(*) FROM soal.http_logs_100M WHERE request LIKE '%google%';"
+        },
+        {
+            "id": 18,
+            "operation": "sql",
+            "iterations": 1,
+            "query": "SELECT request, COUNT(*) AS c FROM soal.http_logs_100M WHERE request LIKE '%google%' AND request <> '' GROUP BY request ORDER BY c DESC LIMIT 10;"
+        },
+        {
+            "id": 19,
+            "operation": "sql",
+            "iterations": 1,
+            "query": "SELECT request, COUNT(*) AS c, COUNT(DISTINCT clientip) FROM soal.http_logs_100M WHERE request LIKE '%google%' AND request NOT LIKE '%.google.%' AND request <> '' GROUP BY request ORDER BY c DESC LIMIT 10;"
+        },
+        {
+            "id": 20,
+            "operation": "sql",
+            "iterations": 1,
+            "query": "SELECT clientip, AVG(LENGTH(request)) AS l, COUNT(*) AS c FROM soal.http_logs_100M WHERE request <> '' GROUP BY clientip HAVING COUNT(*) > 100000 ORDER BY l DESC LIMIT 25;"
+        },
+        {
+            "id": 21,
+            "operation": "sql",
+            "iterations": 1,
+            "query": "SHOW TABLES in soal;"
+        },
+        {
+            "id": 22,
+            "operation": "sql",
+            "iterations": 1,
+            "query": "DESCRIBE soal.http_logs_100M;"
+        }            
+    ]
+  }

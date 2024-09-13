@@ -1,19 +1,13 @@
 ## Backgound
-We explore the solution to leverage [SoAL](https://aws.amazon.com/blogs/big-data/spark-on-aws-lambda-an-apache-spark-runtime-for-aws-lambda/) to run Spark SQL query.
+We explore the solution to leverage [SoAL](https://aws.amazon.com/blogs/big-data/spark-on-aws-lambda-an-apache-spark-runtime-for-aws-lambda/) to run EMR-S Spark image on Lambda
 
-## Build
-* Build the jar file
+## Deployment
 ```
-sbt assembly
-```
-
-* Build the docker image
-```
-docker build -t flint-spark-on-aws-lambda:0.1 .
+aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 924196221507.dkr.ecr.us-west-2.amazonaws.com
+./deploy.sh
 ```
 
-## Run
+### Test
 ```
-docker run flint-spark-on-aws-lambda:0.1 "select 1"
+aws lambda invoke --function-name flint-spark-on-aws-lambda --payload '{"query": "select * from soal.http_logs limit 19"}' output.txt
 ```
-
