@@ -8,7 +8,8 @@ public class Benchmark {
   public static void main(String[] args) {
 //    testSpark();
 //    testCalcite();
-    testCalciteRelNode();
+//    testCalciteRelNode();
+    testCalciteDataType();
   }
 
   public static void printStats(List<Long> times, String name) {
@@ -94,6 +95,32 @@ public class Benchmark {
     for (int i = 0; i < rounds; i++) {
       long startTime = System.nanoTime();
       calciteBH.runRelNode(query);
+      long endTime = System.nanoTime();
+
+      long durationInMillis = (endTime - startTime) / 1_000_000;
+      executionTimes.add(durationInMillis);
+    }
+
+    calciteBH.clean();
+    printStats(executionTimes, "Calcite");
+  }
+
+  public static void testCalciteDataType() {
+    String csvFilePath = "/Users/penghuo/oss/BusyBox/ppl/data/calcite";
+    String query = "describe table people";
+
+    CalciteBH calciteBH = new CalciteBH(csvFilePath);
+    // warmup
+    for (int i = 0; i < 3; i++) {
+      calciteBH.run(query);
+    }
+
+    // iteration
+    int rounds = 10;
+    List<Long> executionTimes = new ArrayList<>();
+    for (int i = 0; i < rounds; i++) {
+      long startTime = System.nanoTime();
+      calciteBH.run(query);
       long endTime = System.nanoTime();
 
       long durationInMillis = (endTime - startTime) / 1_000_000;
