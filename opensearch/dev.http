@@ -1,0 +1,214 @@
+
+# nexus
+#@baseUrl = http://ec2-18-237-133-156.us-west-2.compute.amazonaws.com:9200
+@baseUrl = http://localhost:9200
+
+###
+GET {{baseUrl}}/_cat/indices
+
+###
+DELETE {{baseUrl}}/people
+
+###
+POST {{baseUrl}}/_plugins/_ppl
+Content-Type: application/x-ndjson
+
+{
+  "query": "describe opensearch_dashboards_sample_data_flights "
+}
+
+###
+POST {{baseUrl}}/_plugins/_ppl
+Content-Type: application/x-ndjson
+
+{
+  "query": "source = opensearch_dashboards_sample_data_flights "
+}
+
+###
+DELETE {{baseUrl}}/test002
+
+###
+PUT {{baseUrl}}/test002
+Content-Type: application/x-ndjson
+
+{
+  "mappings": {
+    "properties": {
+      "id": {
+        "type": "integer"
+      },
+      "salary": {
+        "type": "integer"
+      }
+    }
+  }
+}
+
+###
+POST {{baseUrl}}/_bulk/
+Content-Type: application/x-ndjson
+
+{"index": {"_index": "test002"}}
+{"id": 1000, "salary": 100000}
+{"index": {"_index": "test002"}}
+{"id": 1001}
+
+###
+DELETE  {{baseUrl}}/test001
+
+###
+PUT {{baseUrl}}/test001
+Content-Type: application/x-ndjson
+
+{
+  "mappings": {
+    "properties": {
+      "profile": {
+        "type": "object",
+        "dynamic": false
+      }
+    }
+  }
+}
+
+###
+POST {{baseUrl}}/_bulk/
+Content-Type: application/x-ndjson
+
+{"index": {"_index": "test001"}}
+{"profile": {"age": 1}}
+{"index": {"_index": "test001"}}
+{"profile": {"address": "a"}}
+
+###
+POST {{baseUrl}}/_plugins/_ppl
+Content-Type: application/x-ndjson
+
+{
+  "query": "source = test001 "
+}
+
+###
+GET {{baseUrl}}/test001/_search
+
+
+
+
+###
+POST {{baseUrl}}/_plugins/_ppl
+Content-Type: application/x-ndjson
+
+{
+  "query": "source = test002 | fields salary "
+}
+
+###
+DELETE {{baseUrl}}/people
+
+###
+PUT {{baseUrl}}/people
+Content-Type: application/x-ndjson
+
+{
+  "mappings": {
+    "properties": {
+      "city": {
+        "properties": {
+          "name": {
+            "type": "keyword"
+          },
+          "location": {
+            "properties": {
+              "latitude": {
+                "type": "double"
+              }
+            }
+          }
+        }
+      },
+      "account": {
+        "properties": {
+          "id": {
+            "type": "keyword"
+          }
+        }
+      },
+      "projects": {
+        "type": "nested",
+        "properties": {
+          "name": {
+            "type": "keyword"
+          }
+        }
+      }
+    }
+  }
+}
+
+
+###
+POST {{baseUrl}}/_plugins/_ppl
+Content-Type: application/x-ndjson
+
+{
+  "query": "describe people"
+}
+
+
+###
+POST {{baseUrl}}/_bulk/
+Content-Type: application/x-ndjson
+
+{"index": {"_index": "people"}}
+{"@timestamp": 1718458823000, "id": 1000, "name": "Jake", "occupation": "Engineer", "country": "USA", "salary": 100000}
+{"index": {"_index": "people"}}
+{"@timestamp": 1718458833000, "id": 1001, "name": "Hello", "occupation": "Artist", "country": "USA ABC", "salary": 70000}
+{"index": {"_index": "people"}}
+{"@timestamp": 1718458843000, "id": 1002, "name": "John", "occupation": "Doctor", "country": "usa", "salary": 120000}
+{"index": {"_index": "people"}}
+{"@timestamp": 1718458843000, "id": 1002, "name": "John", "occupation": "Doctor", "country": "China", "salary": 120000}
+
+###
+POST {{baseUrl}}/people/_search
+Content-Type: application/x-ndjson
+
+{
+  "query": {
+    "bool": {
+      "must_not": {
+        "match": {
+          "country": "USA"
+        }
+      }
+    }
+  }
+}
+
+
+###
+POST {{baseUrl}}/people/_search
+Content-Type: application/x-ndjson
+
+{
+  "query": {
+    "match": {
+        "country": "USA"
+    }
+  }
+}
+
+###
+POST {{baseUrl}}/people/_search
+Content-Type: application/x-ndjson
+
+{
+  "query": {
+    "term": {
+        "country": "USA"
+    }
+  }
+}
+
+###
+PUT {{baseUrl}}/
