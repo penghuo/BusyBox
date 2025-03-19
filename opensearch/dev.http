@@ -86,7 +86,7 @@ POST {{baseUrl}}/_plugins/_ppl
 Content-Type: application/x-ndjson
 
 {
-  "query": "source = test001 "
+  "query": "source = test002"
 }
 
 ###
@@ -212,3 +212,158 @@ Content-Type: application/x-ndjson
 
 ###
 PUT {{baseUrl}}/
+
+###
+DELETE {{baseUrl}}/idx00003
+
+###
+PUT {{baseUrl}}/idx00003
+Content-Type: application/x-ndjson
+
+{
+  "mappings": {
+    "properties": {
+      "timestamp": {
+        "type":   "date",
+        "format": "yyyy-MM-dd-HH-mm-ss || epoch_millis"
+      }
+    }
+  }
+}
+
+###
+POST {{baseUrl}}/_bulk/
+Content-Type: application/x-ndjson
+
+{"index": {"_index": "idx00003"}}
+{"timestamp": "2015-01-01 12:10:30"}
+
+###
+POST {{baseUrl}}/_plugins/_ppl
+Content-Type: application/x-ndjson
+
+{
+  "query": "source = idx00003 | where timestamp >= '2024-03-27 00:00:00' and timestamp <= '2024-04-01 16:39:38'"
+}
+
+###
+POST {{baseUrl}}/_plugins/_ppl
+Content-Type: application/x-ndjson
+
+{
+  "query": "source = idx00003 "
+}
+
+###
+POST {{baseUrl}}/_plugins/_ppl
+Content-Type: application/x-ndjson
+
+{
+  "query": "source = idx00003 | fields timestamp"
+}
+
+###
+POST {{baseUrl}}/idx00003/_search
+Content-Type: application/x-ndjson
+
+{"from":0,"size":10000,"timeout":"1m","query":{"bool":{"filter":[{"range":{"timestamp":{"from":"20240126","to":null,"include_lower":true,"include_upper":true,"boost":1.0}}},{"range":{"timestamp":{"from":null,"to":"20240331","include_lower":true,"include_upper":true,"boost":1.0}}}],"adjust_pure_negative":true,"boost":1.0}},"_source":{"includes":["timestamp"],"excludes":[]},"sort":[{"_doc":{"order":"asc"}}]}
+
+###
+POST {{baseUrl}}/idx00003/_search
+Content-Type: application/x-ndjson
+
+
+###
+POST {{baseUrl}}/idx00003/_search
+Content-Type: application/x-ndjson
+
+{
+  "from": 0,
+  "size": 10000,
+  "timeout": "1m",
+  "query": {
+    "bool": {
+      "filter": [
+        {
+          "range": {
+            "timestamp": {
+              "from": "2024-03-26 00:00:00",
+              "to": null,
+              "include_lower": true,
+              "include_upper": true,
+              "boost": 1
+            }
+          }
+        }
+      ],
+      "adjust_pure_negative": true,
+      "boost": 1
+    }
+  },
+  "_source": {
+    "includes": [
+      "timestamp"
+    ],
+    "excludes": []
+  },
+  "sort": [
+    {
+      "_doc": {
+        "order": "asc"
+      }
+    }
+  ]
+}
+
+###
+POST {{baseUrl}}/idx00003/_search
+Content-Type: application/x-ndjson
+
+{
+  "script_fields": {
+    "timestamp_epoch": {
+      "script": {
+        "source": "doc['timestamp'].value.toInstant().toEpochMilli()"
+      }
+    }
+  },
+  "fields": ["timestamp"]
+}
+
+
+
+###
+PUT {{baseUrl}}/sample-index
+Content-Type: application/x-ndjson
+
+{
+  "mappings": {
+    "properties": {
+      "message": {
+        "properties":{
+          "timestamp_received":{
+            "type":"date"
+          }
+        }
+      }
+    }
+  }
+}
+
+###
+POST {{baseUrl}}/sample-index/_doc/1
+Content-Type: application/x-ndjson
+
+{
+    "message" : {
+      "timestamp_received" : "1705642934886"
+    }
+}
+
+###
+POST {{baseUrl}}/_plugins/_sql
+Content-Type: application/x-ndjson
+
+{
+  "query" : "SELECT message.timestamp_received FROM sample-index"
+}
