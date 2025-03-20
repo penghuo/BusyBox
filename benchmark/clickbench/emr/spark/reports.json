@@ -1,0 +1,827 @@
+{
+  "timestamp": "2025-03-20T21:18:15.940150",
+  "config": {
+    "warmup_runs": 1,
+    "test_iterations": 5,
+    "log_level": "WARN"
+  },
+  "results": [
+    {
+      "query_id": "Q1",
+      "query": "SELECT COUNT(*) FROM sparkhits;",
+      "warmup_runs": 1,
+      "test_runs": 5,
+      "timings": [],
+      "error": null,
+      "avg_time": 2.633827675399516,
+      "p75_time": 1.553797267999471,
+      "min_time": 1.3229337719985779,
+      "max_time": 7.332280205000643,
+      "individual_times": [
+        7.332280205000643,
+        1.553797267999471,
+        1.4533902509992913,
+        1.3229337719985779,
+        1.506736880999597
+      ]
+    },
+    {
+      "query_id": "Q2",
+      "query": "SELECT COUNT(*) FROM sparkhits WHERE AdvEngineID <> 0;",
+      "warmup_runs": 1,
+      "test_runs": 5,
+      "timings": [],
+      "error": null,
+      "avg_time": 2.623933528800626,
+      "p75_time": 1.9807251450001786,
+      "min_time": 1.7708104070006812,
+      "max_time": 5.764120637000815,
+      "individual_times": [
+        5.764120637000815,
+        1.9807251450001786,
+        1.8044462730013038,
+        1.7995651820001513,
+        1.7708104070006812
+      ]
+    },
+    {
+      "query_id": "Q3",
+      "query": "SELECT SUM(AdvEngineID), COUNT(*), AVG(ResolutionWidth) FROM sparkhits;",
+      "warmup_runs": 1,
+      "test_runs": 5,
+      "timings": [],
+      "error": null,
+      "avg_time": 2.4755685086001904,
+      "p75_time": 1.949356054999953,
+      "min_time": 1.668537096998989,
+      "max_time": 5.096115349000684,
+      "individual_times": [
+        5.096115349000684,
+        1.949356054999953,
+        1.8025179500000377,
+        1.8613160920012888,
+        1.668537096998989
+      ]
+    },
+    {
+      "query_id": "Q4",
+      "query": "SELECT AVG(UserID) FROM sparkhits;",
+      "warmup_runs": 1,
+      "test_runs": 5,
+      "timings": [],
+      "error": null,
+      "avg_time": 2.370915314599915,
+      "p75_time": 1.8011344299993652,
+      "min_time": 1.5757206449998193,
+      "max_time": 5.178281259999494,
+      "individual_times": [
+        5.178281259999494,
+        1.8011344299993652,
+        1.6853295720011374,
+        1.6141106659997604,
+        1.5757206449998193
+      ]
+    },
+    {
+      "query_id": "Q5",
+      "query": "SELECT COUNT(DISTINCT UserID) FROM sparkhits;",
+      "warmup_runs": 1,
+      "test_runs": 5,
+      "timings": [],
+      "error": null,
+      "avg_time": 4.067172330200265,
+      "p75_time": 3.2346554630003084,
+      "min_time": 2.851276941000833,
+      "max_time": 8.193212836000384,
+      "individual_times": [
+        8.193212836000384,
+        3.2346554630003084,
+        3.1102351139998063,
+        2.946481296999991,
+        2.851276941000833
+      ]
+    },
+    {
+      "query_id": "Q6",
+      "query": "SELECT COUNT(DISTINCT SearchPhrase) FROM sparkhits;",
+      "warmup_runs": 1,
+      "test_runs": 5,
+      "timings": [],
+      "error": null,
+      "avg_time": 4.520163489600236,
+      "p75_time": 3.6885764850012492,
+      "min_time": 3.2564159110006585,
+      "max_time": 8.658222000000023,
+      "individual_times": [
+        8.658222000000023,
+        3.6885764850012492,
+        3.5894778419988143,
+        3.408125210000435,
+        3.2564159110006585
+      ]
+    },
+    {
+      "query_id": "Q7",
+      "query": "SELECT MIN(EventDate), MAX(EventDate) FROM sparkhits;",
+      "warmup_runs": 1,
+      "test_runs": 5,
+      "timings": [],
+      "error": null,
+      "avg_time": 1.947770682999908,
+      "p75_time": 1.500543010999536,
+      "min_time": 1.321353375000399,
+      "max_time": 4.159807046999049,
+      "individual_times": [
+        4.159807046999049,
+        1.500543010999536,
+        1.4037327980004193,
+        1.321353375000399,
+        1.3534171840001363
+      ]
+    },
+    {
+      "query_id": "Q8",
+      "query": "SELECT AdvEngineID, COUNT(*) FROM sparkhits WHERE AdvEngineID <> 0 GROUP BY AdvEngineID ORDER BY COUNT(*) DESC;",
+      "warmup_runs": 1,
+      "test_runs": 5,
+      "timings": [],
+      "error": null,
+      "avg_time": 2.798896977599725,
+      "p75_time": 2.2276092060001247,
+      "min_time": 1.8860751319989504,
+      "max_time": 6.011148423998748,
+      "individual_times": [
+        6.011148423998748,
+        2.2276092060001247,
+        1.8860751319989504,
+        1.916345261999595,
+        1.9533068640012061
+      ]
+    },
+    {
+      "query_id": "Q9",
+      "query": "SELECT RegionID, COUNT(DISTINCT UserID) AS u FROM sparkhits GROUP BY RegionID ORDER BY u DESC LIMIT 10;",
+      "warmup_runs": 1,
+      "test_runs": 5,
+      "timings": [],
+      "error": null,
+      "avg_time": 4.843557176999821,
+      "p75_time": 4.322151755999585,
+      "min_time": 3.4178121690001717,
+      "max_time": 9.169871523999973,
+      "individual_times": [
+        9.169871523999973,
+        4.322151755999585,
+        3.708910762999949,
+        3.5990396729994245,
+        3.4178121690001717
+      ]
+    },
+    {
+      "query_id": "Q10",
+      "query": "SELECT RegionID, SUM(AdvEngineID), COUNT(*) AS c, AVG(ResolutionWidth), COUNT(DISTINCT UserID) FROM sparkhits GROUP BY RegionID ORDER BY c DESC LIMIT 10;",
+      "warmup_runs": 1,
+      "test_runs": 5,
+      "timings": [],
+      "error": null,
+      "avg_time": 5.545427389000179,
+      "p75_time": 4.775149627999781,
+      "min_time": 4.249561069000265,
+      "max_time": 9.726460849000432,
+      "individual_times": [
+        9.726460849000432,
+        4.775149627999781,
+        4.5747486899999785,
+        4.401216709000437,
+        4.249561069000265
+      ]
+    },
+    {
+      "query_id": "Q11",
+      "query": "SELECT MobilePhoneModel, COUNT(DISTINCT UserID) AS u FROM sparkhits WHERE MobilePhoneModel <> '' GROUP BY MobilePhoneModel ORDER BY u DESC LIMIT 10;",
+      "warmup_runs": 1,
+      "test_runs": 5,
+      "timings": [],
+      "error": null,
+      "avg_time": 4.051671071600504,
+      "p75_time": 3.291522512001393,
+      "min_time": 2.628728551000677,
+      "max_time": 8.72321152800032,
+      "individual_times": [
+        8.72321152800032,
+        3.291522512001393,
+        2.889997962000052,
+        2.7248948050000763,
+        2.628728551000677
+      ]
+    },
+    {
+      "query_id": "Q12",
+      "query": "SELECT MobilePhone, MobilePhoneModel, COUNT(DISTINCT UserID) AS u FROM sparkhits WHERE MobilePhoneModel <> '' GROUP BY MobilePhone, MobilePhoneModel ORDER BY u DESC LIMIT 10;",
+      "warmup_runs": 1,
+      "test_runs": 5,
+      "timings": [],
+      "error": null,
+      "avg_time": 4.303207164400374,
+      "p75_time": 3.6619578360005107,
+      "min_time": 2.908922906999578,
+      "max_time": 8.628501476001475,
+      "individual_times": [
+        8.628501476001475,
+        3.6619578360005107,
+        2.908922906999578,
+        2.9153402450010617,
+        3.4013133579992427
+      ]
+    },
+    {
+      "query_id": "Q13",
+      "query": "SELECT SearchPhrase, COUNT(*) AS c FROM sparkhits WHERE SearchPhrase <> '' GROUP BY SearchPhrase ORDER BY c DESC LIMIT 10;",
+      "warmup_runs": 1,
+      "test_runs": 5,
+      "timings": [],
+      "error": null,
+      "avg_time": 4.657365266800116,
+      "p75_time": 3.792045471000165,
+      "min_time": 3.3568384909995075,
+      "max_time": 9.127827242000421,
+      "individual_times": [
+        9.127827242000421,
+        3.792045471000165,
+        3.5072238689990627,
+        3.502891261001423,
+        3.3568384909995075
+      ]
+    },
+    {
+      "query_id": "Q14",
+      "query": "SELECT SearchPhrase, COUNT(DISTINCT UserID) AS u FROM sparkhits WHERE SearchPhrase <> '' GROUP BY SearchPhrase ORDER BY u DESC LIMIT 10;",
+      "warmup_runs": 1,
+      "test_runs": 5,
+      "timings": [],
+      "error": null,
+      "avg_time": 6.625255004199789,
+      "p75_time": 5.879455805999896,
+      "min_time": 5.242990947999715,
+      "max_time": 11.226951624999856,
+      "individual_times": [
+        11.226951624999856,
+        5.879455805999896,
+        5.4722459919994435,
+        5.3046306500000355,
+        5.242990947999715
+      ]
+    },
+    {
+      "query_id": "Q15",
+      "query": "SELECT SearchEngineID, SearchPhrase, COUNT(*) AS c FROM sparkhits WHERE SearchPhrase <> '' GROUP BY SearchEngineID, SearchPhrase ORDER BY c DESC LIMIT 10;",
+      "warmup_runs": 1,
+      "test_runs": 5,
+      "timings": [],
+      "error": null,
+      "avg_time": 4.807138714800385,
+      "p75_time": 3.84178814400002,
+      "min_time": 3.5131684520001727,
+      "max_time": 9.077711804999126,
+      "individual_times": [
+        9.077711804999126,
+        3.84178814400002,
+        3.8284389970012853,
+        3.7745861760013213,
+        3.5131684520001727
+      ]
+    },
+    {
+      "query_id": "Q16",
+      "query": "SELECT UserID, COUNT(*) FROM sparkhits GROUP BY UserID ORDER BY COUNT(*) DESC LIMIT 10;",
+      "warmup_runs": 1,
+      "test_runs": 5,
+      "timings": [],
+      "error": null,
+      "avg_time": 4.326047753000239,
+      "p75_time": 3.6092472649997944,
+      "min_time": 3.1011029050005163,
+      "max_time": 8.300054514000294,
+      "individual_times": [
+        8.300054514000294,
+        3.6092472649997944,
+        3.378781766001339,
+        3.2410523149992514,
+        3.1011029050005163
+      ]
+    },
+    {
+      "query_id": "Q17",
+      "query": "SELECT UserID, SearchPhrase, COUNT(*) FROM sparkhits GROUP BY UserID, SearchPhrase ORDER BY COUNT(*) DESC LIMIT 10;",
+      "warmup_runs": 1,
+      "test_runs": 5,
+      "timings": [],
+      "error": null,
+      "avg_time": 6.658195140599855,
+      "p75_time": 5.875698358999216,
+      "min_time": 5.417846553000345,
+      "max_time": 11.052837077000731,
+      "individual_times": [
+        11.052837077000731,
+        5.875698358999216,
+        5.475590051999461,
+        5.469003661999523,
+        5.417846553000345
+      ]
+    },
+    {
+      "query_id": "Q18",
+      "query": "SELECT UserID, SearchPhrase, COUNT(*) FROM sparkhits GROUP BY UserID, SearchPhrase LIMIT 10;",
+      "warmup_runs": 1,
+      "test_runs": 5,
+      "timings": [],
+      "error": null,
+      "avg_time": 5.577996223600349,
+      "p75_time": 4.7300709360006294,
+      "min_time": 4.451772398000685,
+      "max_time": 9.61767160599993,
+      "individual_times": [
+        9.61767160599993,
+        4.7300709360006294,
+        4.550893558000098,
+        4.539572620000399,
+        4.451772398000685
+      ]
+    },
+    {
+      "query_id": "Q19",
+      "query": "SELECT UserID, extract(minute FROM TIMESTAMP(EventTime)) AS m, SearchPhrase, COUNT(*) FROM sparkhits GROUP BY UserID, extract(minute FROM TIMESTAMP(EventTime)), SearchPhrase ORDER BY COUNT(*) DESC LIMIT 10;",
+      "warmup_runs": 1,
+      "test_runs": 5,
+      "timings": [],
+      "error": null,
+      "avg_time": 10.488973528600036,
+      "p75_time": 9.487110088000918,
+      "min_time": 8.825574409000183,
+      "max_time": 15.830362083999717,
+      "individual_times": [
+        15.830362083999717,
+        9.487110088000918,
+        9.353349217999494,
+        8.825574409000183,
+        8.948471843999869
+      ]
+    },
+    {
+      "query_id": "Q20",
+      "query": "SELECT UserID FROM sparkhits WHERE UserID = 435090932899640449;",
+      "warmup_runs": 1,
+      "test_runs": 5,
+      "timings": [],
+      "error": null,
+      "avg_time": 2.686738524400789,
+      "p75_time": 2.2586289750015567,
+      "min_time": 1.9658459890015365,
+      "max_time": 4.993980702000044,
+      "individual_times": [
+        4.993980702000044,
+        2.2586289750015567,
+        2.1269063540003117,
+        2.0883306020004966,
+        1.9658459890015365
+      ]
+    },
+    {
+      "query_id": "Q21",
+      "query": "SELECT COUNT(*) FROM sparkhits WHERE URL LIKE '%google%';",
+      "warmup_runs": 1,
+      "test_runs": 5,
+      "timings": [],
+      "error": null,
+      "avg_time": 5.80781773780036,
+      "p75_time": 5.224502422999649,
+      "min_time": 4.910526463001588,
+      "max_time": 8.975967888000014,
+      "individual_times": [
+        8.975967888000014,
+        5.224502422999649,
+        4.910526463001588,
+        4.985387782000544,
+        4.9427041330000065
+      ]
+    },
+    {
+      "query_id": "Q22",
+      "query": "SELECT SearchPhrase, MIN(URL), COUNT(*) AS c FROM sparkhits WHERE URL LIKE '%google%' AND SearchPhrase <> '' GROUP BY SearchPhrase ORDER BY c DESC LIMIT 10;",
+      "warmup_runs": 1,
+      "test_runs": 5,
+      "timings": [],
+      "error": null,
+      "avg_time": 7.633162188000279,
+      "p75_time": 6.8724267939996935,
+      "min_time": 6.56186711600094,
+      "max_time": 11.48214258200096,
+      "individual_times": [
+        11.48214258200096,
+        6.8724267939996935,
+        6.56186711600094,
+        6.626301734999288,
+        6.623072713000511
+      ]
+    },
+    {
+      "query_id": "Q23",
+      "query": "SELECT SearchPhrase, MIN(URL), MIN(Title), COUNT(*) AS c, COUNT(DISTINCT UserID) FROM sparkhits WHERE Title LIKE '%Google%' AND URL NOT LIKE '%.google.%' AND SearchPhrase <> '' GROUP BY SearchPhrase ORDER BY c DESC LIMIT 10;",
+      "warmup_runs": 1,
+      "test_runs": 5,
+      "timings": [],
+      "error": null,
+      "avg_time": 10.197721095400265,
+      "p75_time": 9.102536096999756,
+      "min_time": 8.527341789000275,
+      "max_time": 15.667830843000047,
+      "individual_times": [
+        15.667830843000047,
+        9.102536096999756,
+        8.878477669000858,
+        8.812419079000392,
+        8.527341789000275
+      ]
+    },
+    {
+      "query_id": "Q24",
+      "query": "SELECT * FROM sparkhits WHERE URL LIKE '%google%' ORDER BY EventTime LIMIT 10;",
+      "warmup_runs": 1,
+      "test_runs": 5,
+      "timings": [],
+      "error": null,
+      "avg_time": 61.168424077599774,
+      "p75_time": 61.67995557600079,
+      "min_time": 58.669955122999454,
+      "max_time": 66.10220916700018,
+      "individual_times": [
+        66.10220916700018,
+        58.669955122999454,
+        59.479977393999434,
+        59.91002312799901,
+        61.67995557600079
+      ]
+    },
+    {
+      "query_id": "Q25",
+      "query": "SELECT SearchPhrase FROM sparkhits WHERE SearchPhrase <> '' ORDER BY EventTime LIMIT 10;",
+      "warmup_runs": 1,
+      "test_runs": 5,
+      "timings": [],
+      "error": null,
+      "avg_time": 3.667344844399486,
+      "p75_time": 2.9982459819984797,
+      "min_time": 2.7561785279995092,
+      "max_time": 6.922925593999025,
+      "individual_times": [
+        6.922925593999025,
+        2.9982459819984797,
+        2.8192729160000454,
+        2.840101202000369,
+        2.7561785279995092
+      ]
+    },
+    {
+      "query_id": "Q26",
+      "query": "SELECT SearchPhrase FROM sparkhits WHERE SearchPhrase <> '' ORDER BY SearchPhrase LIMIT 10;",
+      "warmup_runs": 1,
+      "test_runs": 5,
+      "timings": [],
+      "error": null,
+      "avg_time": 3.169383825400655,
+      "p75_time": 2.429453223001474,
+      "min_time": 2.1454906660001143,
+      "max_time": 6.572136257000238,
+      "individual_times": [
+        6.572136257000238,
+        2.429453223001474,
+        2.376835850000134,
+        2.3230031310013146,
+        2.1454906660001143
+      ]
+    },
+    {
+      "query_id": "Q27",
+      "query": "SELECT SearchPhrase FROM sparkhits WHERE SearchPhrase <> '' ORDER BY EventTime, SearchPhrase LIMIT 10;",
+      "warmup_runs": 1,
+      "test_runs": 5,
+      "timings": [],
+      "error": null,
+      "avg_time": 3.735381495800175,
+      "p75_time": 3.0455169340002612,
+      "min_time": 2.6125762199990277,
+      "max_time": 7.1010281140006555,
+      "individual_times": [
+        7.1010281140006555,
+        3.0455169340002612,
+        3.0383847009998135,
+        2.8794015100011165,
+        2.6125762199990277
+      ]
+    },
+    {
+      "query_id": "Q28",
+      "query": "SELECT CounterID, AVG(length(URL)) AS l, COUNT(*) AS c FROM sparkhits WHERE URL <> '' GROUP BY CounterID HAVING COUNT(*) > 100000 ORDER BY l DESC LIMIT 25;",
+      "warmup_runs": 1,
+      "test_runs": 5,
+      "timings": [],
+      "error": null,
+      "avg_time": 7.976168445799703,
+      "p75_time": 7.302325332000692,
+      "min_time": 6.934750849999546,
+      "max_time": 11.545233847000418,
+      "individual_times": [
+        11.545233847000418,
+        7.302325332000692,
+        6.958016166998277,
+        7.140516032999585,
+        6.934750849999546
+      ]
+    },
+    {
+      "query_id": "Q29",
+      "query": "SELECT REGEXP_REPLACE(Referer, '^https?://(?:www\\.)?([^/]+)/.*$', '\\1') AS k, AVG(length(Referer)) AS l, COUNT(*) AS c, MIN(Referer) FROM sparkhits WHERE Referer <> '' GROUP BY REGEXP_REPLACE(Referer, '^https?://(?:www\\.)?([^/]+)/.*$', '\\1') HAVING COUNT(*) > 100000 ORDER BY l DESC LIMIT 25;",
+      "warmup_runs": 1,
+      "test_runs": 5,
+      "timings": [],
+      "error": null,
+      "avg_time": 22.526565035200473,
+      "p75_time": 21.434512218000236,
+      "min_time": 20.74907646400061,
+      "max_time": 28.22567178099962,
+      "individual_times": [
+        28.22567178099962,
+        21.33379767400038,
+        21.434512218000236,
+        20.74907646400061,
+        20.889767039001526
+      ]
+    },
+    {
+      "query_id": "Q30",
+      "query": "SELECT SUM(ResolutionWidth), SUM(ResolutionWidth + 1), SUM(ResolutionWidth + 2), SUM(ResolutionWidth + 3), SUM(ResolutionWidth + 4), SUM(ResolutionWidth + 5), SUM(ResolutionWidth + 6), SUM(ResolutionWidth + 7), SUM(ResolutionWidth + 8), SUM(ResolutionWidth + 9), SUM(ResolutionWidth + 10), SUM(ResolutionWidth + 11), SUM(ResolutionWidth + 12), SUM(ResolutionWidth + 13), SUM(ResolutionWidth + 14), SUM(ResolutionWidth + 15), SUM(ResolutionWidth + 16), SUM(ResolutionWidth + 17), SUM(ResolutionWidth + 18), SUM(ResolutionWidth + 19), SUM(ResolutionWidth + 20), SUM(ResolutionWidth + 21), SUM(ResolutionWidth + 22), SUM(ResolutionWidth + 23), SUM(ResolutionWidth + 24), SUM(ResolutionWidth + 25), SUM(ResolutionWidth + 26), SUM(ResolutionWidth + 27), SUM(ResolutionWidth + 28), SUM(ResolutionWidth + 29), SUM(ResolutionWidth + 30), SUM(ResolutionWidth + 31), SUM(ResolutionWidth + 32), SUM(ResolutionWidth + 33), SUM(ResolutionWidth + 34), SUM(ResolutionWidth + 35), SUM(ResolutionWidth + 36), SUM(ResolutionWidth + 37), SUM(ResolutionWidth + 38), SUM(ResolutionWidth + 39), SUM(ResolutionWidth + 40), SUM(ResolutionWidth + 41), SUM(ResolutionWidth + 42), SUM(ResolutionWidth + 43), SUM(ResolutionWidth + 44), SUM(ResolutionWidth + 45), SUM(ResolutionWidth + 46), SUM(ResolutionWidth + 47), SUM(ResolutionWidth + 48), SUM(ResolutionWidth + 49), SUM(ResolutionWidth + 50), SUM(ResolutionWidth + 51), SUM(ResolutionWidth + 52), SUM(ResolutionWidth + 53), SUM(ResolutionWidth + 54), SUM(ResolutionWidth + 55), SUM(ResolutionWidth + 56), SUM(ResolutionWidth + 57), SUM(ResolutionWidth + 58), SUM(ResolutionWidth + 59), SUM(ResolutionWidth + 60), SUM(ResolutionWidth + 61), SUM(ResolutionWidth + 62), SUM(ResolutionWidth + 63), SUM(ResolutionWidth + 64), SUM(ResolutionWidth + 65), SUM(ResolutionWidth + 66), SUM(ResolutionWidth + 67), SUM(ResolutionWidth + 68), SUM(ResolutionWidth + 69), SUM(ResolutionWidth + 70), SUM(ResolutionWidth + 71), SUM(ResolutionWidth + 72), SUM(ResolutionWidth + 73), SUM(ResolutionWidth + 74), SUM(ResolutionWidth + 75), SUM(ResolutionWidth + 76), SUM(ResolutionWidth + 77), SUM(ResolutionWidth + 78), SUM(ResolutionWidth + 79), SUM(ResolutionWidth + 80), SUM(ResolutionWidth + 81), SUM(ResolutionWidth + 82), SUM(ResolutionWidth + 83), SUM(ResolutionWidth + 84), SUM(ResolutionWidth + 85), SUM(ResolutionWidth + 86), SUM(ResolutionWidth + 87), SUM(ResolutionWidth + 88), SUM(ResolutionWidth + 89) FROM sparkhits;",
+      "warmup_runs": 1,
+      "test_runs": 5,
+      "timings": [],
+      "error": null,
+      "avg_time": 4.758312136399764,
+      "p75_time": 4.229941232999408,
+      "min_time": 3.939662765000321,
+      "max_time": 7.4215966449992266,
+      "individual_times": [
+        7.4215966449992266,
+        4.190014316000088,
+        4.229941232999408,
+        4.010345722999773,
+        3.939662765000321
+      ]
+    },
+    {
+      "query_id": "Q31",
+      "query": "SELECT SearchEngineID, ClientIP, COUNT(*) AS c, SUM(IsRefresh), AVG(ResolutionWidth) FROM sparkhits WHERE SearchPhrase <> '' GROUP BY SearchEngineID, ClientIP ORDER BY c DESC LIMIT 10;",
+      "warmup_runs": 1,
+      "test_runs": 5,
+      "timings": [],
+      "error": null,
+      "avg_time": 5.450257549399976,
+      "p75_time": 4.544229492999875,
+      "min_time": 3.983319480999853,
+      "max_time": 10.266733205000492,
+      "individual_times": [
+        10.266733205000492,
+        4.346541406999677,
+        4.110464160999982,
+        3.983319480999853,
+        4.544229492999875
+      ]
+    },
+    {
+      "query_id": "Q32",
+      "query": "SELECT WatchID, ClientIP, COUNT(*) AS c, SUM(IsRefresh), AVG(ResolutionWidth) FROM sparkhits WHERE SearchPhrase <> '' GROUP BY WatchID, ClientIP ORDER BY c DESC LIMIT 10;",
+      "warmup_runs": 1,
+      "test_runs": 5,
+      "timings": [],
+      "error": null,
+      "avg_time": 6.093503118599983,
+      "p75_time": 4.9546586830001615,
+      "min_time": 4.671021823998672,
+      "max_time": 11.22266123100053,
+      "individual_times": [
+        11.22266123100053,
+        4.9546586830001615,
+        4.937342258999706,
+        4.671021823998672,
+        4.681831596000848
+      ]
+    },
+    {
+      "query_id": "Q33",
+      "query": "SELECT WatchID, ClientIP, COUNT(*) AS c, SUM(IsRefresh), AVG(ResolutionWidth) FROM sparkhits GROUP BY WatchID, ClientIP ORDER BY c DESC LIMIT 10;",
+      "warmup_runs": 1,
+      "test_runs": 5,
+      "timings": [],
+      "error": null,
+      "avg_time": 9.531732246599494,
+      "p75_time": 8.513979039998958,
+      "min_time": 8.275423041999602,
+      "max_time": 14.192525955999372,
+      "individual_times": [
+        14.192525955999372,
+        8.513979039998958,
+        8.3598473130005,
+        8.316885881999042,
+        8.275423041999602
+      ]
+    },
+    {
+      "query_id": "Q34",
+      "query": "SELECT URL, COUNT(*) AS c FROM sparkhits GROUP BY URL ORDER BY c DESC LIMIT 10;",
+      "warmup_runs": 1,
+      "test_runs": 5,
+      "timings": [],
+      "error": null,
+      "avg_time": 10.350476230400455,
+      "p75_time": 9.318882614999893,
+      "min_time": 9.051915043000918,
+      "max_time": 15.069539351999993,
+      "individual_times": [
+        15.069539351999993,
+        9.318882614999893,
+        9.245975006000663,
+        9.066069136000806,
+        9.051915043000918
+      ]
+    },
+    {
+      "query_id": "Q35",
+      "query": "SELECT 1, URL, COUNT(*) AS c FROM sparkhits GROUP BY 1, URL ORDER BY c DESC LIMIT 10;",
+      "warmup_runs": 1,
+      "test_runs": 5,
+      "timings": [],
+      "error": null,
+      "avg_time": 10.488492132999818,
+      "p75_time": 9.50220673900003,
+      "min_time": 9.089847257000656,
+      "max_time": 15.120915868999873,
+      "individual_times": [
+        15.120915868999873,
+        9.50220673900003,
+        9.477196955998807,
+        9.252293843999723,
+        9.089847257000656
+      ]
+    },
+    {
+      "query_id": "Q36",
+      "query": "SELECT ClientIP, ClientIP - 1, ClientIP - 2, ClientIP - 3, COUNT(*) AS c FROM sparkhits GROUP BY ClientIP, ClientIP - 1, ClientIP - 2, ClientIP - 3 ORDER BY c DESC LIMIT 10;",
+      "warmup_runs": 1,
+      "test_runs": 5,
+      "timings": [],
+      "error": null,
+      "avg_time": 4.658134834799784,
+      "p75_time": 3.7842717209987313,
+      "min_time": 3.2782379850013967,
+      "max_time": 9.092478489999849,
+      "individual_times": [
+        9.092478489999849,
+        3.7842717209987313,
+        3.659045170999889,
+        3.4766408069990575,
+        3.2782379850013967
+      ]
+    },
+    {
+      "query_id": "Q37",
+      "query": "SELECT URL, COUNT(*) AS PageViews FROM sparkhits WHERE CounterID = 62 AND EventDate >= 15887 AND EventDate <= 15917 AND DontCountHits = 0 AND IsRefresh = 0 AND URL <> '' GROUP BY URL ORDER BY PageViews DESC LIMIT 10;",
+      "warmup_runs": 1,
+      "test_runs": 5,
+      "timings": [],
+      "error": null,
+      "avg_time": 2.5251330104008956,
+      "p75_time": 1.7854824900005042,
+      "min_time": 1.5093966920012463,
+      "max_time": 5.970717047001017,
+      "individual_times": [
+        5.970717047001017,
+        1.7854824900005042,
+        1.7472451990015543,
+        1.612823624000157,
+        1.5093966920012463
+      ]
+    },
+    {
+      "query_id": "Q38",
+      "query": "SELECT Title, COUNT(*) AS PageViews FROM sparkhits WHERE CounterID = 62 AND EventDate >= 15887 AND EventDate <= 15917 AND DontCountHits = 0 AND IsRefresh = 0 AND Title <> '' GROUP BY Title ORDER BY PageViews DESC LIMIT 10;",
+      "warmup_runs": 1,
+      "test_runs": 5,
+      "timings": [],
+      "error": null,
+      "avg_time": 2.3084864657997968,
+      "p75_time": 1.6631376620007359,
+      "min_time": 1.46885265399942,
+      "max_time": 5.298000428998421,
+      "individual_times": [
+        5.298000428998421,
+        1.6631376620007359,
+        1.5574615920013457,
+        1.554979991999062,
+        1.46885265399942
+      ]
+    },
+    {
+      "query_id": "Q39",
+      "query": "SELECT URL, COUNT(*) AS PageViews FROM sparkhits WHERE CounterID = 62 AND EventDate >= 15887 AND EventDate <= 15917 AND IsRefresh = 0 AND IsLink <> 0 AND IsDownload = 0 GROUP BY URL ORDER BY PageViews DESC LIMIT 1010;",
+      "warmup_runs": 1,
+      "test_runs": 5,
+      "timings": [],
+      "error": null,
+      "avg_time": 2.3203662788000656,
+      "p75_time": 1.6589738050006417,
+      "min_time": 1.4757942169999296,
+      "max_time": 5.301105446000292,
+      "individual_times": [
+        5.301105446000292,
+        1.6589738050006417,
+        1.5990269899994018,
+        1.5669309360000625,
+        1.4757942169999296
+      ]
+    },
+    {
+      "query_id": "Q40",
+      "query": "SELECT TraficSourceID, SearchEngineID, AdvEngineID, CASE WHEN (SearchEngineID = 0 AND AdvEngineID = 0) THEN Referer ELSE '' END AS Src, URL AS Dst, COUNT(*) AS PageViews FROM sparkhits WHERE CounterID = 62 AND EventDate >= 15887 AND EventDate <= 15917 AND IsRefresh = 0 GROUP BY TraficSourceID, SearchEngineID, AdvEngineID, CASE WHEN (SearchEngineID = 0 AND AdvEngineID = 0) THEN Referer ELSE '' END, URL ORDER BY PageViews DESC LIMIT 1010;",
+      "warmup_runs": 1,
+      "test_runs": 5,
+      "timings": [],
+      "error": null,
+      "avg_time": 3.159480980000444,
+      "p75_time": 2.4764745209995453,
+      "min_time": 2.1135594330007734,
+      "max_time": 6.566980078001507,
+      "individual_times": [
+        6.566980078001507,
+        2.4764745209995453,
+        2.423698818000048,
+        2.216692050000347,
+        2.1135594330007734
+      ]
+    },
+    {
+      "query_id": "Q41",
+      "query": "SELECT URLHash, EventDate, COUNT(*) AS PageViews FROM sparkhits WHERE CounterID = 62 AND EventDate >= 15887 AND EventDate <= 15917 AND IsRefresh = 0 AND TraficSourceID IN (-1, 6) AND RefererHash = 3594120000172545465 GROUP BY URLHash, EventDate ORDER BY PageViews DESC LIMIT 110;",
+      "warmup_runs": 1,
+      "test_runs": 5,
+      "timings": [],
+      "error": null,
+      "avg_time": 2.254857081400405,
+      "p75_time": 1.6657540350006457,
+      "min_time": 1.431347789000938,
+      "max_time": 5.173277238000082,
+      "individual_times": [
+        5.173277238000082,
+        1.6657540350006457,
+        1.4992006749998836,
+        1.431347789000938,
+        1.504705670000476
+      ]
+    },
+    {
+      "query_id": "Q42",
+      "query": "SELECT WindowClientWidth, WindowClientHeight, COUNT(*) AS PageViews FROM sparkhits WHERE CounterID = 62 AND EventDate >= 15887 AND EventDate <= 15917 AND IsRefresh = 0 AND DontCountHits = 0 AND URLHash = 2868770270353813622 GROUP BY WindowClientWidth, WindowClientHeight ORDER BY PageViews DESC LIMIT 10010;",
+      "warmup_runs": 1,
+      "test_runs": 5,
+      "timings": [],
+      "error": null,
+      "avg_time": 2.2517918293997354,
+      "p75_time": 1.632603789001223,
+      "min_time": 1.4381174509999255,
+      "max_time": 5.1127292629989824,
+      "individual_times": [
+        5.1127292629989824,
+        1.632603789001223,
+        1.5845748519986955,
+        1.4381174509999255,
+        1.4909337919998507
+      ]
+    },
+    {
+      "query_id": "Q43",
+      "query": "SELECT DATE_TRUNC('minute', TIMESTAMP(EventTime)) AS M, COUNT(*) AS PageViews FROM sparkhits WHERE CounterID = 62 AND EventDate >= 15900 AND EventDate <= 15901 AND IsRefresh = 0 AND DontCountHits = 0 GROUP BY DATE_TRUNC('minute', TIMESTAMP(EventTime)) ORDER BY DATE_TRUNC('minute', TIMESTAMP(EventTime)) LIMIT 1010;",
+      "warmup_runs": 1,
+      "test_runs": 5,
+      "timings": [],
+      "error": null,
+      "avg_time": 2.2681884430003265,
+      "p75_time": 1.7355993930013938,
+      "min_time": 1.3975514599987946,
+      "max_time": 5.1759328820007795,
+      "individual_times": [
+        5.1759328820007795,
+        1.7355993930013938,
+        1.567785361999995,
+        1.3975514599987946,
+        1.4640731180006696
+      ]
+    }
+  ]
+}
