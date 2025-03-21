@@ -1,639 +1,661 @@
 {
-  "timestamp": "2025-03-20T20:59:33.685952",
+  "timestamp": "2025-03-21T16:20:50.708200",
   "results": [
     {
       "query_id": "Q1",
       "query": "SELECT COUNT(*) FROM prestohits",
       "iterations": 5,
-      "avg_time": 6.955940940400614,
-      "p75_time": 7.404123817001164,
-      "min_time": 6.431004133000897,
-      "max_time": 7.510532701000557,
+      "avg_time": 4.253136662399629,
+      "p75_time": 4.253892606000591,
+      "min_time": 4.1982063950054,
+      "max_time": 4.355537744995672,
       "individual_times": [
-        7.510532701000557,
-        6.724933286001033,
-        6.431004133000897,
-        7.404123817001164,
-        6.709110764999423
+        4.222776219998195,
+        4.1982063950054,
+        4.355537744995672,
+        4.253892606000591,
+        4.235270345998288
       ]
     },
     {
       "query_id": "Q2",
       "query": "SELECT COUNT(*) FROM prestohits WHERE AdvEngineID <> 0",
       "iterations": 5,
-      "avg_time": 7.753430968599423,
-      "p75_time": 8.41773113599993,
-      "min_time": 6.711066588999529,
-      "max_time": 8.472500715999558,
+      "avg_time": 4.34847190700093,
+      "p75_time": 4.431243735001772,
+      "min_time": 4.2320294300006935,
+      "max_time": 4.448386759999266,
       "individual_times": [
-        7.606689333999384,
-        6.711066588999529,
-        8.41773113599993,
-        8.472500715999558,
-        7.559167067998715
+        4.431243735001772,
+        4.2923895740023,
+        4.2320294300006935,
+        4.338310036000621,
+        4.448386759999266
       ]
     },
     {
       "query_id": "Q3",
       "query": "SELECT SUM(AdvEngineID), COUNT(*), AVG(ResolutionWidth) FROM prestohits",
       "iterations": 5,
-      "avg_time": 8.00530960219985,
-      "p75_time": 7.919167120000566,
-      "min_time": 7.6824524349995045,
-      "max_time": 8.804085396999653,
+      "avg_time": 4.6801452010011415,
+      "p75_time": 4.597070287003589,
+      "min_time": 4.413643030995445,
+      "max_time": 5.4183502579980996,
       "individual_times": [
-        7.708823926999685,
-        7.912019131999841,
-        8.804085396999653,
-        7.919167120000566,
-        7.6824524349995045
+        4.511582477003685,
+        4.4600799520048895,
+        4.597070287003589,
+        4.413643030995445,
+        5.4183502579980996
       ]
     },
     {
       "query_id": "Q4",
       "query": "SELECT AVG(UserID) FROM prestohits",
       "iterations": 5,
-      "avg_time": 7.733424023200132,
-      "p75_time": 7.613517632000367,
-      "min_time": 7.50903650500004,
-      "max_time": 8.436622403000001,
+      "avg_time": 4.459272871800931,
+      "p75_time": 4.481761006005399,
+      "min_time": 4.347857587999897,
+      "max_time": 4.740707183998893,
       "individual_times": [
-        7.529360032000113,
-        8.436622403000001,
-        7.50903650500004,
-        7.613517632000367,
-        7.578583544000139
+        4.740707183998893,
+        4.481761006005399,
+        4.359905687000719,
+        4.347857587999897,
+        4.3661328939997475
       ]
     },
     {
       "query_id": "Q5",
       "query": "SELECT COUNT(DISTINCT UserID) FROM prestohits",
       "iterations": 5,
-      "avg_time": 8.111356802199953,
-      "p75_time": 7.963890613000331,
-      "min_time": 7.9099733809998725,
-      "max_time": 8.821229454000786,
+      "avg_time": 4.903588817399577,
+      "p75_time": 5.346969457998057,
+      "min_time": 4.56179438700201,
+      "max_time": 5.481488017998345,
       "individual_times": [
-        7.9099733809998725,
-        7.963890613000331,
-        7.9255545799987885,
-        7.936135982999986,
-        8.821229454000786
+        5.481488017998345,
+        5.346969457998057,
+        4.565675331003149,
+        4.56179438700201,
+        4.562016892996326
       ]
     },
     {
       "query_id": "Q6",
       "query": "SELECT COUNT(DISTINCT SearchPhrase) FROM prestohits",
       "iterations": 5,
-      "avg_time": 9.714396897600091,
-      "p75_time": 9.777918298001168,
-      "min_time": 9.557710822000445,
-      "max_time": 9.835986186999435,
+      "avg_time": 5.594825019601558,
+      "p75_time": 5.662504348001676,
+      "min_time": 5.484851878005429,
+      "max_time": 5.693909140005417,
       "individual_times": [
-        9.651727370999652,
-        9.557710822000445,
-        9.748641809999754,
-        9.777918298001168,
-        9.835986186999435
+        5.693909140005417,
+        5.662504348001676,
+        5.630442591995234,
+        5.502417140000034,
+        5.484851878005429
       ]
     },
     {
       "query_id": "Q7",
       "query": "SELECT MIN(EventDate), MAX(EventDate) FROM prestohits",
       "iterations": 5,
-      "avg_time": 7.116158239400465,
-      "p75_time": 7.470209278999391,
-      "min_time": 6.819810422999581,
-      "max_time": 7.493915100001686,
+      "avg_time": 4.316372003797733,
+      "p75_time": 4.357786215994565,
+      "min_time": 4.279269721999299,
+      "max_time": 4.358683329002815,
       "individual_times": [
-        6.933569422000801,
-        6.863286973000868,
-        7.470209278999391,
-        6.819810422999581,
-        7.493915100001686
+        4.287294898997061,
+        4.2988258529949235,
+        4.358683329002815,
+        4.357786215994565,
+        4.279269721999299
       ]
     },
     {
       "query_id": "Q8",
       "query": "SELECT AdvEngineID, COUNT(*) FROM prestohits WHERE AdvEngineID <> 0 GROUP BY AdvEngineID ORDER BY COUNT(*) DESC",
       "iterations": 5,
-      "avg_time": 7.810616255000423,
-      "p75_time": 7.934773606000817,
-      "min_time": 7.493253230999471,
-      "max_time": 8.487729100999786,
+      "avg_time": 4.392049409999163,
+      "p75_time": 4.447465527999157,
+      "min_time": 4.291991434998636,
+      "max_time": 4.4753620690025855,
       "individual_times": [
-        7.615116045000832,
-        7.522209292001207,
-        7.493253230999471,
-        8.487729100999786,
-        7.934773606000817
+        4.325634649001586,
+        4.4753620690025855,
+        4.291991434998636,
+        4.419793368993851,
+        4.447465527999157
       ]
     },
     {
       "query_id": "Q9",
       "query": "SELECT RegionID, COUNT(DISTINCT UserID) AS u FROM prestohits GROUP BY RegionID ORDER BY u DESC LIMIT 10",
       "iterations": 5,
-      "avg_time": 10.501622145200235,
-      "p75_time": 10.5693654709994,
-      "min_time": 10.296020362999116,
-      "max_time": 10.695180943001105,
+      "avg_time": 5.834536183999444,
+      "p75_time": 5.873637291995692,
+      "min_time": 5.761304349005513,
+      "max_time": 5.874113714002306,
       "individual_times": [
-        10.38564085300095,
-        10.296020362999116,
-        10.561903096000606,
-        10.695180943001105,
-        10.5693654709994
+        5.874113714002306,
+        5.857484718995693,
+        5.873637291995692,
+        5.761304349005513,
+        5.806140845998016
       ]
     },
     {
       "query_id": "Q10",
       "query": "SELECT RegionID, SUM(AdvEngineID), COUNT(*) AS c, AVG(ResolutionWidth), COUNT(DISTINCT UserID) FROM prestohits GROUP BY RegionID ORDER BY c DESC LIMIT 10",
       "iterations": 5,
-      "avg_time": 14.665328297000087,
-      "p75_time": 14.662040351000542,
-      "min_time": 14.564082863000294,
-      "max_time": 14.786050210999747,
+      "avg_time": 8.034450762199413,
+      "p75_time": 8.076599591993727,
+      "min_time": 7.895509153997409,
+      "max_time": 8.194907005003188,
       "individual_times": [
-        14.652631191000182,
-        14.564082863000294,
-        14.661836868999671,
-        14.662040351000542,
-        14.786050210999747
+        7.982633088999137,
+        7.895509153997409,
+        8.076599591993727,
+        8.194907005003188,
+        8.022604971003602
       ]
     },
     {
       "query_id": "Q11",
       "query": "SELECT MobilePhoneModel, COUNT(DISTINCT UserID) AS u FROM prestohits WHERE MobilePhoneModel <> '' GROUP BY MobilePhoneModel ORDER BY u DESC LIMIT 10",
       "iterations": 5,
-      "avg_time": 8.508315406600378,
-      "p75_time": 8.955516440000792,
-      "min_time": 8.05937507499948,
-      "max_time": 9.024688068000614,
+      "avg_time": 5.203963853600726,
+      "p75_time": 5.490545280001243,
+      "min_time": 4.738478065999516,
+      "max_time": 5.569269664003514,
       "individual_times": [
-        9.024688068000614,
-        8.955516440000792,
-        8.292588039001203,
-        8.05937507499948,
-        8.209409410999797
+        5.569269664003514,
+        5.490545280001243,
+        5.465087066004344,
+        4.756439191995014,
+        4.738478065999516
       ]
     },
     {
       "query_id": "Q12",
       "query": "SELECT MobilePhone, MobilePhoneModel, COUNT(DISTINCT UserID) AS u FROM prestohits WHERE MobilePhoneModel <> '' GROUP BY MobilePhone, MobilePhoneModel ORDER BY u DESC LIMIT 10",
       "iterations": 5,
-      "avg_time": 9.601275988800262,
-      "p75_time": 9.805382673999702,
-      "min_time": 9.214802934000545,
-      "max_time": 9.952444442000342,
+      "avg_time": 5.398453517201415,
+      "p75_time": 5.721540113001538,
+      "min_time": 4.8973045960010495,
+      "max_time": 5.778839370999776,
       "individual_times": [
-        9.952444442000342,
-        9.805382673999702,
-        9.766896652001378,
-        9.266853241999343,
-        9.214802934000545
+        5.721540113001538,
+        5.647568945001694,
+        4.8973045960010495,
+        4.947014561003016,
+        5.778839370999776
       ]
     },
     {
       "query_id": "Q13",
       "query": "SELECT SearchPhrase, COUNT(*) AS c FROM prestohits WHERE SearchPhrase <> '' GROUP BY SearchPhrase ORDER BY c DESC LIMIT 10",
       "iterations": 5,
-      "avg_time": 9.756548139000733,
-      "p75_time": 9.924855323999509,
-      "min_time": 8.914393086000928,
-      "max_time": 10.198020136000196,
+      "avg_time": 5.425567034601409,
+      "p75_time": 5.607824644001084,
+      "min_time": 4.960417565998796,
+      "max_time": 5.661582435997843,
       "individual_times": [
-        9.924855323999509,
-        9.831948833001661,
-        8.914393086000928,
-        10.198020136000196,
-        9.913523316001374
+        5.31325496500358,
+        5.584755562005739,
+        4.960417565998796,
+        5.661582435997843,
+        5.607824644001084
       ]
     },
     {
       "query_id": "Q14",
       "query": "SELECT SearchPhrase, COUNT(DISTINCT UserID) AS u FROM prestohits WHERE SearchPhrase <> '' GROUP BY SearchPhrase ORDER BY u DESC LIMIT 10",
       "iterations": 5,
-      "avg_time": 11.98579057120005,
-      "p75_time": 12.24944628099911,
-      "min_time": 11.590729133000423,
-      "max_time": 12.496969431000252,
+      "avg_time": 6.632429592600966,
+      "p75_time": 6.6578047439979855,
+      "min_time": 6.567289800004801,
+      "max_time": 6.670582468999783,
       "individual_times": [
-        12.24944628099911,
-        12.496969431000252,
-        11.932359227999768,
-        11.659448783000698,
-        11.590729133000423
+        6.670582468999783,
+        6.623334531002911,
+        6.567289800004801,
+        6.6578047439979855,
+        6.643136418999347
       ]
     },
     {
       "query_id": "Q15",
       "query": "SELECT SearchEngineID, SearchPhrase, COUNT(*) AS c FROM prestohits WHERE SearchPhrase <> '' GROUP BY SearchEngineID, SearchPhrase ORDER BY c DESC LIMIT 10",
       "iterations": 5,
-      "avg_time": 10.146517525199306,
-      "p75_time": 10.286046150999027,
-      "min_time": 9.877630338998642,
-      "max_time": 10.436444798000593,
+      "avg_time": 5.642470785397745,
+      "p75_time": 5.770181239997328,
+      "min_time": 5.447625799999514,
+      "max_time": 5.770988130992919,
       "individual_times": [
-        10.148089949998393,
-        10.286046150999027,
-        10.436444798000593,
-        9.984376387999873,
-        9.877630338998642
+        5.770181239997328,
+        5.755012503002945,
+        5.770988130992919,
+        5.4685462529960205,
+        5.447625799999514
       ]
     },
     {
       "query_id": "Q16",
       "query": "SELECT UserID, COUNT(*) FROM prestohits GROUP BY UserID ORDER BY COUNT(*) DESC LIMIT 10",
       "iterations": 5,
-      "avg_time": 9.290255174599588,
-      "p75_time": 9.762685680998402,
-      "min_time": 8.289270203998967,
-      "max_time": 9.77922940999997,
+      "avg_time": 4.754720277199522,
+      "p75_time": 4.821280723001109,
+      "min_time": 4.600474109000061,
+      "max_time": 4.928537948995654,
       "individual_times": [
-        8.289270203998967,
-        9.754878059000475,
-        8.865212519000124,
-        9.762685680998402,
-        9.77922940999997
+        4.928537948995654,
+        4.771204029995715,
+        4.821280723001109,
+        4.652104575005069,
+        4.600474109000061
       ]
     },
     {
       "query_id": "Q17",
       "query": "SELECT UserID, SearchPhrase, COUNT(*) FROM prestohits GROUP BY UserID, SearchPhrase ORDER BY COUNT(*) DESC LIMIT 10",
       "iterations": 5,
-      "avg_time": 13.221553342599872,
-      "p75_time": 13.195850699999937,
-      "min_time": 13.085835830001088,
-      "max_time": 13.513268398999571,
+      "avg_time": 7.172014094001497,
+      "p75_time": 7.232533583999611,
+      "min_time": 7.019200079004804,
+      "max_time": 7.238437972999236,
       "individual_times": [
-        13.189460022998901,
-        13.085835830001088,
-        13.123351760999867,
-        13.195850699999937,
-        13.513268398999571
+        7.222766691003926,
+        7.147132142999908,
+        7.232533583999611,
+        7.019200079004804,
+        7.238437972999236
       ]
     },
     {
       "query_id": "Q18",
       "query": "SELECT UserID, SearchPhrase, COUNT(*) FROM prestohits GROUP BY UserID, SearchPhrase LIMIT 10",
       "iterations": 5,
-      "avg_time": 12.66626051860003,
-      "p75_time": 12.688557726998624,
-      "min_time": 12.603579193000769,
-      "max_time": 12.739405053000155,
+      "avg_time": 6.968469901797652,
+      "p75_time": 7.048136106997845,
+      "min_time": 6.8062804189976305,
+      "max_time": 7.196691575998557,
       "individual_times": [
-        12.688557726998624,
-        12.618338116000814,
-        12.739405053000155,
-        12.681422503999784,
-        12.603579193000769
+        6.8062804189976305,
+        6.9787161169952014,
+        6.81252528999903,
+        7.048136106997845,
+        7.196691575998557
       ]
     },
     {
       "query_id": "Q19",
       "query": "SELECT UserID, extract(minute FROM from_unixtime(eventtime)) AS m, SearchPhrase, COUNT(*) FROM prestohits GROUP BY UserID, extract(minute FROM from_unixtime(eventtime)), SearchPhrase ORDER BY COUNT(*) DESC LIMIT 10",
       "iterations": 5,
-      "avg_time": 23.642908860600073,
-      "p75_time": 23.965526691001287,
-      "min_time": 22.661247662999813,
-      "max_time": 24.019916377999834,
+      "avg_time": 10.845458083800622,
+      "p75_time": 10.862476522997895,
+      "min_time": 10.691145185002824,
+      "max_time": 11.145518523000646,
       "individual_times": [
-        23.793288173999827,
-        24.019916377999834,
-        22.661247662999813,
-        23.774565396999606,
-        23.965526691001287
+        10.691145185002824,
+        11.145518523000646,
+        10.862476522997895,
+        10.751587559003383,
+        10.776562628998363
       ]
     },
     {
       "query_id": "Q20",
       "query": "SELECT UserID FROM prestohits WHERE UserID = 435090932899640449",
       "iterations": 5,
-      "avg_time": 7.405605698799991,
-      "p75_time": 7.583998385000086,
-      "min_time": 6.82525673300006,
-      "max_time": 7.608892926999033,
+      "avg_time": 4.449264663399663,
+      "p75_time": 4.464222583999799,
+      "min_time": 4.41224878099456,
+      "max_time": 4.513408074002655,
       "individual_times": [
-        7.459334701999978,
-        7.583998385000086,
-        7.608892926999033,
-        6.82525673300006,
-        7.550545747000797
+        4.41224878099456,
+        4.513408074002655,
+        4.444019667003886,
+        4.464222583999799,
+        4.412424210997415
       ]
     },
     {
       "query_id": "Q21",
       "query": "SELECT COUNT(*) FROM prestohits WHERE URL LIKE '%google%'",
       "iterations": 5,
-      "avg_time": 13.36471301299971,
-      "p75_time": 13.595079983999312,
-      "min_time": 13.09647342399876,
-      "max_time": 13.5958029730009,
+      "avg_time": 7.604839584000001,
+      "p75_time": 7.650282457005233,
+      "min_time": 7.359739145998901,
+      "max_time": 7.777169832996151,
       "individual_times": [
-        13.222350514999562,
-        13.5958029730009,
-        13.313858169000014,
-        13.595079983999312,
-        13.09647342399876
+        7.777169832996151,
+        7.64172616200085,
+        7.359739145998901,
+        7.650282457005233,
+        7.595280321998871
       ]
     },
     {
       "query_id": "Q22",
       "query": "SELECT SearchPhrase, MIN(URL), COUNT(*) AS c FROM prestohits WHERE URL LIKE '%google%' AND SearchPhrase <> '' GROUP BY SearchPhrase ORDER BY c DESC LIMIT 10",
       "iterations": 5,
-      "avg_time": 13.07231577999919,
-      "p75_time": 13.055416043998775,
-      "min_time": 12.704272730999946,
-      "max_time": 13.769563140998798,
+      "avg_time": 7.14760507119936,
+      "p75_time": 7.391096054001537,
+      "min_time": 6.918662805001077,
+      "max_time": 7.44668969399936,
       "individual_times": [
-        12.704272730999946,
-        13.055416043998775,
-        12.866394385999229,
-        13.769563140998798,
-        12.965932597999199
+        7.021438787996885,
+        7.391096054001537,
+        7.44668969399936,
+        6.960138014997938,
+        6.918662805001077
       ]
     },
     {
       "query_id": "Q23",
       "query": "SELECT SearchPhrase, MIN(URL), MIN(Title), COUNT(*) AS c, COUNT(DISTINCT UserID) FROM prestohits WHERE Title LIKE '%Google%' AND URL NOT LIKE '%.google.%' AND SearchPhrase <> '' GROUP BY SearchPhrase ORDER BY c DESC LIMIT 10",
       "iterations": 5,
-      "avg_time": 15.501667449799788,
-      "p75_time": 15.439379374000055,
-      "min_time": 15.382134868999856,
-      "max_time": 15.857838361000177,
+      "avg_time": 8.715922716000932,
+      "p75_time": 8.878220892998797,
+      "min_time": 8.51315758599958,
+      "max_time": 9.00297954200505,
       "individual_times": [
-        15.857838361000177,
-        15.439379374000055,
-        15.404642158999195,
-        15.42434248599966,
-        15.382134868999856
+        9.00297954200505,
+        8.51315758599958,
+        8.527215464004257,
+        8.658040094996977,
+        8.878220892998797
       ]
     },
     {
       "query_id": "Q24",
       "query": "SELECT * FROM prestohits WHERE URL LIKE '%google%' ORDER BY from_unixtime(eventtime) LIMIT 10",
       "iterations": 5,
-      "avg_time": 49.15558753360019,
-      "p75_time": 50.2270022520006,
-      "min_time": 47.72639289400104,
-      "max_time": 51.230457659999956,
+      "avg_time": 30.97963266580191,
+      "p75_time": 32.71678910600167,
+      "min_time": 28.690017722001357,
+      "max_time": 32.9699111450027,
       "individual_times": [
-        47.72639289400104,
-        51.230457659999956,
-        48.300709338998786,
-        48.29337552300058,
-        50.2270022520006
+        28.690017722001357,
+        30.59121864500048,
+        32.71678910600167,
+        32.9699111450027,
+        29.930226711003343
       ]
     },
     {
       "query_id": "Q25",
       "query": "SELECT SearchPhrase FROM prestohits WHERE SearchPhrase <> '' ORDER BY from_unixtime(eventtime) LIMIT 10",
       "iterations": 5,
-      "avg_time": 9.469013326400454,
-      "p75_time": 9.764149483000438,
-      "min_time": 8.731988153000202,
-      "max_time": 9.91975131900108,
+      "avg_time": 5.620964513601211,
+      "p75_time": 5.68164508400514,
+      "min_time": 5.533216839998204,
+      "max_time": 5.708485146002204,
       "individual_times": [
-        9.91975131900108,
-        9.347241699000733,
-        9.764149483000438,
-        9.58193597799982,
-        8.731988153000202
+        5.68164508400514,
+        5.547153478000837,
+        5.708485146002204,
+        5.533216839998204,
+        5.634322019999672
       ]
     },
     {
       "query_id": "Q26",
       "query": "SELECT SearchPhrase FROM prestohits WHERE SearchPhrase <> '' ORDER BY SearchPhrase LIMIT 10",
       "iterations": 5,
-      "avg_time": 8.583987683399391,
-      "p75_time": 8.847581194999293,
-      "min_time": 7.846087808999073,
-      "max_time": 8.933805304999623,
+      "avg_time": 4.714602829999057,
+      "p75_time": 4.619049234999693,
+      "min_time": 4.463372686004732,
+      "max_time": 5.454811564995907,
       "individual_times": [
-        8.699396648000402,
-        8.593067459998565,
-        8.933805304999623,
-        7.846087808999073,
-        8.847581194999293
+        4.619049234999693,
+        4.564397975998872,
+        4.463372686004732,
+        5.454811564995907,
+        4.471382687996083
       ]
     },
     {
       "query_id": "Q27",
       "query": "SELECT SearchPhrase FROM prestohits WHERE SearchPhrase <> '' ORDER BY from_unixtime(eventtime), SearchPhrase LIMIT 10",
       "iterations": 5,
-      "avg_time": 9.511623396600044,
-      "p75_time": 9.696050046000892,
-      "min_time": 9.313418666999496,
-      "max_time": 9.724401420000504,
+      "avg_time": 5.555901794799138,
+      "p75_time": 5.6148807979989215,
+      "min_time": 5.496570602997963,
+      "max_time": 5.633853972998622,
       "individual_times": [
-        9.377815705000103,
-        9.446431144999224,
-        9.724401420000504,
-        9.313418666999496,
-        9.696050046000892
+        5.6148807979989215,
+        5.5308448530049645,
+        5.503358746995218,
+        5.633853972998622,
+        5.496570602997963
       ]
     },
     {
       "query_id": "Q28",
       "query": "SELECT CounterID, AVG(length(URL)) AS l, COUNT(*) AS c FROM prestohits WHERE URL <> '' GROUP BY CounterID HAVING COUNT(*) > 100000 ORDER BY l DESC LIMIT 25",
       "iterations": 5,
-      "avg_time": 12.923336742799801,
-      "p75_time": 12.943451700999503,
-      "min_time": 12.817624830000568,
-      "max_time": 13.152691753999534,
+      "avg_time": 7.241796732196235,
+      "p75_time": 7.3604342749968055,
+      "min_time": 7.020414560000063,
+      "max_time": 7.396028092996858,
       "individual_times": [
-        12.817624830000568,
-        13.152691753999534,
-        12.848191750999831,
-        12.943451700999503,
-        12.854723677999573
+        7.396028092996858,
+        7.3604342749968055,
+        7.240843732994108,
+        7.1912629999933415,
+        7.020414560000063
       ]
     },
     {
       "query_id": "Q29",
       "query": "SELECT REGEXP_REPLACE(Referer, '^https?://(?:www\\.)?([^/]+)/.*$', '\\1') AS k, AVG(length(Referer)) AS l, COUNT(*) AS c, MIN(Referer) FROM prestohits WHERE Referer <> '' GROUP BY REGEXP_REPLACE(Referer, '^https?://(?:www\\.)?([^/]+)/.*$', '\\1') HAVING COUNT(*) > 100000 ORDER BY l DESC LIMIT 25",
       "iterations": 5,
-      "avg_time": 28.550183849799943,
-      "p75_time": 28.59362392100047,
-      "min_time": 28.450731703998827,
-      "max_time": 28.618858363999607,
+      "avg_time": 15.355122560200106,
+      "p75_time": 15.353838673996506,
+      "min_time": 15.29158665399882,
+      "max_time": 15.45878446700226,
       "individual_times": [
-        28.525366805000886,
-        28.562338454999917,
-        28.618858363999607,
-        28.450731703998827,
-        28.59362392100047
+        15.45878446700226,
+        15.353838673996506,
+        15.32049783399998,
+        15.350905172002967,
+        15.29158665399882
       ]
     },
     {
       "query_id": "Q30",
-      "query": "SELECT SUM(ResolutionWidth + n) FROM prestohits;  -- Repeat pattern for all 89 cases\nSELECT SearchEngineID, ClientIP, COUNT(*) AS c, SUM(IsRefresh), AVG(ResolutionWidth) FROM prestohits WHERE SearchPhrase <> '' GROUP BY SearchEngineID, ClientIP ORDER BY c DESC LIMIT 10",
-      "error": "Query 20250320_204841_00226_ts9i4 failed: line 1:30: Column 'n' cannot be resolved\nLINE 1: SELECT SUM(ResolutionWidth + n) FROM prestohits\n                                     ^\n\n"
-    },
-    {
-      "query_id": "Q30",
-      "query": "SELECT SUM(ResolutionWidth + n) FROM prestohits;  -- Repeat pattern for all 89 cases\nSELECT SearchEngineID, ClientIP, COUNT(*) AS c, SUM(IsRefresh), AVG(ResolutionWidth) FROM prestohits WHERE SearchPhrase <> '' GROUP BY SearchEngineID, ClientIP ORDER BY c DESC LIMIT 10",
-      "error": "'avg_time'"
+      "query": "SELECT SUM(ResolutionWidth), SUM(ResolutionWidth + 1), SUM(ResolutionWidth + 2), SUM(ResolutionWidth + 3), SUM(ResolutionWidth + 4), SUM(ResolutionWidth + 5), SUM(ResolutionWidth + 6), SUM(ResolutionWidth + 7), SUM(ResolutionWidth + 8), SUM(ResolutionWidth + 9), SUM(ResolutionWidth + 10), SUM(ResolutionWidth + 11), SUM(ResolutionWidth + 12), SUM(ResolutionWidth + 13), SUM(ResolutionWidth + 14), SUM(ResolutionWidth + 15), SUM(ResolutionWidth + 16), SUM(ResolutionWidth + 17), SUM(ResolutionWidth + 18), SUM(ResolutionWidth + 19), SUM(ResolutionWidth + 20), SUM(ResolutionWidth + 21), SUM(ResolutionWidth + 22), SUM(ResolutionWidth + 23), SUM(ResolutionWidth + 24), SUM(ResolutionWidth + 25), SUM(ResolutionWidth + 26), SUM(ResolutionWidth + 27), SUM(ResolutionWidth + 28), SUM(ResolutionWidth + 29), SUM(ResolutionWidth + 30), SUM(ResolutionWidth + 31), SUM(ResolutionWidth + 32), SUM(ResolutionWidth + 33), SUM(ResolutionWidth + 34), SUM(ResolutionWidth + 35), SUM(ResolutionWidth + 36), SUM(ResolutionWidth + 37), SUM(ResolutionWidth + 38), SUM(ResolutionWidth + 39), SUM(ResolutionWidth + 40), SUM(ResolutionWidth + 41), SUM(ResolutionWidth + 42), SUM(ResolutionWidth + 43), SUM(ResolutionWidth + 44), SUM(ResolutionWidth + 45), SUM(ResolutionWidth + 46), SUM(ResolutionWidth + 47), SUM(ResolutionWidth + 48), SUM(ResolutionWidth + 49), SUM(ResolutionWidth + 50), SUM(ResolutionWidth + 51), SUM(ResolutionWidth + 52), SUM(ResolutionWidth + 53), SUM(ResolutionWidth + 54), SUM(ResolutionWidth + 55), SUM(ResolutionWidth + 56), SUM(ResolutionWidth + 57), SUM(ResolutionWidth + 58), SUM(ResolutionWidth + 59), SUM(ResolutionWidth + 60), SUM(ResolutionWidth + 61), SUM(ResolutionWidth + 62), SUM(ResolutionWidth + 63), SUM(ResolutionWidth + 64), SUM(ResolutionWidth + 65), SUM(ResolutionWidth + 66), SUM(ResolutionWidth + 67), SUM(ResolutionWidth + 68), SUM(ResolutionWidth + 69), SUM(ResolutionWidth + 70), SUM(ResolutionWidth + 71), SUM(ResolutionWidth + 72), SUM(ResolutionWidth + 73), SUM(ResolutionWidth + 74), SUM(ResolutionWidth + 75), SUM(ResolutionWidth + 76), SUM(ResolutionWidth + 77), SUM(ResolutionWidth + 78), SUM(ResolutionWidth + 79), SUM(ResolutionWidth + 80), SUM(ResolutionWidth + 81), SUM(ResolutionWidth + 82), SUM(ResolutionWidth + 83), SUM(ResolutionWidth + 84), SUM(ResolutionWidth + 85), SUM(ResolutionWidth + 86), SUM(ResolutionWidth + 87), SUM(ResolutionWidth + 88), SUM(ResolutionWidth + 89) FROM prestohits",
+      "iterations": 5,
+      "avg_time": 11.504941195198626,
+      "p75_time": 11.563839207003184,
+      "min_time": 11.398701750993496,
+      "max_time": 11.64829612399626,
+      "individual_times": [
+        11.441872392999358,
+        11.563839207003184,
+        11.398701750993496,
+        11.471996501000831,
+        11.64829612399626
+      ]
     },
     {
       "query_id": "Q31",
-      "query": "SELECT WatchID, ClientIP, COUNT(*) AS c, SUM(IsRefresh), AVG(ResolutionWidth) FROM prestohits WHERE SearchPhrase <> '' GROUP BY WatchID, ClientIP ORDER BY c DESC LIMIT 10",
+      "query": "SELECT SearchEngineID, ClientIP, COUNT(*) AS c, SUM(IsRefresh), AVG(ResolutionWidth) FROM prestohits WHERE SearchPhrase <> '' GROUP BY SearchEngineID, ClientIP ORDER BY c DESC LIMIT 10",
       "iterations": 5,
-      "avg_time": 12.65963765519955,
-      "p75_time": 12.776629963000232,
-      "min_time": 12.48285483699874,
-      "max_time": 12.77698499500002,
+      "avg_time": 6.3089534581959015,
+      "p75_time": 6.382332762994338,
+      "min_time": 6.205743741993501,
+      "max_time": 6.38406815900089,
       "individual_times": [
-        12.776629963000232,
-        12.48285483699874,
-        12.644938262999858,
-        12.616780217998894,
-        12.77698499500002
+        6.382332762994338,
+        6.38406815900089,
+        6.305956669995794,
+        6.266665956994984,
+        6.205743741993501
       ]
     },
     {
       "query_id": "Q32",
-      "query": "SELECT WatchID, ClientIP, COUNT(*) AS c, SUM(IsRefresh), AVG(ResolutionWidth) FROM prestohits GROUP BY WatchID, ClientIP ORDER BY c DESC LIMIT 10",
+      "query": "SELECT WatchID, ClientIP, COUNT(*) AS c, SUM(IsRefresh), AVG(ResolutionWidth) FROM prestohits WHERE SearchPhrase <> '' GROUP BY WatchID, ClientIP ORDER BY c DESC LIMIT 10",
       "iterations": 5,
-      "avg_time": 28.459087321599508,
-      "p75_time": 29.096471860999372,
-      "min_time": 27.464342958999623,
-      "max_time": 29.425915433999762,
+      "avg_time": 7.11912555040035,
+      "p75_time": 7.174743383002351,
+      "min_time": 7.000207475000934,
+      "max_time": 7.2531761069985805,
       "individual_times": [
-        28.651295674999346,
-        27.464342958999623,
-        29.425915433999762,
-        29.096471860999372,
-        27.65741067899944
+        7.174743383002351,
+        7.2531761069985805,
+        7.000207475000934,
+        7.127441085998726,
+        7.040059701001155
       ]
     },
     {
       "query_id": "Q33",
-      "query": "SELECT URL, COUNT(*) AS c FROM prestohits GROUP BY URL ORDER BY c DESC LIMIT 10",
+      "query": "SELECT WatchID, ClientIP, COUNT(*) AS c, SUM(IsRefresh), AVG(ResolutionWidth) FROM prestohits GROUP BY WatchID, ClientIP ORDER BY c DESC LIMIT 10",
       "iterations": 5,
-      "avg_time": 20.363404993199946,
-      "p75_time": 20.34194720999949,
-      "min_time": 19.892663512999206,
-      "max_time": 21.44027688300048,
+      "avg_time": 13.781001593600376,
+      "p75_time": 13.856958905998908,
+      "min_time": 13.271202019001066,
+      "max_time": 14.271230982005363,
       "individual_times": [
-        20.34194720999949,
-        21.44027688300048,
-        20.228691573000106,
-        19.892663512999206,
-        19.913445787000455
+        13.271202019001066,
+        13.767161447001854,
+        13.856958905998908,
+        13.73845461399469,
+        14.271230982005363
       ]
     },
     {
       "query_id": "Q34",
-      "query": "SELECT 1, URL, COUNT(*) AS c FROM prestohits GROUP BY 1, URL ORDER BY c DESC LIMIT 10",
+      "query": "SELECT URL, COUNT(*) AS c FROM prestohits GROUP BY URL ORDER BY c DESC LIMIT 10",
       "iterations": 5,
-      "avg_time": 20.857808893799664,
-      "p75_time": 21.684557062999374,
-      "min_time": 19.687315502000274,
-      "max_time": 21.811410893998982,
+      "avg_time": 9.789521507800965,
+      "p75_time": 9.910597797002993,
+      "min_time": 9.277557321998756,
+      "max_time": 10.472526676996495,
       "individual_times": [
-        20.70387403099994,
-        21.684557062999374,
-        21.811410893998982,
-        20.401886978999755,
-        19.687315502000274
+        9.554622243005724,
+        9.732303500000853,
+        10.472526676996495,
+        9.910597797002993,
+        9.277557321998756
       ]
     },
     {
       "query_id": "Q35",
-      "query": "SELECT ClientIP, ClientIP - 1, ClientIP - 2, ClientIP - 3, COUNT(*) AS c FROM prestohits GROUP BY ClientIP, ClientIP - 1, ClientIP - 2, ClientIP - 3 ORDER BY c DESC LIMIT 10",
+      "query": "SELECT 1, URL, COUNT(*) AS c FROM prestohits GROUP BY 1, URL ORDER BY c DESC LIMIT 10",
       "iterations": 5,
-      "avg_time": 10.716222087200004,
-      "p75_time": 10.702917988999616,
-      "min_time": 10.462545787999261,
-      "max_time": 11.375913238000066,
+      "avg_time": 9.65222607520118,
+      "p75_time": 9.74930909199611,
+      "min_time": 9.43079919500451,
+      "max_time": 9.848409414000344,
       "individual_times": [
-        10.462545787999261,
-        10.51651677100017,
-        10.523216650000904,
-        11.375913238000066,
-        10.702917988999616
+        9.848409414000344,
+        9.43079919500451,
+        9.601194804999977,
+        9.631417870004952,
+        9.74930909199611
       ]
     },
     {
       "query_id": "Q36",
-      "query": "SELECT URL, COUNT(*) AS PageViews FROM prestohits WHERE CounterID = 62 AND EventDate >= DATE '2013-07-01' AND EventDate <= DATE '2013-07-31' AND DontCountHits = 0 AND IsRefresh = 0 AND URL <> '' GROUP BY URL ORDER BY PageViews DESC LIMIT 10",
+      "query": "SELECT ClientIP, ClientIP - 1, ClientIP - 2, ClientIP - 3, COUNT(*) AS c FROM prestohits GROUP BY ClientIP, ClientIP - 1, ClientIP - 2, ClientIP - 3 ORDER BY c DESC LIMIT 10",
       "iterations": 5,
-      "avg_time": 6.964125199200135,
-      "p75_time": 7.4599654949997785,
-      "min_time": 6.5325770279996505,
-      "max_time": 7.4686248950001755,
+      "avg_time": 5.93588233699993,
+      "p75_time": 5.990384160999383,
+      "min_time": 5.856710963002115,
+      "max_time": 5.994415517998277,
       "individual_times": [
-        7.4686248950001755,
-        7.4599654949997785,
-        6.7269111270015856,
-        6.5325770279996505,
-        6.632547450999482
+        5.990384160999383,
+        5.918690536003851,
+        5.994415517998277,
+        5.856710963002115,
+        5.9192105069960235
       ]
     },
     {
       "query_id": "Q37",
-      "query": "SELECT Title, COUNT(*) AS PageViews FROM prestohits WHERE CounterID = 62 AND EventDate >= DATE '2013-07-01' AND EventDate <= DATE '2013-07-31' AND DontCountHits = 0 AND IsRefresh = 0 AND Title <> '' GROUP BY Title ORDER BY PageViews DESC LIMIT 10",
+      "query": "SELECT URL, COUNT(*) AS PageViews FROM prestohits WHERE CounterID = 62 AND EventDate >= DATE '2013-07-01' AND EventDate <= DATE '2013-07-31' AND DontCountHits = 0 AND IsRefresh = 0 AND URL <> '' GROUP BY URL ORDER BY PageViews DESC LIMIT 10",
       "iterations": 5,
-      "avg_time": 6.915732751600444,
-      "p75_time": 7.417580385001202,
-      "min_time": 6.559571820000201,
-      "max_time": 7.445216735999566,
+      "avg_time": 4.0275669472001026,
+      "p75_time": 4.330466231003811,
+      "min_time": 3.496945824001159,
+      "max_time": 4.375364828003512,
       "individual_times": [
-        6.5855919100013125,
-        6.559571820000201,
-        7.445216735999566,
-        6.570702906999941,
-        7.417580385001202
+        4.330466231003811,
+        3.6285793959978037,
+        4.375364828003512,
+        4.306478456994228,
+        3.496945824001159
       ]
     },
     {
       "query_id": "Q38",
-      "query": "SELECT URL, COUNT(*) AS PageViews FROM prestohits WHERE CounterID = 62 AND EventDate >= DATE '2013-07-01' AND EventDate <= DATE '2013-07-31' AND IsRefresh = 0 AND IsLink <> 0 AND IsDownload = 0 GROUP BY URL ORDER BY PageViews DESC OFFSET 1000 LIMIT 10",
-      "error": "Query 20250320_205926_00270_ts9i4 failed: Offset support is not enabled\n\n"
-    },
-    {
-      "query_id": "Q38",
-      "query": "SELECT URL, COUNT(*) AS PageViews FROM prestohits WHERE CounterID = 62 AND EventDate >= DATE '2013-07-01' AND EventDate <= DATE '2013-07-31' AND IsRefresh = 0 AND IsLink <> 0 AND IsDownload = 0 GROUP BY URL ORDER BY PageViews DESC OFFSET 1000 LIMIT 10",
-      "error": "'avg_time'"
+      "query": "SELECT Title, COUNT(*) AS PageViews FROM prestohits WHERE CounterID = 62 AND EventDate >= DATE '2013-07-01' AND EventDate <= DATE '2013-07-31' AND DontCountHits = 0 AND IsRefresh = 0 AND Title <> '' GROUP BY Title ORDER BY PageViews DESC LIMIT 10",
+      "iterations": 5,
+      "avg_time": 4.266859934999957,
+      "p75_time": 4.268884067001636,
+      "min_time": 4.238695689004089,
+      "max_time": 4.293970482998702,
+      "individual_times": [
+        4.238695689004089,
+        4.293970482998702,
+        4.265070337998623,
+        4.268884067001636,
+        4.267679097996734
+      ]
     },
     {
       "query_id": "Q39",
-      "query": "SELECT TraficSourceID, SearchEngineID, AdvEngineID, CASE WHEN (SearchEngineID = 0 AND AdvEngineID = 0) THEN Referer ELSE '' END AS Src, URL AS Dst, COUNT(*) AS PageViews FROM prestohits WHERE CounterID = 62 AND EventDate >= DATE '2013-07-01' AND EventDate <= DATE '2013-07-31' AND IsRefresh = 0 GROUP BY TraficSourceID, SearchEngineID, AdvEngineID, CASE WHEN (SearchEngineID = 0 AND AdvEngineID = 0) THEN Referer ELSE '' END, URL ORDER BY PageViews DESC OFFSET 1000 LIMIT 10",
-      "error": "Query 20250320_205928_00272_ts9i4 failed: Offset support is not enabled\n\n"
+      "query": "SELECT URL, COUNT(*) AS PageViews FROM prestohits WHERE CounterID = 62 AND EventDate >= DATE '2013-07-01' AND EventDate <= DATE '2013-07-31' AND IsRefresh = 0 AND IsLink <> 0 AND IsDownload = 0 GROUP BY URL ORDER BY PageViews DESC OFFSET 1000 LIMIT 10",
+      "error": "Query 20250321_162041_00417_vd9qd failed: Offset support is not enabled\n\n"
     },
     {
       "query_id": "Q39",
-      "query": "SELECT TraficSourceID, SearchEngineID, AdvEngineID, CASE WHEN (SearchEngineID = 0 AND AdvEngineID = 0) THEN Referer ELSE '' END AS Src, URL AS Dst, COUNT(*) AS PageViews FROM prestohits WHERE CounterID = 62 AND EventDate >= DATE '2013-07-01' AND EventDate <= DATE '2013-07-31' AND IsRefresh = 0 GROUP BY TraficSourceID, SearchEngineID, AdvEngineID, CASE WHEN (SearchEngineID = 0 AND AdvEngineID = 0) THEN Referer ELSE '' END, URL ORDER BY PageViews DESC OFFSET 1000 LIMIT 10",
+      "query": "SELECT URL, COUNT(*) AS PageViews FROM prestohits WHERE CounterID = 62 AND EventDate >= DATE '2013-07-01' AND EventDate <= DATE '2013-07-31' AND IsRefresh = 0 AND IsLink <> 0 AND IsDownload = 0 GROUP BY URL ORDER BY PageViews DESC OFFSET 1000 LIMIT 10",
       "error": "'avg_time'"
     },
     {
       "query_id": "Q40",
-      "query": "SELECT URLHash, EventDate, COUNT(*) AS PageViews FROM prestohits WHERE CounterID = 62 AND EventDate >= DATE '2013-07-01' AND EventDate <= DATE '2013-07-31' AND IsRefresh = 0 AND TraficSourceID IN (-1, 6) AND RefererHash = 3594120000172545465 GROUP BY URLHash, EventDate ORDER BY PageViews DESC OFFSET 100 LIMIT 10",
-      "error": "Query 20250320_205929_00274_ts9i4 failed: Offset support is not enabled\n\n"
+      "query": "SELECT TraficSourceID, SearchEngineID, AdvEngineID, CASE WHEN (SearchEngineID = 0 AND AdvEngineID = 0) THEN Referer ELSE '' END AS Src, URL AS Dst, COUNT(*) AS PageViews FROM prestohits WHERE CounterID = 62 AND EventDate >= DATE '2013-07-01' AND EventDate <= DATE '2013-07-31' AND IsRefresh = 0 GROUP BY TraficSourceID, SearchEngineID, AdvEngineID, CASE WHEN (SearchEngineID = 0 AND AdvEngineID = 0) THEN Referer ELSE '' END, URL ORDER BY PageViews DESC OFFSET 1000 LIMIT 10",
+      "error": "Query 20250321_162043_00419_vd9qd failed: Offset support is not enabled\n\n"
     },
     {
       "query_id": "Q40",
-      "query": "SELECT URLHash, EventDate, COUNT(*) AS PageViews FROM prestohits WHERE CounterID = 62 AND EventDate >= DATE '2013-07-01' AND EventDate <= DATE '2013-07-31' AND IsRefresh = 0 AND TraficSourceID IN (-1, 6) AND RefererHash = 3594120000172545465 GROUP BY URLHash, EventDate ORDER BY PageViews DESC OFFSET 100 LIMIT 10",
+      "query": "SELECT TraficSourceID, SearchEngineID, AdvEngineID, CASE WHEN (SearchEngineID = 0 AND AdvEngineID = 0) THEN Referer ELSE '' END AS Src, URL AS Dst, COUNT(*) AS PageViews FROM prestohits WHERE CounterID = 62 AND EventDate >= DATE '2013-07-01' AND EventDate <= DATE '2013-07-31' AND IsRefresh = 0 GROUP BY TraficSourceID, SearchEngineID, AdvEngineID, CASE WHEN (SearchEngineID = 0 AND AdvEngineID = 0) THEN Referer ELSE '' END, URL ORDER BY PageViews DESC OFFSET 1000 LIMIT 10",
       "error": "'avg_time'"
     },
     {
       "query_id": "Q41",
-      "query": "SELECT WindowClientWidth, WindowClientHeight, COUNT(*) AS PageViews FROM prestohits WHERE CounterID = 62 AND EventDate >= DATE '2013-07-01' AND EventDate <= DATE '2013-07-31' AND IsRefresh = 0 AND DontCountHits = 0 AND URLHash = 2868770270353813622 GROUP BY WindowClientWidth, WindowClientHeight ORDER BY PageViews DESC OFFSET 10000 LIMIT 10",
-      "error": "Query 20250320_205931_00276_ts9i4 failed: Offset support is not enabled\n\n"
+      "query": "SELECT URLHash, EventDate, COUNT(*) AS PageViews FROM prestohits WHERE CounterID = 62 AND EventDate >= DATE '2013-07-01' AND EventDate <= DATE '2013-07-31' AND IsRefresh = 0 AND TraficSourceID IN (-1, 6) AND RefererHash = 3594120000172545465 GROUP BY URLHash, EventDate ORDER BY PageViews DESC OFFSET 100 LIMIT 10",
+      "error": "Query 20250321_162045_00421_vd9qd failed: Offset support is not enabled\n\n"
     },
     {
       "query_id": "Q41",
-      "query": "SELECT WindowClientWidth, WindowClientHeight, COUNT(*) AS PageViews FROM prestohits WHERE CounterID = 62 AND EventDate >= DATE '2013-07-01' AND EventDate <= DATE '2013-07-31' AND IsRefresh = 0 AND DontCountHits = 0 AND URLHash = 2868770270353813622 GROUP BY WindowClientWidth, WindowClientHeight ORDER BY PageViews DESC OFFSET 10000 LIMIT 10",
+      "query": "SELECT URLHash, EventDate, COUNT(*) AS PageViews FROM prestohits WHERE CounterID = 62 AND EventDate >= DATE '2013-07-01' AND EventDate <= DATE '2013-07-31' AND IsRefresh = 0 AND TraficSourceID IN (-1, 6) AND RefererHash = 3594120000172545465 GROUP BY URLHash, EventDate ORDER BY PageViews DESC OFFSET 100 LIMIT 10",
       "error": "'avg_time'"
     },
     {
       "query_id": "Q42",
+      "query": "SELECT WindowClientWidth, WindowClientHeight, COUNT(*) AS PageViews FROM prestohits WHERE CounterID = 62 AND EventDate >= DATE '2013-07-01' AND EventDate <= DATE '2013-07-31' AND IsRefresh = 0 AND DontCountHits = 0 AND URLHash = 2868770270353813622 GROUP BY WindowClientWidth, WindowClientHeight ORDER BY PageViews DESC OFFSET 10000 LIMIT 10",
+      "error": "Query 20250321_162048_00423_vd9qd failed: Offset support is not enabled\n\n"
+    },
+    {
+      "query_id": "Q42",
+      "query": "SELECT WindowClientWidth, WindowClientHeight, COUNT(*) AS PageViews FROM prestohits WHERE CounterID = 62 AND EventDate >= DATE '2013-07-01' AND EventDate <= DATE '2013-07-31' AND IsRefresh = 0 AND DontCountHits = 0 AND URLHash = 2868770270353813622 GROUP BY WindowClientWidth, WindowClientHeight ORDER BY PageViews DESC OFFSET 10000 LIMIT 10",
+      "error": "'avg_time'"
+    },
+    {
+      "query_id": "Q43",
       "query": "SELECT DATE_TRUNC('minute', from_unixtime(eventtime)) AS M, COUNT(*) AS PageViews FROM prestohits WHERE CounterID = 62 AND EventDate >= DATE '2013-07-14' AND EventDate <= DATE '2013-07-15' AND IsRefresh = 0 AND DontCountHits = 0 GROUP BY DATE_TRUNC('minute', from_unixtime(eventtime)) ORDER BY DATE_TRUNC('minute', from_unixtime(eventtime)) OFFSET 1000 LIMIT 10;",
-      "error": "Query 20250320_205933_00278_ts9i4 failed: Offset support is not enabled\n\n"
+      "error": "Query 20250321_162050_00425_vd9qd failed: Offset support is not enabled\n\n"
     },
     {
-      "query_id": "Q42",
+      "query_id": "Q43",
       "query": "SELECT DATE_TRUNC('minute', from_unixtime(eventtime)) AS M, COUNT(*) AS PageViews FROM prestohits WHERE CounterID = 62 AND EventDate >= DATE '2013-07-14' AND EventDate <= DATE '2013-07-15' AND IsRefresh = 0 AND DontCountHits = 0 GROUP BY DATE_TRUNC('minute', from_unixtime(eventtime)) ORDER BY DATE_TRUNC('minute', from_unixtime(eventtime)) OFFSET 1000 LIMIT 10;",
       "error": "'avg_time'"
     }

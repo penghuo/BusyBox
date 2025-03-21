@@ -20,7 +20,7 @@ def execute_presto_query(presto_cli_path, query, catalog, schema, iterations, wa
             presto_cli_path,
             "--catalog", catalog,
             "--schema", schema,
-            "--execute", query,
+            "--execute", "SELECT EventTime FROM prestohits LIMIT 1",
             "--output-format", "CSV_HEADER"
         ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     

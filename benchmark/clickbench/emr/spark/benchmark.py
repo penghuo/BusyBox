@@ -52,7 +52,7 @@ def benchmark_query(query, query_id, args):
         
         # Warmup phase
         if args.warmup_runs > 0:
-            warmup_timings = execute_phase(spark, "select 1", "Warmup", args.warmup_runs)
+            warmup_timings = execute_phase(spark, "SELECT EventTime FROM sparkhits LIMIT 10", "Warmup", args.warmup_runs)
             if warmup_timings is None:
                 result["error"] = "Warmup phase failed"
                 return result
