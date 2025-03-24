@@ -1,12 +1,10 @@
 ## EMR Presto
 * launch cli
 ```
-presto-cli --catalog awsdatacatalog
+presto-cli --catalog awsdatacatalog --schema default
 ```
 * create table
 ```
-USE default
-
 CREATE TABLE prestohits (
   watchid BIGINT,
   javaenable SMALLINT,
