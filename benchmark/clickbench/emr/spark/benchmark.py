@@ -2,29 +2,28 @@
 
 import argparse
 import json
-import os
 import time
 import numpy as np
 from datetime import datetime
 from pyspark.sql import SparkSession
 
-def init_spark(log_level="WARN", query_id="#"):
-    """Initialize and return a new Spark session with Glue integration"""
+def init_spark(log_level="WARN"):
+    """Initialize Spark once with dynamic allocation disabled"""
     spark = (SparkSession.builder
-             .appName(f"QueryBenchmark-{query_id}")
+             .appName("QueryBenchmark")
              .enableHiveSupport()
+             .config("spark.dynamicAllocation.enabled", "false")
              .getOrCreate())
-    
     spark.sparkContext.setLogLevel(log_level)
     return spark
 
 def execute_phase(spark, query, phase, runs):
-    """Execute a phase (warmup or test) and return timings"""
+    """Generic phase executor"""
     timings = []
     for i in range(runs):
         try:
             start = time.perf_counter()
-            spark.sql(query).show()  # Force execution
+            spark.sql(query).show()  # Original execution method
             elapsed = time.perf_counter() - start
             timings.append(elapsed)
             print(f"  {phase} run {i+1}/{runs}: {elapsed:.2f}s")
@@ -33,31 +32,19 @@ def execute_phase(spark, query, phase, runs):
             return None
     return timings
 
-def benchmark_query(query, query_id, args):
-    """Benchmark a single query with isolated Spark context"""
+def benchmark_query(spark, query, query_id, args):
+    """Benchmark single query using existing context"""
     print(f"\nProcessing {query_id}: {query[:80]}...")
     
     result = {
         "query_id": query_id,
         "query": query,
-        "warmup_runs": args.warmup_runs,
         "test_runs": args.iterations,
         "timings": [],
         "error": None
     }
     
     try:
-        # Initialize fresh Spark context for each query
-        spark = init_spark(args.log_level, query_id)
-        
-        # Warmup phase
-        if args.warmup_runs > 0:
-            warmup_timings = execute_phase(spark, "SELECT EventTime FROM sparkhits LIMIT 1", "Warmup", args.warmup_runs)
-            if warmup_timings is None:
-                result["error"] = "Warmup phase failed"
-                return result
-        
-        # Test phase
         test_timings = execute_phase(spark, query, "Test", args.iterations)
         if test_timings:
             result.update({
@@ -70,56 +57,58 @@ def benchmark_query(query, query_id, args):
         
     except Exception as e:
         result["error"] = str(e)
-    finally:
-        spark.stop()
     
     return result
 
 def main():
-    """Main execution flow"""
-    parser = argparse.ArgumentParser(description="Isolated Spark Query Benchmark")
-    parser.add_argument("--queries", required=True, help="Path to SQL query file")
-    parser.add_argument("--iterations", type=int, default=3, help="Test iterations per query")
-    parser.add_argument("--warmup-runs", type=int, default=2, help="Warmup iterations per query")
-    parser.add_argument("--output", required=True, help="Output JSON file path")
-    parser.add_argument("--log-level", default="WARN", help="Spark log level")
+    """Main flow with single context initialization"""
+    parser = argparse.ArgumentParser(description="Spark Query Benchmark")
+    parser.add_argument("--queries", required=True)
+    parser.add_argument("--iterations", type=int, default=3)
+    parser.add_argument("--warmup-runs", type=int, default=1)
+    parser.add_argument("--output", required=True)
+    parser.add_argument("--log-level", default="WARN")
     args = parser.parse_args()
 
-    # Read queries
-    with open(args.queries) as f:
-        queries = [q.strip() for q in f if q.strip() and not q.startswith("--")]
+    # Initialize Spark once
+    spark = init_spark(args.log_level)
     
-    results = []
-    
-    # Benchmark each query in isolation
-    for idx, query in enumerate(queries, 1):
-        qid = f"Q{idx}"
-        result = benchmark_query(query, qid, args)
-        results.append(result)
+    try:
+        # Single warmup run for all queries
+        if args.warmup_runs > 0:
+            print("Running global warmup...")
+            execute_phase(spark, 
+                "SELECT EventTime FROM sparkhits LIMIT 1", 
+                "Global Warmup", 
+                args.warmup_runs
+            )
+
+        # Process all queries with same context
+        with open(args.queries) as f:
+            queries = [q.strip() for q in f if q.strip() and not q.startswith("--")]
         
-        if result["error"]:
-            print(f"  {qid} failed: {result['error']}")
-        else:
-            print(f"  {qid} summary:")
-            print(f"    Avg: {result['avg_time']:.2f}s")
-            print(f"    P75: {result['p75_time']:.2f}s")
-            print(f"    Range: {result['min_time']:.2f}s - {result['max_time']:.2f}s")
+        results = []
+        for idx, query in enumerate(queries, 1):
+            result = benchmark_query(spark, query, f"Q{idx}", args)
+            results.append(result)
+            
+            if result["error"]:
+                print(f"  Q{idx} failed: {result['error']}")
+            else:
+                print(f"  Q{idx} summary: {result['avg_time']:.2f}s avg")
 
-    # Generate report
-    report = {
-        "timestamp": datetime.now().isoformat(),
-        "config": {
-            "warmup_runs": args.warmup_runs,
-            "test_iterations": args.iterations,
-            "log_level": args.log_level
-        },
-        "results": results
-    }
+        # Generate report
+        report = {
+            "timestamp": datetime.now().isoformat(),
+            "config": vars(args),
+            "results": results
+        }
 
-    with open(args.output, 'w') as f:
-        json.dump(report, f, indent=2)
+        with open(args.output, 'w') as f:
+            json.dump(report, f, indent=2)
 
-    print(f"\nBenchmark complete. Report saved to {args.output}")
+    finally:
+        spark.stop()
 
 if __name__ == "__main__":
     main()
