@@ -611,53 +611,83 @@
     },
     {
       "query_id": "Q39",
-      "query": "SELECT URL, COUNT(*) AS PageViews FROM prestohits WHERE CounterID = 62 AND EventDate >= DATE '2013-07-01' AND EventDate <= DATE '2013-07-31' AND IsRefresh = 0 AND IsLink <> 0 AND IsDownload = 0 GROUP BY URL ORDER BY PageViews DESC OFFSET 1000 LIMIT 10",
-      "error": "Query 20250321_162041_00417_vd9qd failed: Offset support is not enabled\n\n"
-    },
-    {
-      "query_id": "Q39",
-      "query": "SELECT URL, COUNT(*) AS PageViews FROM prestohits WHERE CounterID = 62 AND EventDate >= DATE '2013-07-01' AND EventDate <= DATE '2013-07-31' AND IsRefresh = 0 AND IsLink <> 0 AND IsDownload = 0 GROUP BY URL ORDER BY PageViews DESC OFFSET 1000 LIMIT 10",
-      "error": "'avg_time'"
+      "query": "SELECT URL, COUNT(*) AS PageViews FROM prestohits WHERE CounterID = 62 AND EventDate >= DATE '2013-07-01' AND EventDate <= DATE '2013-07-31' AND IsRefresh = 0 AND IsLink <> 0 AND IsDownload = 0 GROUP BY URL ORDER BY PageViews DESC LIMIT 1010",
+      "iterations": 5,
+      "avg_time": 5.060915911800021,
+      "p75_time": 5.4924591290000535,
+      "min_time": 4.3371682599999986,
+      "max_time": 6.647335661999932,
+      "individual_times": [
+        6.647335661999932,
+        5.4924591290000535,
+        4.47532758300008,
+        4.3371682599999986,
+        4.352288925000039
+      ]
     },
     {
       "query_id": "Q40",
-      "query": "SELECT TraficSourceID, SearchEngineID, AdvEngineID, CASE WHEN (SearchEngineID = 0 AND AdvEngineID = 0) THEN Referer ELSE '' END AS Src, URL AS Dst, COUNT(*) AS PageViews FROM prestohits WHERE CounterID = 62 AND EventDate >= DATE '2013-07-01' AND EventDate <= DATE '2013-07-31' AND IsRefresh = 0 GROUP BY TraficSourceID, SearchEngineID, AdvEngineID, CASE WHEN (SearchEngineID = 0 AND AdvEngineID = 0) THEN Referer ELSE '' END, URL ORDER BY PageViews DESC OFFSET 1000 LIMIT 10",
-      "error": "Query 20250321_162043_00419_vd9qd failed: Offset support is not enabled\n\n"
-    },
-    {
-      "query_id": "Q40",
-      "query": "SELECT TraficSourceID, SearchEngineID, AdvEngineID, CASE WHEN (SearchEngineID = 0 AND AdvEngineID = 0) THEN Referer ELSE '' END AS Src, URL AS Dst, COUNT(*) AS PageViews FROM prestohits WHERE CounterID = 62 AND EventDate >= DATE '2013-07-01' AND EventDate <= DATE '2013-07-31' AND IsRefresh = 0 GROUP BY TraficSourceID, SearchEngineID, AdvEngineID, CASE WHEN (SearchEngineID = 0 AND AdvEngineID = 0) THEN Referer ELSE '' END, URL ORDER BY PageViews DESC OFFSET 1000 LIMIT 10",
-      "error": "'avg_time'"
+      "query": "SELECT TraficSourceID, SearchEngineID, AdvEngineID, CASE WHEN (SearchEngineID = 0 AND AdvEngineID = 0) THEN Referer ELSE '' END AS Src, URL AS Dst, COUNT(*) AS PageViews FROM prestohits WHERE CounterID = 62 AND EventDate >= DATE '2013-07-01' AND EventDate <= DATE '2013-07-31' AND IsRefresh = 0 GROUP BY TraficSourceID, SearchEngineID, AdvEngineID, CASE WHEN (SearchEngineID = 0 AND AdvEngineID = 0) THEN Referer ELSE '' END, URL ORDER BY PageViews DESC LIMIT 1010",
+      "iterations": 5,
+      "avg_time": 4.492456404599989,
+      "p75_time": 4.494587411000111,
+      "min_time": 4.354850414000111,
+      "max_time": 4.799086678999856,
+      "individual_times": [
+        4.799086678999856,
+        4.494587411000111,
+        4.378208442999949,
+        4.435549075999916,
+        4.354850414000111
+      ]
     },
     {
       "query_id": "Q41",
-      "query": "SELECT URLHash, EventDate, COUNT(*) AS PageViews FROM prestohits WHERE CounterID = 62 AND EventDate >= DATE '2013-07-01' AND EventDate <= DATE '2013-07-31' AND IsRefresh = 0 AND TraficSourceID IN (-1, 6) AND RefererHash = 3594120000172545465 GROUP BY URLHash, EventDate ORDER BY PageViews DESC OFFSET 100 LIMIT 10",
-      "error": "Query 20250321_162045_00421_vd9qd failed: Offset support is not enabled\n\n"
-    },
-    {
-      "query_id": "Q41",
-      "query": "SELECT URLHash, EventDate, COUNT(*) AS PageViews FROM prestohits WHERE CounterID = 62 AND EventDate >= DATE '2013-07-01' AND EventDate <= DATE '2013-07-31' AND IsRefresh = 0 AND TraficSourceID IN (-1, 6) AND RefererHash = 3594120000172545465 GROUP BY URLHash, EventDate ORDER BY PageViews DESC OFFSET 100 LIMIT 10",
-      "error": "'avg_time'"
+      "query": "SELECT URLHash, EventDate, COUNT(*) AS PageViews FROM prestohits WHERE CounterID = 62 AND EventDate >= DATE '2013-07-01' AND EventDate <= DATE '2013-07-31' AND IsRefresh = 0 AND TraficSourceID IN (-1, 6) AND RefererHash = 3594120000172545465 GROUP BY URLHash, EventDate ORDER BY PageViews DESC LIMIT 110",
+      "iterations": 5,
+      "avg_time": 4.313557079799966,
+      "p75_time": 4.3537549699999545,
+      "min_time": 4.177199101000042,
+      "max_time": 4.40160532699997,
+      "individual_times": [
+        4.343616280999868,
+        4.177199101000042,
+        4.291609719999997,
+        4.3537549699999545,
+        4.40160532699997
+      ]
     },
     {
       "query_id": "Q42",
-      "query": "SELECT WindowClientWidth, WindowClientHeight, COUNT(*) AS PageViews FROM prestohits WHERE CounterID = 62 AND EventDate >= DATE '2013-07-01' AND EventDate <= DATE '2013-07-31' AND IsRefresh = 0 AND DontCountHits = 0 AND URLHash = 2868770270353813622 GROUP BY WindowClientWidth, WindowClientHeight ORDER BY PageViews DESC OFFSET 10000 LIMIT 10",
-      "error": "Query 20250321_162048_00423_vd9qd failed: Offset support is not enabled\n\n"
-    },
-    {
-      "query_id": "Q42",
-      "query": "SELECT WindowClientWidth, WindowClientHeight, COUNT(*) AS PageViews FROM prestohits WHERE CounterID = 62 AND EventDate >= DATE '2013-07-01' AND EventDate <= DATE '2013-07-31' AND IsRefresh = 0 AND DontCountHits = 0 AND URLHash = 2868770270353813622 GROUP BY WindowClientWidth, WindowClientHeight ORDER BY PageViews DESC OFFSET 10000 LIMIT 10",
-      "error": "'avg_time'"
+      "query": "SELECT WindowClientWidth, WindowClientHeight, COUNT(*) AS PageViews FROM prestohits WHERE CounterID = 62 AND EventDate >= DATE '2013-07-01' AND EventDate <= DATE '2013-07-31' AND IsRefresh = 0 AND DontCountHits = 0 AND URLHash = 2868770270353813622 GROUP BY WindowClientWidth, WindowClientHeight ORDER BY PageViews DESC LIMIT 10010",
+      "iterations": 5,
+      "avg_time": 4.396839749000037,
+      "p75_time": 4.385866479000015,
+      "min_time": 4.360869526999977,
+      "max_time": 4.488234675000058,
+      "individual_times": [
+        4.488234675000058,
+        4.360869526999977,
+        4.377048453000043,
+        4.385866479000015,
+        4.372179611000092
+      ]
     },
     {
       "query_id": "Q43",
-      "query": "SELECT DATE_TRUNC('minute', from_unixtime(eventtime)) AS M, COUNT(*) AS PageViews FROM prestohits WHERE CounterID = 62 AND EventDate >= DATE '2013-07-14' AND EventDate <= DATE '2013-07-15' AND IsRefresh = 0 AND DontCountHits = 0 GROUP BY DATE_TRUNC('minute', from_unixtime(eventtime)) ORDER BY DATE_TRUNC('minute', from_unixtime(eventtime)) OFFSET 1000 LIMIT 10;",
-      "error": "Query 20250321_162050_00425_vd9qd failed: Offset support is not enabled\n\n"
-    },
-    {
-      "query_id": "Q43",
-      "query": "SELECT DATE_TRUNC('minute', from_unixtime(eventtime)) AS M, COUNT(*) AS PageViews FROM prestohits WHERE CounterID = 62 AND EventDate >= DATE '2013-07-14' AND EventDate <= DATE '2013-07-15' AND IsRefresh = 0 AND DontCountHits = 0 GROUP BY DATE_TRUNC('minute', from_unixtime(eventtime)) ORDER BY DATE_TRUNC('minute', from_unixtime(eventtime)) OFFSET 1000 LIMIT 10;",
-      "error": "'avg_time'"
+      "query": "SELECT DATE_TRUNC('minute', from_unixtime(eventtime)) AS M, COUNT(*) AS PageViews FROM prestohits WHERE CounterID = 62 AND EventDate >= DATE '2013-07-14' AND EventDate <= DATE '2013-07-15' AND IsRefresh = 0 AND DontCountHits = 0 GROUP BY DATE_TRUNC('minute', from_unixtime(eventtime)) ORDER BY DATE_TRUNC('minute', from_unixtime(eventtime)) LIMIT 1010;",
+      "iterations": 5,
+      "avg_time": 4.346382462200017,
+      "p75_time": 4.388318584999979,
+      "min_time": 4.2749945999999,
+      "max_time": 4.428983283000207,
+      "individual_times": [
+        4.351008659999934,
+        4.388318584999979,
+        4.288607183000067,
+        4.428983283000207,
+        4.2749945999999
+      ]
     }
   ]
 }
