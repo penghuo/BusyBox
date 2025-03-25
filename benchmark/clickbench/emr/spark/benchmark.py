@@ -13,6 +13,7 @@ def init_spark(log_level="WARN"):
              .appName("QueryBenchmark")
              .enableHiveSupport()
              .config("spark.dynamicAllocation.enabled", "false")
+             .config("spark.sql.dataprefetch.filescan.checkInstanceType", "false")
              .getOrCreate())
     spark.sparkContext.setLogLevel(log_level)
     return spark

@@ -5,3 +5,5 @@
  * 2 nodes EMR cluster benchmark
 * 20250324
  * 2 nodes EMR cluster benchmark, rewrite spark benchmark scripts which all query share same context now.
+* 20250324
+ * 2 nodes EMR cluster benchmark, enable Spark chunkPrefetch
