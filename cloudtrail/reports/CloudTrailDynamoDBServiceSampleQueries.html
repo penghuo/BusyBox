@@ -1,0 +1,1914 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Presto to Spark SQL Report</title>
+    <style>
+        body { font-family: Arial; margin: 20px; }
+        .header { background-color: #4a86e8; color: white; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
+        .summary { margin-bottom: 20px; }
+        .progress-bar { width: 100%; background-color: #f3f3f3; height: 30px; border-radius: 5px; margin-bottom: 20px; }
+        .progress { height: 100%; background-color: #4CAF50; text-align: center; line-height: 30px; color: white; border-radius: 5px; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; vertical-align: top; }
+        th { background-color: #f2f2f2; }
+        tr:hover { background-color: #f5f5f5; }
+        .success { color: green; }
+        .error { color: red; }
+        .query { max-width: 400px; overflow-x: auto; }
+        .actions { white-space: nowrap; }
+        .filter-bar { margin-bottom: 15px; }
+        .tabs { display: flex; }
+        .tab { padding: 5px 10px; cursor: pointer; border: 1px solid #ccc; }
+        .tab.active { background-color: #4a86e8; color: white; }
+        .improved { background-color: #d4edda; }
+        pre { margin: 0; white-space: pre-wrap; }
+        .hidden { display: none; }
+        input[type=text] { padding: 5px; width: 30%; }
+        button { padding: 5px 10px; margin-right: 5px; cursor: pointer; }
+        
+        /* Diff styling */
+        .diff {
+            font-family: monospace;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-top: 10px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .diff-section { margin-bottom: 15px; }
+        .diff-line { white-space: pre-wrap; font-size: 14px; line-height: 1.5; }
+        .diff-removed { background-color: #ffdddd; color: #994444; }
+        .diff-added { background-color: #ddffdd; color: #449944; }
+        .unchanged { color: #666; }
+        .full-queries { margin-top: 15px; border-top: 1px solid #eee; padding-top: 10px; }
+        .error-message { white-space: pre-wrap; color: #d9534f; }
+    </style>
+    <script>
+        function toggleQuery(id) {
+            const elem = document.getElementById('query-'+id);
+            elem.classList.toggle('hidden');
+        }
+        
+        function filterStatus(status) {
+            const rows = document.querySelectorAll('#resultsTable tr[data-id]');
+            rows.forEach(row => {
+                if (status === 'all' || 
+                    (status === 'success' && row.getAttribute('data-spark') === 'true') ||
+                    (status === 'failed' && row.getAttribute('data-spark') === 'false') ||
+                    (status === 'improved' && row.getAttribute('data-presto') === 'false' && row.getAttribute('data-spark') === 'true')) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+            
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.getElementById('tab-'+status).classList.add('active');
+        }
+        
+        function filterText() {
+            const filter = document.getElementById('filterInput').value.toLowerCase();
+            const rows = document.querySelectorAll('#resultsTable tr[data-id]');
+            
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                if (text.includes(filter)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+    <div class="header">
+        <h1>Presto to Spark SQL Compatibility Report</h1>
+        <p>Table: ctl_ddb | Spark: 3.5.5 | Date: 2025-04-04 15:30</p>
+        <p>Translation Method: Custom Rules</p>
+    </div>
+    
+    <div class="summary">
+        <p>Total queries: <b>16</b></p>
+        <p>Presto success: <b>0</b> (0.0%)</p>
+        <p>Spark success: <b>16</b> (100.0%)</p>
+        <p>Improvement from translation: <b>16</b> queries</p>
+        
+        <div class="progress-bar">
+            <div class="progress" style="width: 100.0%;">
+                100.0%
+            </div>
+        </div>
+    </div>
+    
+    <div class="filter-bar">
+        <div class="tabs">
+            <div id="tab-all" class="tab active" onclick="filterStatus('all')">All Queries</div>
+            <div id="tab-success" class="tab" onclick="filterStatus('success')">Successful</div>
+            <div id="tab-failed" class="tab" onclick="filterStatus('failed')">Failed</div>
+            <div id="tab-improved" class="tab" onclick="filterStatus('improved')">Improved</div>
+        </div>
+        <div style="margin-top: 10px;">
+            <input type="text" id="filterInput" onkeyup="filterText()" placeholder="Search...">
+        </div>
+    </div>
+    
+    <table id="resultsTable">
+        <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Presto</th>
+            <th>Spark</th>
+            <th>Presto Error</th>
+            <th>Spark Error</th>
+            <th>Details</th>
+        </tr>
+    
+        <tr data-id="1" data-presto="false" data-spark="true" class="improved">
+            <td>1</td>
+            <td>Get age of DynamoDB tables</td>
+            <td class="error">Failed</td>
+            <td class="success">Success</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_DIFF` is invalid: expects one of the units without quotes YEAR, QUA...</td>
+            <td class="error-message"></td>
+            <td class="actions">
+                <button onclick="toggleQuery(1)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-1" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT element_at(requestParameters, 'tableName') as tableName, DATE_DIFF('millisecond', eventTime, now()) AS table_age_ms FROM ctl_ddb WHERE eventSource = 'dynamodb.amazonaws.com' AND eventName = 'CreateTable' AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP)</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT requestParameters['tableName'] as tableName, DATE_DIFF(MILLISECOND, eventTime, now()) AS table_age_ms FROM ctl_ddb WHERE eventSource = 'dynamodb.amazonaws.com' AND eventName = 'CreateTable' AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP)</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT 
+</span>
+<span class="diff-removed">
+element_at(
+</span>
+<span class="unchanged">
+requestParameters
+</span>
+<span class="diff-removed">
+, '
+</span>
+<span class="diff-added">
+['
+</span>
+<span class="unchanged">
+tableName
+</span>
+<span class="diff-removed">
+') 
+</span>
+<span class="diff-added">
+'] 
+</span>
+<span class="unchanged">
+as tableName, DATE_DIFF(
+</span>
+<span class="diff-removed">
+'millisecond'
+</span>
+<span class="diff-added">
+MILLISECOND
+</span>
+<span class="unchanged">
+, eventTime, now()) AS table_age_ms FROM ctl_ddb WHERE eventSource = 'dynamodb.amazonaws.com' AND eventName = 'CreateTable' AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'week'
+</span>
+<span class="diff-added">
+WEEK
+</span>
+<span class="unchanged">
+, -1, CURRENT_TIMESTAMP)
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT element_at(requestParameters, 'tableName') as tableName, DATE_DIFF('millisecond', eventTime, now()) AS table_age_ms FROM ctl_ddb WHERE eventSource = 'dynamodb.amazonaws.com' AND eventName = 'CreateTable' AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP)</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT requestParameters['tableName'] as tableName, DATE_DIFF(MILLISECOND, eventTime, now()) AS table_age_ms FROM ctl_ddb WHERE eventSource = 'dynamodb.amazonaws.com' AND eventName = 'CreateTable' AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP)</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="2" data-presto="false" data-spark="true" class="improved">
+            <td>2</td>
+            <td>Get usage of DynamoDB table indexes in queries</td>
+            <td class="error">Failed</td>
+            <td class="success">Success</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message"></td>
+            <td class="actions">
+                <button onclick="toggleQuery(2)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-2" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT element_at(requestParameters, 'indexName') as indexName, count(*) AS indexUsageCount FROM ctl_ddb WHERE eventSource = 'dynamodb.amazonaws.com' AND eventName = 'Query' AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'indexName') ORDER BY indexUsageCount DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT requestParameters['indexName'] as indexName, count(*) AS indexUsageCount FROM ctl_ddb WHERE eventSource = 'dynamodb.amazonaws.com' AND eventName = 'Query' AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) GROUP BY requestParameters['indexName'] ORDER BY indexUsageCount DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT 
+</span>
+<span class="diff-removed">
+element_at(
+</span>
+<span class="unchanged">
+requestParameters
+</span>
+<span class="diff-removed">
+, '
+</span>
+<span class="diff-added">
+['
+</span>
+<span class="unchanged">
+indexName
+</span>
+<span class="diff-removed">
+') 
+</span>
+<span class="diff-added">
+'] 
+</span>
+<span class="unchanged">
+as indexName, count(*) AS indexUsageCount FROM ctl_ddb WHERE eventSource = 'dynamodb.amazonaws.com' AND eventName = 'Query' AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'week'
+</span>
+<span class="diff-added">
+WEEK
+</span>
+<span class="unchanged">
+, -1, CURRENT_TIMESTAMP) GROUP BY 
+</span>
+<span class="diff-removed">
+element_at(
+</span>
+<span class="unchanged">
+requestParameters
+</span>
+<span class="diff-removed">
+, '
+</span>
+<span class="diff-added">
+['
+</span>
+<span class="unchanged">
+indexName
+</span>
+<span class="diff-removed">
+') 
+</span>
+<span class="diff-added">
+'] 
+</span>
+<span class="unchanged">
+ORDER BY indexUsageCount DESC
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT element_at(requestParameters, 'indexName') as indexName, count(*) AS indexUsageCount FROM ctl_ddb WHERE eventSource = 'dynamodb.amazonaws.com' AND eventName = 'Query' AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'indexName') ORDER BY indexUsageCount DESC</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT requestParameters['indexName'] as indexName, count(*) AS indexUsageCount FROM ctl_ddb WHERE eventSource = 'dynamodb.amazonaws.com' AND eventName = 'Query' AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) GROUP BY requestParameters['indexName'] ORDER BY indexUsageCount DESC</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="3" data-presto="false" data-spark="true" class="improved">
+            <td>3</td>
+            <td>Get fields used in DynamoDB table scans</td>
+            <td class="error">Failed</td>
+            <td class="success">Success</td>
+            <td class="error-message">
+[PARSE_SYNTAX_ERROR] Syntax error at or near 'varchar'.(line 1, pos 230)
+
+== SQL ==
+SELECT element_at(requestParameters, 'tableName') as tableName, s...</td>
+            <td class="error-message"></td>
+            <td class="actions">
+                <button onclick="toggleQuery(3)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-3" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT element_at(requestParameters, 'tableName') as tableName, scanfields, count(*) as field_usage_count FROM ctl_ddb CROSS JOIN UNNEST(map_values(cast(json_parse(element_at(requestParameters, 'expressionAttributeNames')) as map(varchar, varchar)))) as t (scanfields) WHERE eventSource = 'dynamodb.amazonaws.com' AND eventName = 'Scan' AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'tableName'), scanfields ORDER BY field_usage_count DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT requestParameters['tableName'] as tableName, scanfields, count(*) as field_usage_count FROM ctl_ddb LATERAL VIEW explode(map_values(from_json(requestParameters['expressionAttributeNames'], 'map<string, string>'))) t AS scanfields WHERE eventSource = 'dynamodb.amazonaws.com' AND eventName = 'Scan' AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) GROUP BY requestParameters['tableName'], scanfields ORDER BY field_usage_count DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT 
+</span>
+<span class="diff-removed">
+element_at(
+</span>
+<span class="unchanged">
+requestParameters
+</span>
+<span class="diff-removed">
+, '
+</span>
+<span class="diff-added">
+['
+</span>
+<span class="unchanged">
+tableName
+</span>
+<span class="diff-removed">
+') 
+</span>
+<span class="diff-added">
+'] 
+</span>
+<span class="unchanged">
+as tableName, scanfields, count(*) as field_usage_count FROM ctl_ddb 
+</span>
+<span class="diff-removed">
+CROSS JOIN UNNEST
+</span>
+<span class="diff-added">
+LATERAL VIEW explode
+</span>
+<span class="unchanged">
+(map_values(
+</span>
+<span class="diff-removed">
+cast(json_parse(element_at
+</span>
+<span class="diff-added">
+from_json
+</span>
+<span class="unchanged">
+(requestParameters
+</span>
+<span class="diff-added">
+['expressionAttributeNames']
+</span>
+<span class="unchanged">
+, '
+</span>
+<span class="diff-removed">
+expressionAttributeNames')) as 
+</span>
+<span class="unchanged">
+map
+</span>
+<span class="diff-removed">
+(varchar
+</span>
+<span class="diff-added">
+<string
+</span>
+<span class="unchanged">
+, 
+</span>
+<span class="diff-removed">
+varchar)
+</span>
+<span class="diff-added">
+string>'
+</span>
+<span class="unchanged">
+))) 
+</span>
+<span class="diff-removed">
+as 
+</span>
+<span class="unchanged">
+t 
+</span>
+<span class="diff-removed">
+(scanfields) 
+</span>
+<span class="diff-added">
+AS scanfields 
+</span>
+<span class="unchanged">
+WHERE eventSource = 'dynamodb.amazonaws.com' AND eventName = 'Scan' AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'week'
+</span>
+<span class="diff-added">
+WEEK
+</span>
+<span class="unchanged">
+, -1, CURRENT_TIMESTAMP) GROUP BY 
+</span>
+<span class="diff-removed">
+element_at(
+</span>
+<span class="unchanged">
+requestParameters
+</span>
+<span class="diff-removed">
+, '
+</span>
+<span class="diff-added">
+['
+</span>
+<span class="unchanged">
+tableName
+</span>
+<span class="diff-removed">
+')
+</span>
+<span class="diff-added">
+']
+</span>
+<span class="unchanged">
+, scanfields ORDER BY field_usage_count DESC
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT element_at(requestParameters, 'tableName') as tableName, scanfields, count(*) as field_usage_count FROM ctl_ddb CROSS JOIN UNNEST(map_values(cast(json_parse(element_at(requestParameters, 'expressionAttributeNames')) as map(varchar, varchar)))) as t (scanfields) WHERE eventSource = 'dynamodb.amazonaws.com' AND eventName = 'Scan' AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'tableName'), scanfields ORDER BY field_usage_count DESC</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT requestParameters['tableName'] as tableName, scanfields, count(*) as field_usage_count FROM ctl_ddb LATERAL VIEW explode(map_values(from_json(requestParameters['expressionAttributeNames'], 'map<string, string>'))) t AS scanfields WHERE eventSource = 'dynamodb.amazonaws.com' AND eventName = 'Scan' AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) GROUP BY requestParameters['tableName'], scanfields ORDER BY field_usage_count DESC</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="4" data-presto="false" data-spark="true" class="improved">
+            <td>4</td>
+            <td>Get fields used in DynamoDB table queries</td>
+            <td class="error">Failed</td>
+            <td class="success">Success</td>
+            <td class="error-message">
+[PARSE_SYNTAX_ERROR] Syntax error at or near 'varchar'.(line 1, pos 231)
+
+== SQL ==
+SELECT element_at(requestParameters, 'tableName') as tableName, q...</td>
+            <td class="error-message"></td>
+            <td class="actions">
+                <button onclick="toggleQuery(4)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-4" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT element_at(requestParameters, 'tableName') as tableName, queryfields, count(*) as field_usage_count FROM ctl_ddb CROSS JOIN UNNEST(map_values(cast(json_parse(element_at(requestParameters, 'expressionAttributeNames')) as map(varchar, varchar)))) as t (queryfields) WHERE eventSource = 'dynamodb.amazonaws.com' AND eventName = 'Query' AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'tableName'), queryfields ORDER BY field_usage_count DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT requestParameters['tableName'] as tableName, queryfields, count(*) as field_usage_count FROM ctl_ddb LATERAL VIEW explode(map_values(from_json(requestParameters['expressionAttributeNames'], 'map<string, string>'))) t AS queryfields WHERE eventSource = 'dynamodb.amazonaws.com' AND eventName = 'Query' AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) GROUP BY requestParameters['tableName'], queryfields ORDER BY field_usage_count DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT 
+</span>
+<span class="diff-removed">
+element_at(
+</span>
+<span class="unchanged">
+requestParameters
+</span>
+<span class="diff-removed">
+, '
+</span>
+<span class="diff-added">
+['
+</span>
+<span class="unchanged">
+tableName
+</span>
+<span class="diff-removed">
+') 
+</span>
+<span class="diff-added">
+'] 
+</span>
+<span class="unchanged">
+as tableName, queryfields, count(*) as field_usage_count FROM ctl_ddb 
+</span>
+<span class="diff-removed">
+CROSS JOIN UNNEST
+</span>
+<span class="diff-added">
+LATERAL VIEW explode
+</span>
+<span class="unchanged">
+(map_values(
+</span>
+<span class="diff-removed">
+cast(json_parse(element_at
+</span>
+<span class="diff-added">
+from_json
+</span>
+<span class="unchanged">
+(requestParameters
+</span>
+<span class="diff-added">
+['expressionAttributeNames']
+</span>
+<span class="unchanged">
+, '
+</span>
+<span class="diff-removed">
+expressionAttributeNames')) as 
+</span>
+<span class="unchanged">
+map
+</span>
+<span class="diff-removed">
+(varchar
+</span>
+<span class="diff-added">
+<string
+</span>
+<span class="unchanged">
+, 
+</span>
+<span class="diff-removed">
+varchar)
+</span>
+<span class="diff-added">
+string>'
+</span>
+<span class="unchanged">
+))) 
+</span>
+<span class="diff-removed">
+as 
+</span>
+<span class="unchanged">
+t 
+</span>
+<span class="diff-removed">
+(queryfields) 
+</span>
+<span class="diff-added">
+AS queryfields 
+</span>
+<span class="unchanged">
+WHERE eventSource = 'dynamodb.amazonaws.com' AND eventName = 'Query' AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'week'
+</span>
+<span class="diff-added">
+WEEK
+</span>
+<span class="unchanged">
+, -1, CURRENT_TIMESTAMP) GROUP BY 
+</span>
+<span class="diff-removed">
+element_at(
+</span>
+<span class="unchanged">
+requestParameters
+</span>
+<span class="diff-removed">
+, '
+</span>
+<span class="diff-added">
+['
+</span>
+<span class="unchanged">
+tableName
+</span>
+<span class="diff-removed">
+')
+</span>
+<span class="diff-added">
+']
+</span>
+<span class="unchanged">
+, queryfields ORDER BY field_usage_count DESC
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT element_at(requestParameters, 'tableName') as tableName, queryfields, count(*) as field_usage_count FROM ctl_ddb CROSS JOIN UNNEST(map_values(cast(json_parse(element_at(requestParameters, 'expressionAttributeNames')) as map(varchar, varchar)))) as t (queryfields) WHERE eventSource = 'dynamodb.amazonaws.com' AND eventName = 'Query' AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'tableName'), queryfields ORDER BY field_usage_count DESC</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT requestParameters['tableName'] as tableName, queryfields, count(*) as field_usage_count FROM ctl_ddb LATERAL VIEW explode(map_values(from_json(requestParameters['expressionAttributeNames'], 'map<string, string>'))) t AS queryfields WHERE eventSource = 'dynamodb.amazonaws.com' AND eventName = 'Query' AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) GROUP BY requestParameters['tableName'], queryfields ORDER BY field_usage_count DESC</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="5" data-presto="false" data-spark="true" class="improved">
+            <td>5</td>
+            <td>Get frequently used DynamoDB table indexes by month</td>
+            <td class="error">Failed</td>
+            <td class="success">Success</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message"></td>
+            <td class="actions">
+                <button onclick="toggleQuery(5)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-5" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT element_at(requestParameters, 'indexName') as indexName, count(*) as indexUsageCount, date_trunc('month', eventTime) as month FROM ctl_ddb WHERE eventSource = 'dynamodb.amazonaws.com' AND eventName = 'Query' AND eventTime > DATE_ADD('month', -6, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'indexName'), date_trunc('month', eventTime) ORDER BY month DESC, indexUsageCount DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT requestParameters['indexName'] as indexName, count(*) as indexUsageCount, date_trunc('month', eventTime) as month FROM ctl_ddb WHERE eventSource = 'dynamodb.amazonaws.com' AND eventName = 'Query' AND eventTime > DATE_ADD(MONTH, -6, CURRENT_TIMESTAMP) GROUP BY requestParameters['indexName'], date_trunc('month', eventTime) ORDER BY month DESC, indexUsageCount DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT 
+</span>
+<span class="diff-removed">
+element_at(
+</span>
+<span class="unchanged">
+requestParameters
+</span>
+<span class="diff-removed">
+, '
+</span>
+<span class="diff-added">
+['
+</span>
+<span class="unchanged">
+indexName
+</span>
+<span class="diff-removed">
+') 
+</span>
+<span class="diff-added">
+'] 
+</span>
+<span class="unchanged">
+as indexName, count(*) as indexUsageCount, date_trunc('month', eventTime) as month FROM ctl_ddb WHERE eventSource = 'dynamodb.amazonaws.com' AND eventName = 'Query' AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'month'
+</span>
+<span class="diff-added">
+MONTH
+</span>
+<span class="unchanged">
+, -6, CURRENT_TIMESTAMP) GROUP BY 
+</span>
+<span class="diff-removed">
+element_at(
+</span>
+<span class="unchanged">
+requestParameters
+</span>
+<span class="diff-removed">
+, '
+</span>
+<span class="diff-added">
+['
+</span>
+<span class="unchanged">
+indexName
+</span>
+<span class="diff-removed">
+')
+</span>
+<span class="diff-added">
+']
+</span>
+<span class="unchanged">
+, date_trunc('month', eventTime) ORDER BY month DESC, indexUsageCount DESC
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT element_at(requestParameters, 'indexName') as indexName, count(*) as indexUsageCount, date_trunc('month', eventTime) as month FROM ctl_ddb WHERE eventSource = 'dynamodb.amazonaws.com' AND eventName = 'Query' AND eventTime > DATE_ADD('month', -6, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'indexName'), date_trunc('month', eventTime) ORDER BY month DESC, indexUsageCount DESC</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT requestParameters['indexName'] as indexName, count(*) as indexUsageCount, date_trunc('month', eventTime) as month FROM ctl_ddb WHERE eventSource = 'dynamodb.amazonaws.com' AND eventName = 'Query' AND eventTime > DATE_ADD(MONTH, -6, CURRENT_TIMESTAMP) GROUP BY requestParameters['indexName'], date_trunc('month', eventTime) ORDER BY month DESC, indexUsageCount DESC</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="6" data-presto="false" data-spark="true" class="improved">
+            <td>6</td>
+            <td>Get frequently used fields in DynamoDB scans by month</td>
+            <td class="error">Failed</td>
+            <td class="success">Success</td>
+            <td class="error-message">
+[PARSE_SYNTAX_ERROR] Syntax error at or near 'varchar'.(line 1, pos 271)
+
+== SQL ==
+SELECT element_at(requestParameters, 'tableName') as tableName, s...</td>
+            <td class="error-message"></td>
+            <td class="actions">
+                <button onclick="toggleQuery(6)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-6" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT element_at(requestParameters, 'tableName') as tableName, scanfields, date_trunc('month', eventTime) as month, count(*) as field_usage_count FROM ctl_ddb CROSS JOIN UNNEST(map_values(cast(json_parse(element_at(requestParameters, 'expressionAttributeNames')) as map(varchar,varchar)))) as t (scanfields) WHERE eventSource = 'dynamodb.amazonaws.com'AND eventName = 'Scan' AND eventTime > DATE_ADD('month', -6, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'tableName'), scanfields, date_trunc('month', eventTime) ORDER BY month DESC, field_usage_count DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT requestParameters['tableName'] as tableName, scanfields, date_trunc('month', eventTime) as month, count(*) as field_usage_count FROM ctl_ddb LATERAL VIEW explode(map_values(from_json(requestParameters['expressionAttributeNames'], 'map<string, string>'))) t AS scanfields WHERE eventSource = 'dynamodb.amazonaws.com'AND eventName = 'Scan' AND eventTime > DATE_ADD(MONTH, -6, CURRENT_TIMESTAMP) GROUP BY requestParameters['tableName'], scanfields, date_trunc('month', eventTime) ORDER BY month DESC, field_usage_count DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT 
+</span>
+<span class="diff-removed">
+element_at(
+</span>
+<span class="unchanged">
+requestParameters
+</span>
+<span class="diff-removed">
+, '
+</span>
+<span class="diff-added">
+['
+</span>
+<span class="unchanged">
+tableName
+</span>
+<span class="diff-removed">
+') 
+</span>
+<span class="diff-added">
+'] 
+</span>
+<span class="unchanged">
+as tableName, scanfields, date_trunc('month', eventTime) as month, count(*) as field_usage_count FROM ctl_ddb 
+</span>
+<span class="diff-removed">
+CROSS JOIN UNNEST
+</span>
+<span class="diff-added">
+LATERAL VIEW explode
+</span>
+<span class="unchanged">
+(map_values(
+</span>
+<span class="diff-removed">
+cast(json_parse(element_at
+</span>
+<span class="diff-added">
+from_json
+</span>
+<span class="unchanged">
+(requestParameters
+</span>
+<span class="diff-added">
+['expressionAttributeNames']
+</span>
+<span class="unchanged">
+, '
+</span>
+<span class="diff-removed">
+expressionAttributeNames')) as 
+</span>
+<span class="unchanged">
+map
+</span>
+<span class="diff-removed">
+(varchar,varchar)
+</span>
+<span class="diff-added">
+<string, string>'
+</span>
+<span class="unchanged">
+))) 
+</span>
+<span class="diff-removed">
+as 
+</span>
+<span class="unchanged">
+t 
+</span>
+<span class="diff-removed">
+(scanfields) 
+</span>
+<span class="diff-added">
+AS scanfields 
+</span>
+<span class="unchanged">
+WHERE eventSource = 'dynamodb.amazonaws.com'AND eventName = 'Scan' AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'month'
+</span>
+<span class="diff-added">
+MONTH
+</span>
+<span class="unchanged">
+, -6, CURRENT_TIMESTAMP) GROUP BY 
+</span>
+<span class="diff-removed">
+element_at(
+</span>
+<span class="unchanged">
+requestParameters
+</span>
+<span class="diff-removed">
+, '
+</span>
+<span class="diff-added">
+['
+</span>
+<span class="unchanged">
+tableName
+</span>
+<span class="diff-removed">
+')
+</span>
+<span class="diff-added">
+']
+</span>
+<span class="unchanged">
+, scanfields, date_trunc('month', eventTime) ORDER BY month DESC, field_usage_count DESC
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT element_at(requestParameters, 'tableName') as tableName, scanfields, date_trunc('month', eventTime) as month, count(*) as field_usage_count FROM ctl_ddb CROSS JOIN UNNEST(map_values(cast(json_parse(element_at(requestParameters, 'expressionAttributeNames')) as map(varchar,varchar)))) as t (scanfields) WHERE eventSource = 'dynamodb.amazonaws.com'AND eventName = 'Scan' AND eventTime > DATE_ADD('month', -6, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'tableName'), scanfields, date_trunc('month', eventTime) ORDER BY month DESC, field_usage_count DESC</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT requestParameters['tableName'] as tableName, scanfields, date_trunc('month', eventTime) as month, count(*) as field_usage_count FROM ctl_ddb LATERAL VIEW explode(map_values(from_json(requestParameters['expressionAttributeNames'], 'map<string, string>'))) t AS scanfields WHERE eventSource = 'dynamodb.amazonaws.com'AND eventName = 'Scan' AND eventTime > DATE_ADD(MONTH, -6, CURRENT_TIMESTAMP) GROUP BY requestParameters['tableName'], scanfields, date_trunc('month', eventTime) ORDER BY month DESC, field_usage_count DESC</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="7" data-presto="false" data-spark="true" class="improved">
+            <td>7</td>
+            <td>Get frequently used fields in DynamoDB queries by month</td>
+            <td class="error">Failed</td>
+            <td class="success">Success</td>
+            <td class="error-message">
+[PARSE_SYNTAX_ERROR] Syntax error at or near 'varchar'.(line 1, pos 272)
+
+== SQL ==
+SELECT element_at(requestParameters, 'tableName') as tableName, q...</td>
+            <td class="error-message"></td>
+            <td class="actions">
+                <button onclick="toggleQuery(7)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-7" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT element_at(requestParameters, 'tableName') as tableName, queryfields, date_trunc('month', eventTime) as month, count(*) as field_usage_count FROM ctl_ddb CROSS JOIN UNNEST(map_values(cast(json_parse(element_at(requestParameters, 'expressionAttributeNames')) as map(varchar, varchar)))) as t (queryfields) WHERE eventSource = 'dynamodb.amazonaws.com' AND eventName = 'Query' AND eventTime > DATE_ADD('month', -6, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'tableName'), queryfields, date_trunc('month', eventTime) ORDER BY month DESC, field_usage_count DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT requestParameters['tableName'] as tableName, queryfields, date_trunc('month', eventTime) as month, count(*) as field_usage_count FROM ctl_ddb LATERAL VIEW explode(map_values(from_json(requestParameters['expressionAttributeNames'], 'map<string, string>'))) t AS queryfields WHERE eventSource = 'dynamodb.amazonaws.com' AND eventName = 'Query' AND eventTime > DATE_ADD(MONTH, -6, CURRENT_TIMESTAMP) GROUP BY requestParameters['tableName'], queryfields, date_trunc('month', eventTime) ORDER BY month DESC, field_usage_count DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT 
+</span>
+<span class="diff-removed">
+element_at(
+</span>
+<span class="unchanged">
+requestParameters
+</span>
+<span class="diff-removed">
+, '
+</span>
+<span class="diff-added">
+['
+</span>
+<span class="unchanged">
+tableName
+</span>
+<span class="diff-removed">
+') 
+</span>
+<span class="diff-added">
+'] 
+</span>
+<span class="unchanged">
+as tableName, queryfields, date_trunc('month', eventTime) as month, count(*) as field_usage_count FROM ctl_ddb 
+</span>
+<span class="diff-removed">
+CROSS JOIN UNNEST
+</span>
+<span class="diff-added">
+LATERAL VIEW explode
+</span>
+<span class="unchanged">
+(map_values(
+</span>
+<span class="diff-removed">
+cast(json_parse(element_at
+</span>
+<span class="diff-added">
+from_json
+</span>
+<span class="unchanged">
+(requestParameters
+</span>
+<span class="diff-added">
+['expressionAttributeNames']
+</span>
+<span class="unchanged">
+, '
+</span>
+<span class="diff-removed">
+expressionAttributeNames')) as 
+</span>
+<span class="unchanged">
+map
+</span>
+<span class="diff-removed">
+(varchar
+</span>
+<span class="diff-added">
+<string
+</span>
+<span class="unchanged">
+, 
+</span>
+<span class="diff-removed">
+varchar)
+</span>
+<span class="diff-added">
+string>'
+</span>
+<span class="unchanged">
+))) 
+</span>
+<span class="diff-removed">
+as 
+</span>
+<span class="unchanged">
+t 
+</span>
+<span class="diff-removed">
+(queryfields) 
+</span>
+<span class="diff-added">
+AS queryfields 
+</span>
+<span class="unchanged">
+WHERE eventSource = 'dynamodb.amazonaws.com' AND eventName = 'Query' AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'month'
+</span>
+<span class="diff-added">
+MONTH
+</span>
+<span class="unchanged">
+, -6, CURRENT_TIMESTAMP) GROUP BY 
+</span>
+<span class="diff-removed">
+element_at(
+</span>
+<span class="unchanged">
+requestParameters
+</span>
+<span class="diff-removed">
+, '
+</span>
+<span class="diff-added">
+['
+</span>
+<span class="unchanged">
+tableName
+</span>
+<span class="diff-removed">
+')
+</span>
+<span class="diff-added">
+']
+</span>
+<span class="unchanged">
+, queryfields, date_trunc('month', eventTime) ORDER BY month DESC, field_usage_count DESC
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT element_at(requestParameters, 'tableName') as tableName, queryfields, date_trunc('month', eventTime) as month, count(*) as field_usage_count FROM ctl_ddb CROSS JOIN UNNEST(map_values(cast(json_parse(element_at(requestParameters, 'expressionAttributeNames')) as map(varchar, varchar)))) as t (queryfields) WHERE eventSource = 'dynamodb.amazonaws.com' AND eventName = 'Query' AND eventTime > DATE_ADD('month', -6, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'tableName'), queryfields, date_trunc('month', eventTime) ORDER BY month DESC, field_usage_count DESC</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT requestParameters['tableName'] as tableName, queryfields, date_trunc('month', eventTime) as month, count(*) as field_usage_count FROM ctl_ddb LATERAL VIEW explode(map_values(from_json(requestParameters['expressionAttributeNames'], 'map<string, string>'))) t AS queryfields WHERE eventSource = 'dynamodb.amazonaws.com' AND eventName = 'Query' AND eventTime > DATE_ADD(MONTH, -6, CURRENT_TIMESTAMP) GROUP BY requestParameters['tableName'], queryfields, date_trunc('month', eventTime) ORDER BY month DESC, field_usage_count DESC</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="8" data-presto="false" data-spark="true" class="improved">
+            <td>8</td>
+            <td>Get most throttled DynamoDB tables</td>
+            <td class="error">Failed</td>
+            <td class="success">Success</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message"></td>
+            <td class="actions">
+                <button onclick="toggleQuery(8)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-8" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT element_at(requestParameters, 'tableName') as tableName, count(*) as throttledCallCount FROM ctl_ddb WHERE eventSource = 'dynamodb.amazonaws.com' AND (errorCode like '%Throttling%' OR errorCode like '%Exceeded%') AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'tableName') ORDER BY throttledCallCount DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT requestParameters['tableName'] as tableName, count(*) as throttledCallCount FROM ctl_ddb WHERE eventSource = 'dynamodb.amazonaws.com' AND (errorCode like '%Throttling%' OR errorCode like '%Exceeded%') AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) GROUP BY requestParameters['tableName'] ORDER BY throttledCallCount DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT 
+</span>
+<span class="diff-removed">
+element_at(
+</span>
+<span class="unchanged">
+requestParameters
+</span>
+<span class="diff-removed">
+, '
+</span>
+<span class="diff-added">
+['
+</span>
+<span class="unchanged">
+tableName
+</span>
+<span class="diff-removed">
+') 
+</span>
+<span class="diff-added">
+'] 
+</span>
+<span class="unchanged">
+as tableName, count(*) as throttledCallCount FROM ctl_ddb WHERE eventSource = 'dynamodb.amazonaws.com' AND (errorCode like '%Throttling%' OR errorCode like '%Exceeded%') AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'week'
+</span>
+<span class="diff-added">
+WEEK
+</span>
+<span class="unchanged">
+, -1, CURRENT_TIMESTAMP) GROUP BY 
+</span>
+<span class="diff-removed">
+element_at(
+</span>
+<span class="unchanged">
+requestParameters
+</span>
+<span class="diff-removed">
+, '
+</span>
+<span class="diff-added">
+['
+</span>
+<span class="unchanged">
+tableName
+</span>
+<span class="diff-removed">
+') 
+</span>
+<span class="diff-added">
+'] 
+</span>
+<span class="unchanged">
+ORDER BY throttledCallCount DESC
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT element_at(requestParameters, 'tableName') as tableName, count(*) as throttledCallCount FROM ctl_ddb WHERE eventSource = 'dynamodb.amazonaws.com' AND (errorCode like '%Throttling%' OR errorCode like '%Exceeded%') AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'tableName') ORDER BY throttledCallCount DESC</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT requestParameters['tableName'] as tableName, count(*) as throttledCallCount FROM ctl_ddb WHERE eventSource = 'dynamodb.amazonaws.com' AND (errorCode like '%Throttling%' OR errorCode like '%Exceeded%') AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) GROUP BY requestParameters['tableName'] ORDER BY throttledCallCount DESC</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="9" data-presto="false" data-spark="true" class="improved">
+            <td>9</td>
+            <td>Get most throttled DynamoDB tables by month</td>
+            <td class="error">Failed</td>
+            <td class="success">Success</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message"></td>
+            <td class="actions">
+                <button onclick="toggleQuery(9)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-9" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT element_at(requestParameters, 'tableName') as tableName, date_trunc('month', eventTime) as month, count(*) as throttledCallCount FROM ctl_ddb WHERE eventSource = 'dynamodb.amazonaws.com' AND (errorCode like '%Throttling%' OR errorCode like '%Exceeded%') AND eventTime > DATE_ADD('month', -6, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'tableName'), date_trunc('month', eventTime) ORDER BY month DESC, throttledCallCount DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT requestParameters['tableName'] as tableName, date_trunc('month', eventTime) as month, count(*) as throttledCallCount FROM ctl_ddb WHERE eventSource = 'dynamodb.amazonaws.com' AND (errorCode like '%Throttling%' OR errorCode like '%Exceeded%') AND eventTime > DATE_ADD(MONTH, -6, CURRENT_TIMESTAMP) GROUP BY requestParameters['tableName'], date_trunc('month', eventTime) ORDER BY month DESC, throttledCallCount DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT 
+</span>
+<span class="diff-removed">
+element_at(
+</span>
+<span class="unchanged">
+requestParameters
+</span>
+<span class="diff-removed">
+, '
+</span>
+<span class="diff-added">
+['
+</span>
+<span class="unchanged">
+tableName
+</span>
+<span class="diff-removed">
+') 
+</span>
+<span class="diff-added">
+'] 
+</span>
+<span class="unchanged">
+as tableName, date_trunc('month', eventTime) as month, count(*) as throttledCallCount FROM ctl_ddb WHERE eventSource = 'dynamodb.amazonaws.com' AND (errorCode like '%Throttling%' OR errorCode like '%Exceeded%') AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'month'
+</span>
+<span class="diff-added">
+MONTH
+</span>
+<span class="unchanged">
+, -6, CURRENT_TIMESTAMP) GROUP BY 
+</span>
+<span class="diff-removed">
+element_at(
+</span>
+<span class="unchanged">
+requestParameters
+</span>
+<span class="diff-removed">
+, '
+</span>
+<span class="diff-added">
+['
+</span>
+<span class="unchanged">
+tableName
+</span>
+<span class="diff-removed">
+')
+</span>
+<span class="diff-added">
+']
+</span>
+<span class="unchanged">
+, date_trunc('month', eventTime) ORDER BY month DESC, throttledCallCount DESC
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT element_at(requestParameters, 'tableName') as tableName, date_trunc('month', eventTime) as month, count(*) as throttledCallCount FROM ctl_ddb WHERE eventSource = 'dynamodb.amazonaws.com' AND (errorCode like '%Throttling%' OR errorCode like '%Exceeded%') AND eventTime > DATE_ADD('month', -6, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'tableName'), date_trunc('month', eventTime) ORDER BY month DESC, throttledCallCount DESC</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT requestParameters['tableName'] as tableName, date_trunc('month', eventTime) as month, count(*) as throttledCallCount FROM ctl_ddb WHERE eventSource = 'dynamodb.amazonaws.com' AND (errorCode like '%Throttling%' OR errorCode like '%Exceeded%') AND eventTime > DATE_ADD(MONTH, -6, CURRENT_TIMESTAMP) GROUP BY requestParameters['tableName'], date_trunc('month', eventTime) ORDER BY month DESC, throttledCallCount DESC</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="10" data-presto="false" data-spark="true" class="improved">
+            <td>10</td>
+            <td>Get most throttled DynamoDB indexes</td>
+            <td class="error">Failed</td>
+            <td class="success">Success</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message"></td>
+            <td class="actions">
+                <button onclick="toggleQuery(10)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-10" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT element_at(requestParameters, 'indexName') as indexName, count(*) as throttledCallCount FROM ctl_ddb WHERE eventSource = 'dynamodb.amazonaws.com' AND (errorCode like '%Throttling%' OR errorCode like '%Exceeded%') AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'indexName') ORDER BY throttledCallCount DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT requestParameters['indexName'] as indexName, count(*) as throttledCallCount FROM ctl_ddb WHERE eventSource = 'dynamodb.amazonaws.com' AND (errorCode like '%Throttling%' OR errorCode like '%Exceeded%') AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) GROUP BY requestParameters['indexName'] ORDER BY throttledCallCount DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT 
+</span>
+<span class="diff-removed">
+element_at(
+</span>
+<span class="unchanged">
+requestParameters
+</span>
+<span class="diff-removed">
+, '
+</span>
+<span class="diff-added">
+['
+</span>
+<span class="unchanged">
+indexName
+</span>
+<span class="diff-removed">
+') 
+</span>
+<span class="diff-added">
+'] 
+</span>
+<span class="unchanged">
+as indexName, count(*) as throttledCallCount FROM ctl_ddb WHERE eventSource = 'dynamodb.amazonaws.com' AND (errorCode like '%Throttling%' OR errorCode like '%Exceeded%') AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'week'
+</span>
+<span class="diff-added">
+WEEK
+</span>
+<span class="unchanged">
+, -1, CURRENT_TIMESTAMP) GROUP BY 
+</span>
+<span class="diff-removed">
+element_at(
+</span>
+<span class="unchanged">
+requestParameters
+</span>
+<span class="diff-removed">
+, '
+</span>
+<span class="diff-added">
+['
+</span>
+<span class="unchanged">
+indexName
+</span>
+<span class="diff-removed">
+') 
+</span>
+<span class="diff-added">
+'] 
+</span>
+<span class="unchanged">
+ORDER BY throttledCallCount DESC
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT element_at(requestParameters, 'indexName') as indexName, count(*) as throttledCallCount FROM ctl_ddb WHERE eventSource = 'dynamodb.amazonaws.com' AND (errorCode like '%Throttling%' OR errorCode like '%Exceeded%') AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'indexName') ORDER BY throttledCallCount DESC</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT requestParameters['indexName'] as indexName, count(*) as throttledCallCount FROM ctl_ddb WHERE eventSource = 'dynamodb.amazonaws.com' AND (errorCode like '%Throttling%' OR errorCode like '%Exceeded%') AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) GROUP BY requestParameters['indexName'] ORDER BY throttledCallCount DESC</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="11" data-presto="false" data-spark="true" class="improved">
+            <td>11</td>
+            <td>Get most throttled DynamoDB indexes by month</td>
+            <td class="error">Failed</td>
+            <td class="success">Success</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message"></td>
+            <td class="actions">
+                <button onclick="toggleQuery(11)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-11" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT element_at(requestParameters, 'indexName') as indexName, date_trunc('month', eventTime) as month, count(*) as throttledCallCount FROM ctl_ddb WHERE eventSource = 'dynamodb.amazonaws.com' AND (errorCode like '%Throttling%' OR errorCode like '%Exceeded%') AND eventTime > DATE_ADD('month', -6, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'indexName'), date_trunc('month', eventTime) ORDER BY month DESC, throttledCallCount DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT requestParameters['indexName'] as indexName, date_trunc('month', eventTime) as month, count(*) as throttledCallCount FROM ctl_ddb WHERE eventSource = 'dynamodb.amazonaws.com' AND (errorCode like '%Throttling%' OR errorCode like '%Exceeded%') AND eventTime > DATE_ADD(MONTH, -6, CURRENT_TIMESTAMP) GROUP BY requestParameters['indexName'], date_trunc('month', eventTime) ORDER BY month DESC, throttledCallCount DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT 
+</span>
+<span class="diff-removed">
+element_at(
+</span>
+<span class="unchanged">
+requestParameters
+</span>
+<span class="diff-removed">
+, '
+</span>
+<span class="diff-added">
+['
+</span>
+<span class="unchanged">
+indexName
+</span>
+<span class="diff-removed">
+') 
+</span>
+<span class="diff-added">
+'] 
+</span>
+<span class="unchanged">
+as indexName, date_trunc('month', eventTime) as month, count(*) as throttledCallCount FROM ctl_ddb WHERE eventSource = 'dynamodb.amazonaws.com' AND (errorCode like '%Throttling%' OR errorCode like '%Exceeded%') AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'month'
+</span>
+<span class="diff-added">
+MONTH
+</span>
+<span class="unchanged">
+, -6, CURRENT_TIMESTAMP) GROUP BY 
+</span>
+<span class="diff-removed">
+element_at(
+</span>
+<span class="unchanged">
+requestParameters
+</span>
+<span class="diff-removed">
+, '
+</span>
+<span class="diff-added">
+['
+</span>
+<span class="unchanged">
+indexName
+</span>
+<span class="diff-removed">
+')
+</span>
+<span class="diff-added">
+']
+</span>
+<span class="unchanged">
+, date_trunc('month', eventTime) ORDER BY month DESC, throttledCallCount DESC
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT element_at(requestParameters, 'indexName') as indexName, date_trunc('month', eventTime) as month, count(*) as throttledCallCount FROM ctl_ddb WHERE eventSource = 'dynamodb.amazonaws.com' AND (errorCode like '%Throttling%' OR errorCode like '%Exceeded%') AND eventTime > DATE_ADD('month', -6, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'indexName'), date_trunc('month', eventTime) ORDER BY month DESC, throttledCallCount DESC</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT requestParameters['indexName'] as indexName, date_trunc('month', eventTime) as month, count(*) as throttledCallCount FROM ctl_ddb WHERE eventSource = 'dynamodb.amazonaws.com' AND (errorCode like '%Throttling%' OR errorCode like '%Exceeded%') AND eventTime > DATE_ADD(MONTH, -6, CURRENT_TIMESTAMP) GROUP BY requestParameters['indexName'], date_trunc('month', eventTime) ORDER BY month DESC, throttledCallCount DESC</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="12" data-presto="false" data-spark="true" class="improved">
+            <td>12</td>
+            <td>Get DynamoDB tables with most write requests</td>
+            <td class="error">Failed</td>
+            <td class="success">Success</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message"></td>
+            <td class="actions">
+                <button onclick="toggleQuery(12)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-12" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT element_at(requestParameters, 'tableName'), count(*) as countOfWrites FROM ctl_ddb WHERE eventSource = 'dynamodb.amazonaws.com' AND regexp_like(eventName, '(?i)(Write|Put|agResource|Delete|Update)') AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'tableName') ORDER BY countOfWrites DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT requestParameters['tableName'], count(*) as countOfWrites FROM ctl_ddb WHERE eventSource = 'dynamodb.amazonaws.com' AND regexp_like(eventName, '(?i)(Write|Put|agResource|Delete|Update)') AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) GROUP BY requestParameters['tableName'] ORDER BY countOfWrites DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT 
+</span>
+<span class="diff-removed">
+element_at(
+</span>
+<span class="unchanged">
+requestParameters
+</span>
+<span class="diff-removed">
+, '
+</span>
+<span class="diff-added">
+['
+</span>
+<span class="unchanged">
+tableName
+</span>
+<span class="diff-removed">
+')
+</span>
+<span class="diff-added">
+']
+</span>
+<span class="unchanged">
+, count(*) as countOfWrites FROM ctl_ddb WHERE eventSource = 'dynamodb.amazonaws.com' AND regexp_like(eventName, '(?i)(Write|Put|agResource|Delete|Update)') AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'week'
+</span>
+<span class="diff-added">
+WEEK
+</span>
+<span class="unchanged">
+, -1, CURRENT_TIMESTAMP) GROUP BY 
+</span>
+<span class="diff-removed">
+element_at(
+</span>
+<span class="unchanged">
+requestParameters
+</span>
+<span class="diff-removed">
+, '
+</span>
+<span class="diff-added">
+['
+</span>
+<span class="unchanged">
+tableName
+</span>
+<span class="diff-removed">
+') 
+</span>
+<span class="diff-added">
+'] 
+</span>
+<span class="unchanged">
+ORDER BY countOfWrites DESC
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT element_at(requestParameters, 'tableName'), count(*) as countOfWrites FROM ctl_ddb WHERE eventSource = 'dynamodb.amazonaws.com' AND regexp_like(eventName, '(?i)(Write|Put|agResource|Delete|Update)') AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'tableName') ORDER BY countOfWrites DESC</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT requestParameters['tableName'], count(*) as countOfWrites FROM ctl_ddb WHERE eventSource = 'dynamodb.amazonaws.com' AND regexp_like(eventName, '(?i)(Write|Put|agResource|Delete|Update)') AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) GROUP BY requestParameters['tableName'] ORDER BY countOfWrites DESC</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="13" data-presto="false" data-spark="true" class="improved">
+            <td>13</td>
+            <td>Get DynamoDB tables with most write requests by month</td>
+            <td class="error">Failed</td>
+            <td class="success">Success</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message"></td>
+            <td class="actions">
+                <button onclick="toggleQuery(13)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-13" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT element_at(requestParameters, 'tableName'), date_trunc('month', eventTime) as month, count(*) as countOfWrites FROM ctl_ddb WHERE eventSource = 'dynamodb.amazonaws.com' AND regexp_like(eventName, '(?i)(Write|Put|agResource|Delete|Update)') AND eventTime > DATE_ADD('month', -6, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'tableName'), date_trunc('month', eventTime) ORDER BY month DESC, countOfWrites DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT requestParameters['tableName'], date_trunc('month', eventTime) as month, count(*) as countOfWrites FROM ctl_ddb WHERE eventSource = 'dynamodb.amazonaws.com' AND regexp_like(eventName, '(?i)(Write|Put|agResource|Delete|Update)') AND eventTime > DATE_ADD(MONTH, -6, CURRENT_TIMESTAMP) GROUP BY requestParameters['tableName'], date_trunc('month', eventTime) ORDER BY month DESC, countOfWrites DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT 
+</span>
+<span class="diff-removed">
+element_at(
+</span>
+<span class="unchanged">
+requestParameters
+</span>
+<span class="diff-removed">
+, '
+</span>
+<span class="diff-added">
+['
+</span>
+<span class="unchanged">
+tableName
+</span>
+<span class="diff-removed">
+')
+</span>
+<span class="diff-added">
+']
+</span>
+<span class="unchanged">
+, date_trunc('month', eventTime) as month, count(*) as countOfWrites FROM ctl_ddb WHERE eventSource = 'dynamodb.amazonaws.com' AND regexp_like(eventName, '(?i)(Write|Put|agResource|Delete|Update)') AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'month'
+</span>
+<span class="diff-added">
+MONTH
+</span>
+<span class="unchanged">
+, -6, CURRENT_TIMESTAMP) GROUP BY 
+</span>
+<span class="diff-removed">
+element_at(
+</span>
+<span class="unchanged">
+requestParameters
+</span>
+<span class="diff-removed">
+, '
+</span>
+<span class="diff-added">
+['
+</span>
+<span class="unchanged">
+tableName
+</span>
+<span class="diff-removed">
+')
+</span>
+<span class="diff-added">
+']
+</span>
+<span class="unchanged">
+, date_trunc('month', eventTime) ORDER BY month DESC, countOfWrites DESC
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT element_at(requestParameters, 'tableName'), date_trunc('month', eventTime) as month, count(*) as countOfWrites FROM ctl_ddb WHERE eventSource = 'dynamodb.amazonaws.com' AND regexp_like(eventName, '(?i)(Write|Put|agResource|Delete|Update)') AND eventTime > DATE_ADD('month', -6, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'tableName'), date_trunc('month', eventTime) ORDER BY month DESC, countOfWrites DESC</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT requestParameters['tableName'], date_trunc('month', eventTime) as month, count(*) as countOfWrites FROM ctl_ddb WHERE eventSource = 'dynamodb.amazonaws.com' AND regexp_like(eventName, '(?i)(Write|Put|agResource|Delete|Update)') AND eventTime > DATE_ADD(MONTH, -6, CURRENT_TIMESTAMP) GROUP BY requestParameters['tableName'], date_trunc('month', eventTime) ORDER BY month DESC, countOfWrites DESC</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="14" data-presto="false" data-spark="true" class="improved">
+            <td>14</td>
+            <td>Get DynamoDB tables with most reads</td>
+            <td class="error">Failed</td>
+            <td class="success">Success</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message"></td>
+            <td class="actions">
+                <button onclick="toggleQuery(14)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-14" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT resources[1].arn as tableIdentifier, count(*) as readRequestCount FROM ctl_ddb WHERE eventSource = 'dynamodb.amazonaws.com' and cardinality(resources) > 0 AND regexp_like(eventName, '(?i)(Get|Describe|Query|Scan|ListTags)') AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) GROUP BY resources[1].arn ORDER BY readRequestCount DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT resources[1].arn as tableIdentifier, count(*) as readRequestCount FROM ctl_ddb WHERE eventSource = 'dynamodb.amazonaws.com' and cardinality(resources) > 0 AND regexp_like(eventName, '(?i)(Get|Describe|Query|Scan|ListTags)') AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) GROUP BY resources[1].arn ORDER BY readRequestCount DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT resources[1].arn as tableIdentifier, count(*) as readRequestCount FROM ctl_ddb WHERE eventSource = 'dynamodb.amazonaws.com' and cardinality(resources) > 0 AND regexp_like(eventName, '(?i)(Get|Describe|Query|Scan|ListTags)') AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'week'
+</span>
+<span class="diff-added">
+WEEK
+</span>
+<span class="unchanged">
+, -1, CURRENT_TIMESTAMP) GROUP BY resources[1].arn ORDER BY readRequestCount DESC
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT resources[1].arn as tableIdentifier, count(*) as readRequestCount FROM ctl_ddb WHERE eventSource = 'dynamodb.amazonaws.com' and cardinality(resources) > 0 AND regexp_like(eventName, '(?i)(Get|Describe|Query|Scan|ListTags)') AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) GROUP BY resources[1].arn ORDER BY readRequestCount DESC</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT resources[1].arn as tableIdentifier, count(*) as readRequestCount FROM ctl_ddb WHERE eventSource = 'dynamodb.amazonaws.com' and cardinality(resources) > 0 AND regexp_like(eventName, '(?i)(Get|Describe|Query|Scan|ListTags)') AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) GROUP BY resources[1].arn ORDER BY readRequestCount DESC</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="15" data-presto="false" data-spark="true" class="improved">
+            <td>15</td>
+            <td>Get DynamoDB tables with most read requests by month</td>
+            <td class="error">Failed</td>
+            <td class="success">Success</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message"></td>
+            <td class="actions">
+                <button onclick="toggleQuery(15)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-15" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT resources[1].arn as tableIdentifier, date_trunc('month', eventTime) as month, count(*) as readRequestCount FROM ctl_ddb WHERE eventSource = 'dynamodb.amazonaws.com' and cardinality(resources) > 0 AND regexp_like(eventName, '(?i)(Get|Describe|Query|Scan|ListTags)') AND eventTime > DATE_ADD('month', -6, CURRENT_TIMESTAMP) GROUP BY resources[1].arn, date_trunc('month', eventTime) ORDER BY month DESC, readRequestCount DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT resources[1].arn as tableIdentifier, date_trunc('month', eventTime) as month, count(*) as readRequestCount FROM ctl_ddb WHERE eventSource = 'dynamodb.amazonaws.com' and cardinality(resources) > 0 AND regexp_like(eventName, '(?i)(Get|Describe|Query|Scan|ListTags)') AND eventTime > DATE_ADD(MONTH, -6, CURRENT_TIMESTAMP) GROUP BY resources[1].arn, date_trunc('month', eventTime) ORDER BY month DESC, readRequestCount DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT resources[1].arn as tableIdentifier, date_trunc('month', eventTime) as month, count(*) as readRequestCount FROM ctl_ddb WHERE eventSource = 'dynamodb.amazonaws.com' and cardinality(resources) > 0 AND regexp_like(eventName, '(?i)(Get|Describe|Query|Scan|ListTags)') AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'month'
+</span>
+<span class="diff-added">
+MONTH
+</span>
+<span class="unchanged">
+, -6, CURRENT_TIMESTAMP) GROUP BY resources[1].arn, date_trunc('month', eventTime) ORDER BY month DESC, readRequestCount DESC
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT resources[1].arn as tableIdentifier, date_trunc('month', eventTime) as month, count(*) as readRequestCount FROM ctl_ddb WHERE eventSource = 'dynamodb.amazonaws.com' and cardinality(resources) > 0 AND regexp_like(eventName, '(?i)(Get|Describe|Query|Scan|ListTags)') AND eventTime > DATE_ADD('month', -6, CURRENT_TIMESTAMP) GROUP BY resources[1].arn, date_trunc('month', eventTime) ORDER BY month DESC, readRequestCount DESC</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT resources[1].arn as tableIdentifier, date_trunc('month', eventTime) as month, count(*) as readRequestCount FROM ctl_ddb WHERE eventSource = 'dynamodb.amazonaws.com' and cardinality(resources) > 0 AND regexp_like(eventName, '(?i)(Get|Describe|Query|Scan|ListTags)') AND eventTime > DATE_ADD(MONTH, -6, CURRENT_TIMESTAMP) GROUP BY resources[1].arn, date_trunc('month', eventTime) ORDER BY month DESC, readRequestCount DESC</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="16" data-presto="false" data-spark="true" class="improved">
+            <td>16</td>
+            <td>Get least recently used DynamoDB tables</td>
+            <td class="error">Failed</td>
+            <td class="success">Success</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message"></td>
+            <td class="actions">
+                <button onclick="toggleQuery(16)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-16" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT element_at(requestParameters, 'tableName') as tableIdentifier, max(eventTime) as lastUsage FROM ctl_ddb WHERE eventSource = 'dynamodb.amazonaws.com' and element_at(requestParameters, 'tableName') is not NULL AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'tableName') ORDER BY lastUsage ASC</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT requestParameters['tableName'] as tableIdentifier, max(eventTime) as lastUsage FROM ctl_ddb WHERE eventSource = 'dynamodb.amazonaws.com' and requestParameters['tableName'] is not NULL AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) GROUP BY requestParameters['tableName'] ORDER BY lastUsage ASC</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT 
+</span>
+<span class="diff-removed">
+element_at(
+</span>
+<span class="unchanged">
+requestParameters
+</span>
+<span class="diff-removed">
+, '
+</span>
+<span class="diff-added">
+['
+</span>
+<span class="unchanged">
+tableName
+</span>
+<span class="diff-removed">
+') 
+</span>
+<span class="diff-added">
+'] 
+</span>
+<span class="unchanged">
+as tableIdentifier, max(eventTime) as lastUsage FROM ctl_ddb WHERE eventSource = 'dynamodb.amazonaws.com' and 
+</span>
+<span class="diff-removed">
+element_at(
+</span>
+<span class="unchanged">
+requestParameters
+</span>
+<span class="diff-removed">
+, '
+</span>
+<span class="diff-added">
+['
+</span>
+<span class="unchanged">
+tableName
+</span>
+<span class="diff-removed">
+') 
+</span>
+<span class="diff-added">
+'] 
+</span>
+<span class="unchanged">
+is not NULL AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'week'
+</span>
+<span class="diff-added">
+WEEK
+</span>
+<span class="unchanged">
+, -1, CURRENT_TIMESTAMP) GROUP BY 
+</span>
+<span class="diff-removed">
+element_at(
+</span>
+<span class="unchanged">
+requestParameters
+</span>
+<span class="diff-removed">
+, '
+</span>
+<span class="diff-added">
+['
+</span>
+<span class="unchanged">
+tableName
+</span>
+<span class="diff-removed">
+') 
+</span>
+<span class="diff-added">
+'] 
+</span>
+<span class="unchanged">
+ORDER BY lastUsage ASC
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT element_at(requestParameters, 'tableName') as tableIdentifier, max(eventTime) as lastUsage FROM ctl_ddb WHERE eventSource = 'dynamodb.amazonaws.com' and element_at(requestParameters, 'tableName') is not NULL AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'tableName') ORDER BY lastUsage ASC</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT requestParameters['tableName'] as tableIdentifier, max(eventTime) as lastUsage FROM ctl_ddb WHERE eventSource = 'dynamodb.amazonaws.com' and requestParameters['tableName'] is not NULL AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) GROUP BY requestParameters['tableName'] ORDER BY lastUsage ASC</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+    </table>
+</body>
+</html>
+    

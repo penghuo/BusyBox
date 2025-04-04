@@ -1,0 +1,1329 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Presto to Spark SQL Report</title>
+    <style>
+        body { font-family: Arial; margin: 20px; }
+        .header { background-color: #4a86e8; color: white; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
+        .summary { margin-bottom: 20px; }
+        .progress-bar { width: 100%; background-color: #f3f3f3; height: 30px; border-radius: 5px; margin-bottom: 20px; }
+        .progress { height: 100%; background-color: #4CAF50; text-align: center; line-height: 30px; color: white; border-radius: 5px; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; vertical-align: top; }
+        th { background-color: #f2f2f2; }
+        tr:hover { background-color: #f5f5f5; }
+        .success { color: green; }
+        .error { color: red; }
+        .query { max-width: 400px; overflow-x: auto; }
+        .actions { white-space: nowrap; }
+        .filter-bar { margin-bottom: 15px; }
+        .tabs { display: flex; }
+        .tab { padding: 5px 10px; cursor: pointer; border: 1px solid #ccc; }
+        .tab.active { background-color: #4a86e8; color: white; }
+        .improved { background-color: #d4edda; }
+        pre { margin: 0; white-space: pre-wrap; }
+        .hidden { display: none; }
+        input[type=text] { padding: 5px; width: 30%; }
+        button { padding: 5px 10px; margin-right: 5px; cursor: pointer; }
+        
+        /* Diff styling */
+        .diff {
+            font-family: monospace;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-top: 10px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .diff-section { margin-bottom: 15px; }
+        .diff-line { white-space: pre-wrap; font-size: 14px; line-height: 1.5; }
+        .diff-removed { background-color: #ffdddd; color: #994444; }
+        .diff-added { background-color: #ddffdd; color: #449944; }
+        .unchanged { color: #666; }
+        .full-queries { margin-top: 15px; border-top: 1px solid #eee; padding-top: 10px; }
+        .error-message { white-space: pre-wrap; color: #d9534f; }
+    </style>
+    <script>
+        function toggleQuery(id) {
+            const elem = document.getElementById('query-'+id);
+            elem.classList.toggle('hidden');
+        }
+        
+        function filterStatus(status) {
+            const rows = document.querySelectorAll('#resultsTable tr[data-id]');
+            rows.forEach(row => {
+                if (status === 'all' || 
+                    (status === 'success' && row.getAttribute('data-spark') === 'true') ||
+                    (status === 'failed' && row.getAttribute('data-spark') === 'false') ||
+                    (status === 'improved' && row.getAttribute('data-presto') === 'false' && row.getAttribute('data-spark') === 'true')) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+            
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.getElementById('tab-'+status).classList.add('active');
+        }
+        
+        function filterText() {
+            const filter = document.getElementById('filterInput').value.toLowerCase();
+            const rows = document.querySelectorAll('#resultsTable tr[data-id]');
+            
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                if (text.includes(filter)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+    <div class="header">
+        <h1>Presto to Spark SQL Compatibility Report</h1>
+        <p>Table: ctl_ec2 | Spark: 3.5.5 | Date: 2025-04-04 15:30</p>
+        <p>Translation Method: Custom Rules</p>
+    </div>
+    
+    <div class="summary">
+        <p>Total queries: <b>10</b></p>
+        <p>Presto success: <b>0</b> (0.0%)</p>
+        <p>Spark success: <b>10</b> (100.0%)</p>
+        <p>Improvement from translation: <b>10</b> queries</p>
+        
+        <div class="progress-bar">
+            <div class="progress" style="width: 100.0%;">
+                100.0%
+            </div>
+        </div>
+    </div>
+    
+    <div class="filter-bar">
+        <div class="tabs">
+            <div id="tab-all" class="tab active" onclick="filterStatus('all')">All Queries</div>
+            <div id="tab-success" class="tab" onclick="filterStatus('success')">Successful</div>
+            <div id="tab-failed" class="tab" onclick="filterStatus('failed')">Failed</div>
+            <div id="tab-improved" class="tab" onclick="filterStatus('improved')">Improved</div>
+        </div>
+        <div style="margin-top: 10px;">
+            <input type="text" id="filterInput" onkeyup="filterText()" placeholder="Search...">
+        </div>
+    </div>
+    
+    <table id="resultsTable">
+        <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Presto</th>
+            <th>Spark</th>
+            <th>Presto Error</th>
+            <th>Spark Error</th>
+            <th>Details</th>
+        </tr>
+    
+        <tr data-id="1" data-presto="false" data-spark="true" class="improved">
+            <td>1</td>
+            <td>Count EC2 instances running per month</td>
+            <td class="error">Failed</td>
+            <td class="success">Success</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message"></td>
+            <td class="actions">
+                <button onclick="toggleQuery(1)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-1" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT sum(json_array_length(json_extract(json_parse(element_at(responseElements, 'instancesSet')), '$.items'))) as numberOfRunInstances, date_trunc('month', eventTime) as month FROM ctl_ec2 WHERE eventSource = 'ec2.amazonaws.com' AND eventName = 'RunInstances' AND eventTime > DATE_ADD('month', -6, CURRENT_TIMESTAMP) GROUP BY date_trunc('month', eventTime) ORDER BY month DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT sum(json_array_length(get_json_object(responseElements['instancesSet'], '$.items'))) as numberOfRunInstances, date_trunc('month', eventTime) as month FROM ctl_ec2 WHERE eventSource = 'ec2.amazonaws.com' AND eventName = 'RunInstances' AND eventTime > DATE_ADD(MONTH, -6, CURRENT_TIMESTAMP) GROUP BY date_trunc('month', eventTime) ORDER BY month DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT sum(json_array_length(
+</span>
+<span class="diff-removed">
+json_extract(json_parse(element_at
+</span>
+<span class="diff-added">
+get_json_object
+</span>
+<span class="unchanged">
+(responseElements
+</span>
+<span class="diff-removed">
+, '
+</span>
+<span class="diff-added">
+['
+</span>
+<span class="unchanged">
+instancesSet
+</span>
+<span class="diff-removed">
+'))
+</span>
+<span class="diff-added">
+']
+</span>
+<span class="unchanged">
+, '$.items'))) as numberOfRunInstances, date_trunc('month', eventTime) as month FROM ctl_ec2 WHERE eventSource = 'ec2.amazonaws.com' AND eventName = 'RunInstances' AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'month'
+</span>
+<span class="diff-added">
+MONTH
+</span>
+<span class="unchanged">
+, -6, CURRENT_TIMESTAMP) GROUP BY date_trunc('month', eventTime) ORDER BY month DESC
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT sum(json_array_length(json_extract(json_parse(element_at(responseElements, 'instancesSet')), '$.items'))) as numberOfRunInstances, date_trunc('month', eventTime) as month FROM ctl_ec2 WHERE eventSource = 'ec2.amazonaws.com' AND eventName = 'RunInstances' AND eventTime > DATE_ADD('month', -6, CURRENT_TIMESTAMP) GROUP BY date_trunc('month', eventTime) ORDER BY month DESC</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT sum(json_array_length(get_json_object(responseElements['instancesSet'], '$.items'))) as numberOfRunInstances, date_trunc('month', eventTime) as month FROM ctl_ec2 WHERE eventSource = 'ec2.amazonaws.com' AND eventName = 'RunInstances' AND eventTime > DATE_ADD(MONTH, -6, CURRENT_TIMESTAMP) GROUP BY date_trunc('month', eventTime) ORDER BY month DESC</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="2" data-presto="false" data-spark="true" class="improved">
+            <td>2</td>
+            <td>Count non-terminated EC2 instances</td>
+            <td class="error">Failed</td>
+            <td class="success">Success</td>
+            <td class="error-message">
+[PARSE_SYNTAX_ERROR] Syntax error at or near 'varchar'.(line 1, pos 158)
+
+== SQL ==
+SELECT instances FROM ctl_ec2 CROSS JOIN UNNEST(cast(json_extract...</td>
+            <td class="error-message"></td>
+            <td class="actions">
+                <button onclick="toggleQuery(2)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-2" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT instances FROM ctl_ec2 CROSS JOIN UNNEST(cast(json_extract(json_parse(element_at(responseElements, 'instancesSet')), '$.items[*].instanceId') as array(varchar))) as t (instances) WHERE eventSource = 'ec2.amazonaws.com' AND eventName = 'RunInstances' AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) EXCEPT SELECT instances FROM ctl_ec2 CROSS JOIN UNNEST(cast(json_extract(json_parse(element_at(responseElements, 'instancesSet')), '$.items[*].instanceId') as array(varchar))) as t (instances) WHERE eventSource = 'ec2.amazonaws.com' AND eventName = 'TerminateInstances' AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP)</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT instances FROM ctl_ec2 LATERAL VIEW explode(from_json(get_json_object(responseElements['instancesSet'], '$.items[*].instanceId'), 'array<string>')) t AS instances WHERE eventSource = 'ec2.amazonaws.com' AND eventName = 'RunInstances' AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) EXCEPT SELECT instances FROM ctl_ec2 LATERAL VIEW explode(from_json(get_json_object(responseElements['instancesSet'], '$.items[*].instanceId'), 'array<string>')) t AS instances WHERE eventSource = 'ec2.amazonaws.com' AND eventName = 'TerminateInstances' AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP)</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT instances FROM ctl_ec2 
+</span>
+<span class="diff-removed">
+CROSS JOIN UNNEST
+</span>
+<span class="diff-added">
+LATERAL VIEW explode
+</span>
+<span class="unchanged">
+(
+</span>
+<span class="diff-removed">
+cast
+</span>
+<span class="diff-added">
+from_json
+</span>
+<span class="unchanged">
+(
+</span>
+<span class="diff-removed">
+json_extract(json_parse(element_at
+</span>
+<span class="diff-added">
+get_json_object
+</span>
+<span class="unchanged">
+(responseElements
+</span>
+<span class="diff-removed">
+, '
+</span>
+<span class="diff-added">
+['
+</span>
+<span class="unchanged">
+instancesSet
+</span>
+<span class="diff-removed">
+'))
+</span>
+<span class="diff-added">
+']
+</span>
+<span class="unchanged">
+, '$.items[*].instanceId'
+</span>
+<span class="diff-removed">
+) as 
+</span>
+<span class="diff-added">
+), '
+</span>
+<span class="unchanged">
+array
+</span>
+<span class="diff-removed">
+(varchar)
+</span>
+<span class="diff-added">
+<string>'
+</span>
+<span class="unchanged">
+)) 
+</span>
+<span class="diff-removed">
+as 
+</span>
+<span class="unchanged">
+t 
+</span>
+<span class="diff-removed">
+(instances) 
+</span>
+<span class="diff-added">
+AS instances 
+</span>
+<span class="unchanged">
+WHERE eventSource = 'ec2.amazonaws.com' AND eventName = 'RunInstances' AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'week'
+</span>
+<span class="diff-added">
+WEEK
+</span>
+<span class="unchanged">
+, -1, CURRENT_TIMESTAMP) EXCEPT SELECT instances FROM ctl_ec2 
+</span>
+<span class="diff-removed">
+CROSS JOIN UNNEST
+</span>
+<span class="diff-added">
+LATERAL VIEW explode
+</span>
+<span class="unchanged">
+(
+</span>
+<span class="diff-removed">
+cast
+</span>
+<span class="diff-added">
+from_json
+</span>
+<span class="unchanged">
+(
+</span>
+<span class="diff-removed">
+json_extract(json_parse(element_at
+</span>
+<span class="diff-added">
+get_json_object
+</span>
+<span class="unchanged">
+(responseElements
+</span>
+<span class="diff-removed">
+, '
+</span>
+<span class="diff-added">
+['
+</span>
+<span class="unchanged">
+instancesSet
+</span>
+<span class="diff-removed">
+'))
+</span>
+<span class="diff-added">
+']
+</span>
+<span class="unchanged">
+, '$.items[*].instanceId'
+</span>
+<span class="diff-removed">
+) as 
+</span>
+<span class="diff-added">
+), '
+</span>
+<span class="unchanged">
+array
+</span>
+<span class="diff-removed">
+(varchar)
+</span>
+<span class="diff-added">
+<string>'
+</span>
+<span class="unchanged">
+)) 
+</span>
+<span class="diff-removed">
+as 
+</span>
+<span class="unchanged">
+t 
+</span>
+<span class="diff-removed">
+(instances) 
+</span>
+<span class="diff-added">
+AS instances 
+</span>
+<span class="unchanged">
+WHERE eventSource = 'ec2.amazonaws.com' AND eventName = 'TerminateInstances' AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'week'
+</span>
+<span class="diff-added">
+WEEK
+</span>
+<span class="unchanged">
+, -1, CURRENT_TIMESTAMP)
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT instances FROM ctl_ec2 CROSS JOIN UNNEST(cast(json_extract(json_parse(element_at(responseElements, 'instancesSet')), '$.items[*].instanceId') as array(varchar))) as t (instances) WHERE eventSource = 'ec2.amazonaws.com' AND eventName = 'RunInstances' AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) EXCEPT SELECT instances FROM ctl_ec2 CROSS JOIN UNNEST(cast(json_extract(json_parse(element_at(responseElements, 'instancesSet')), '$.items[*].instanceId') as array(varchar))) as t (instances) WHERE eventSource = 'ec2.amazonaws.com' AND eventName = 'TerminateInstances' AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP)</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT instances FROM ctl_ec2 LATERAL VIEW explode(from_json(get_json_object(responseElements['instancesSet'], '$.items[*].instanceId'), 'array<string>')) t AS instances WHERE eventSource = 'ec2.amazonaws.com' AND eventName = 'RunInstances' AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) EXCEPT SELECT instances FROM ctl_ec2 LATERAL VIEW explode(from_json(get_json_object(responseElements['instancesSet'], '$.items[*].instanceId'), 'array<string>')) t AS instances WHERE eventSource = 'ec2.amazonaws.com' AND eventName = 'TerminateInstances' AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP)</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="3" data-presto="false" data-spark="true" class="improved">
+            <td>3</td>
+            <td>Count EC2 instances created by instance type by month</td>
+            <td class="error">Failed</td>
+            <td class="success">Success</td>
+            <td class="error-message">
+[PARSE_SYNTAX_ERROR] Syntax error at or near 'varchar'.(line 1, pos 237)
+
+== SQL ==
+SELECT instanceType, date_trunc('month', eventTime) as month, cou...</td>
+            <td class="error-message"></td>
+            <td class="actions">
+                <button onclick="toggleQuery(3)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-3" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT instanceType, date_trunc('month', eventTime) as month, count(*) as countByInstanceType FROM ctl_ec2 CROSS JOIN UNNEST(cast(json_extract(json_parse(element_at(responseElements, 'instancesSet')), '$.items[*].instanceType') as array(varchar))) as t (instanceType) WHERE eventSource = 'ec2.amazonaws.com' AND eventName = 'RunInstances' AND eventTime > DATE_ADD('month', -6, CURRENT_TIMESTAMP) GROUP BY instanceType, date_trunc('month', eventTime) ORDER BY month desc, countByInstanceType DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT instanceType, date_trunc('month', eventTime) as month, count(*) as countByInstanceType FROM ctl_ec2 LATERAL VIEW explode(from_json(get_json_object(responseElements['instancesSet'], '$.items[*].instanceType'), 'array<string>')) t AS instanceType WHERE eventSource = 'ec2.amazonaws.com' AND eventName = 'RunInstances' AND eventTime > DATE_ADD(MONTH, -6, CURRENT_TIMESTAMP) GROUP BY instanceType, date_trunc('month', eventTime) ORDER BY month desc, countByInstanceType DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT instanceType, date_trunc('month', eventTime) as month, count(*) as countByInstanceType FROM ctl_ec2 
+</span>
+<span class="diff-removed">
+CROSS JOIN UNNEST
+</span>
+<span class="diff-added">
+LATERAL VIEW explode
+</span>
+<span class="unchanged">
+(
+</span>
+<span class="diff-removed">
+cast
+</span>
+<span class="diff-added">
+from_json
+</span>
+<span class="unchanged">
+(
+</span>
+<span class="diff-removed">
+json_extract(json_parse(element_at
+</span>
+<span class="diff-added">
+get_json_object
+</span>
+<span class="unchanged">
+(responseElements
+</span>
+<span class="diff-removed">
+, '
+</span>
+<span class="diff-added">
+['
+</span>
+<span class="unchanged">
+instancesSet
+</span>
+<span class="diff-removed">
+'))
+</span>
+<span class="diff-added">
+']
+</span>
+<span class="unchanged">
+, '$.items[*].instanceType'
+</span>
+<span class="diff-removed">
+) as 
+</span>
+<span class="diff-added">
+), '
+</span>
+<span class="unchanged">
+array
+</span>
+<span class="diff-removed">
+(varchar)
+</span>
+<span class="diff-added">
+<string>'
+</span>
+<span class="unchanged">
+)) 
+</span>
+<span class="diff-removed">
+as 
+</span>
+<span class="unchanged">
+t 
+</span>
+<span class="diff-removed">
+(instanceType) 
+</span>
+<span class="diff-added">
+AS instanceType 
+</span>
+<span class="unchanged">
+WHERE eventSource = 'ec2.amazonaws.com' AND eventName = 'RunInstances' AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'month'
+</span>
+<span class="diff-added">
+MONTH
+</span>
+<span class="unchanged">
+, -6, CURRENT_TIMESTAMP) GROUP BY instanceType, date_trunc('month', eventTime) ORDER BY month desc, countByInstanceType DESC
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT instanceType, date_trunc('month', eventTime) as month, count(*) as countByInstanceType FROM ctl_ec2 CROSS JOIN UNNEST(cast(json_extract(json_parse(element_at(responseElements, 'instancesSet')), '$.items[*].instanceType') as array(varchar))) as t (instanceType) WHERE eventSource = 'ec2.amazonaws.com' AND eventName = 'RunInstances' AND eventTime > DATE_ADD('month', -6, CURRENT_TIMESTAMP) GROUP BY instanceType, date_trunc('month', eventTime) ORDER BY month desc, countByInstanceType DESC</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT instanceType, date_trunc('month', eventTime) as month, count(*) as countByInstanceType FROM ctl_ec2 LATERAL VIEW explode(from_json(get_json_object(responseElements['instancesSet'], '$.items[*].instanceType'), 'array<string>')) t AS instanceType WHERE eventSource = 'ec2.amazonaws.com' AND eventName = 'RunInstances' AND eventTime > DATE_ADD(MONTH, -6, CURRENT_TIMESTAMP) GROUP BY instanceType, date_trunc('month', eventTime) ORDER BY month desc, countByInstanceType DESC</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="4" data-presto="false" data-spark="true" class="improved">
+            <td>4</td>
+            <td>Count EC2 instances created by instance type</td>
+            <td class="error">Failed</td>
+            <td class="success">Success</td>
+            <td class="error-message">
+[PARSE_SYNTAX_ERROR] Syntax error at or near 'varchar'.(line 1, pos 196)
+
+== SQL ==
+SELECT instanceType, count(*) as countByInstanceType FROM ctl_ec2...</td>
+            <td class="error-message"></td>
+            <td class="actions">
+                <button onclick="toggleQuery(4)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-4" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT instanceType, count(*) as countByInstanceType FROM ctl_ec2 CROSS JOIN UNNEST(cast(json_extract(json_parse(element_at(responseElements, 'instancesSet')), '$.items[*].instanceType') as array(varchar))) as t (instanceType) WHERE eventSource = 'ec2.amazonaws.com' AND eventName = 'RunInstances' AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) GROUP BY instanceType ORDER BY countByInstanceType DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT instanceType, count(*) as countByInstanceType FROM ctl_ec2 LATERAL VIEW explode(from_json(get_json_object(responseElements['instancesSet'], '$.items[*].instanceType'), 'array<string>')) t AS instanceType WHERE eventSource = 'ec2.amazonaws.com' AND eventName = 'RunInstances' AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) GROUP BY instanceType ORDER BY countByInstanceType DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT instanceType, count(*) as countByInstanceType FROM ctl_ec2 
+</span>
+<span class="diff-removed">
+CROSS JOIN UNNEST
+</span>
+<span class="diff-added">
+LATERAL VIEW explode
+</span>
+<span class="unchanged">
+(
+</span>
+<span class="diff-removed">
+cast
+</span>
+<span class="diff-added">
+from_json
+</span>
+<span class="unchanged">
+(
+</span>
+<span class="diff-removed">
+json_extract(json_parse(element_at
+</span>
+<span class="diff-added">
+get_json_object
+</span>
+<span class="unchanged">
+(responseElements
+</span>
+<span class="diff-removed">
+, '
+</span>
+<span class="diff-added">
+['
+</span>
+<span class="unchanged">
+instancesSet
+</span>
+<span class="diff-removed">
+'))
+</span>
+<span class="diff-added">
+']
+</span>
+<span class="unchanged">
+, '$.items[*].instanceType'
+</span>
+<span class="diff-removed">
+) as 
+</span>
+<span class="diff-added">
+), '
+</span>
+<span class="unchanged">
+array
+</span>
+<span class="diff-removed">
+(varchar)
+</span>
+<span class="diff-added">
+<string>'
+</span>
+<span class="unchanged">
+)) 
+</span>
+<span class="diff-removed">
+as 
+</span>
+<span class="unchanged">
+t 
+</span>
+<span class="diff-removed">
+(instanceType) 
+</span>
+<span class="diff-added">
+AS instanceType 
+</span>
+<span class="unchanged">
+WHERE eventSource = 'ec2.amazonaws.com' AND eventName = 'RunInstances' AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'week'
+</span>
+<span class="diff-added">
+WEEK
+</span>
+<span class="unchanged">
+, -1, CURRENT_TIMESTAMP) GROUP BY instanceType ORDER BY countByInstanceType DESC
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT instanceType, count(*) as countByInstanceType FROM ctl_ec2 CROSS JOIN UNNEST(cast(json_extract(json_parse(element_at(responseElements, 'instancesSet')), '$.items[*].instanceType') as array(varchar))) as t (instanceType) WHERE eventSource = 'ec2.amazonaws.com' AND eventName = 'RunInstances' AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) GROUP BY instanceType ORDER BY countByInstanceType DESC</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT instanceType, count(*) as countByInstanceType FROM ctl_ec2 LATERAL VIEW explode(from_json(get_json_object(responseElements['instancesSet'], '$.items[*].instanceType'), 'array<string>')) t AS instanceType WHERE eventSource = 'ec2.amazonaws.com' AND eventName = 'RunInstances' AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) GROUP BY instanceType ORDER BY countByInstanceType DESC</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="5" data-presto="false" data-spark="true" class="improved">
+            <td>5</td>
+            <td>List EC2 security group change events</td>
+            <td class="error">Failed</td>
+            <td class="success">Success</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message"></td>
+            <td class="actions">
+                <button onclick="toggleQuery(5)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-5" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT * FROM ctl_ec2 WHERE eventSource = 'ec2.amazonaws.com' AND eventName IN ('AuthorizeSecurityGroupIngress', 'RevokeSecurityGroupIngress', 'AuthorizeSecurityGroupEgress', 'RevokeSecurityGroupEgress') AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP)</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT * FROM ctl_ec2 WHERE eventSource = 'ec2.amazonaws.com' AND eventName IN ('AuthorizeSecurityGroupIngress', 'RevokeSecurityGroupIngress', 'AuthorizeSecurityGroupEgress', 'RevokeSecurityGroupEgress') AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP)</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT * FROM ctl_ec2 WHERE eventSource = 'ec2.amazonaws.com' AND eventName IN ('AuthorizeSecurityGroupIngress', 'RevokeSecurityGroupIngress', 'AuthorizeSecurityGroupEgress', 'RevokeSecurityGroupEgress') AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'week'
+</span>
+<span class="diff-added">
+WEEK
+</span>
+<span class="unchanged">
+, -1, CURRENT_TIMESTAMP)
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT * FROM ctl_ec2 WHERE eventSource = 'ec2.amazonaws.com' AND eventName IN ('AuthorizeSecurityGroupIngress', 'RevokeSecurityGroupIngress', 'AuthorizeSecurityGroupEgress', 'RevokeSecurityGroupEgress') AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP)</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT * FROM ctl_ec2 WHERE eventSource = 'ec2.amazonaws.com' AND eventName IN ('AuthorizeSecurityGroupIngress', 'RevokeSecurityGroupIngress', 'AuthorizeSecurityGroupEgress', 'RevokeSecurityGroupEgress') AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP)</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="6" data-presto="false" data-spark="true" class="improved">
+            <td>6</td>
+            <td>Count running EC2 instances per availability zone</td>
+            <td class="error">Failed</td>
+            <td class="success">Success</td>
+            <td class="error-message">
+[PARSE_SYNTAX_ERROR] Syntax error at or near 'varchar'.(line 1, pos 199)
+
+== SQL ==
+SELECT availabilityZone, count(*) as countOfInstances FROM ctl_ec...</td>
+            <td class="error-message"></td>
+            <td class="actions">
+                <button onclick="toggleQuery(6)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-6" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT availabilityZone, count(*) as countOfInstances FROM ctl_ec2 CROSS JOIN UNNEST(cast(json_extract(element_at(responseelements, 'instancesSet'), '$.items[*].placement.availabilityZone') as array(varchar))) t (availabilityZone) WHERE eventSource = 'ec2.amazonaws.com' AND eventName = 'RunInstances' AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) GROUP BY availabilityZone ORDER BY countOfInstances DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT availabilityZone, count(*) as countOfInstances FROM ctl_ec2 LATERAL VIEW explode(from_json(get_json_object(responseelements['instancesSet'], '$.items[*].placement.availabilityZone'), 'array<string>')) t AS availabilityZone WHERE eventSource = 'ec2.amazonaws.com' AND eventName = 'RunInstances' AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) GROUP BY availabilityZone ORDER BY countOfInstances DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT availabilityZone, count(*) as countOfInstances FROM ctl_ec2 
+</span>
+<span class="diff-removed">
+CROSS JOIN UNNEST
+</span>
+<span class="diff-added">
+LATERAL VIEW explode
+</span>
+<span class="unchanged">
+(
+</span>
+<span class="diff-removed">
+cast
+</span>
+<span class="diff-added">
+from_json
+</span>
+<span class="unchanged">
+(
+</span>
+<span class="diff-removed">
+json_extract(element_at
+</span>
+<span class="diff-added">
+get_json_object
+</span>
+<span class="unchanged">
+(responseelements
+</span>
+<span class="diff-removed">
+, '
+</span>
+<span class="diff-added">
+['
+</span>
+<span class="unchanged">
+instancesSet
+</span>
+<span class="diff-removed">
+')
+</span>
+<span class="diff-added">
+']
+</span>
+<span class="unchanged">
+, '$.items[*].placement.availabilityZone'
+</span>
+<span class="diff-removed">
+) as 
+</span>
+<span class="diff-added">
+), '
+</span>
+<span class="unchanged">
+array
+</span>
+<span class="diff-removed">
+(varchar)
+</span>
+<span class="diff-added">
+<string>'
+</span>
+<span class="unchanged">
+)) t 
+</span>
+<span class="diff-removed">
+(availabilityZone) 
+</span>
+<span class="diff-added">
+AS availabilityZone 
+</span>
+<span class="unchanged">
+WHERE eventSource = 'ec2.amazonaws.com' AND eventName = 'RunInstances' AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'week'
+</span>
+<span class="diff-added">
+WEEK
+</span>
+<span class="unchanged">
+, -1, CURRENT_TIMESTAMP) GROUP BY availabilityZone ORDER BY countOfInstances DESC
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT availabilityZone, count(*) as countOfInstances FROM ctl_ec2 CROSS JOIN UNNEST(cast(json_extract(element_at(responseelements, 'instancesSet'), '$.items[*].placement.availabilityZone') as array(varchar))) t (availabilityZone) WHERE eventSource = 'ec2.amazonaws.com' AND eventName = 'RunInstances' AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) GROUP BY availabilityZone ORDER BY countOfInstances DESC</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT availabilityZone, count(*) as countOfInstances FROM ctl_ec2 LATERAL VIEW explode(from_json(get_json_object(responseelements['instancesSet'], '$.items[*].placement.availabilityZone'), 'array<string>')) t AS availabilityZone WHERE eventSource = 'ec2.amazonaws.com' AND eventName = 'RunInstances' AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) GROUP BY availabilityZone ORDER BY countOfInstances DESC</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="7" data-presto="false" data-spark="true" class="improved">
+            <td>7</td>
+            <td>Track AMI usage to start EC2 instances</td>
+            <td class="error">Failed</td>
+            <td class="success">Success</td>
+            <td class="error-message">
+[PARSE_SYNTAX_ERROR] Syntax error at or near 'varchar'.(line 1, pos 230)
+
+== SQL ==
+SELECT amiId, count(*) as CountOfInstances, max(eventTime) as fin...</td>
+            <td class="error-message"></td>
+            <td class="actions">
+                <button onclick="toggleQuery(7)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-7" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT amiId, count(*) as CountOfInstances, max(eventTime) as finalTime, min(eventTime) as initialTime FROM ctl_ec2 CROSS JOIN UNNEST(cast(json_extract(element_at(requestParameters, 'instancesSet'), '$.items[*].imageId') as array(varchar))) as t (amiId) WHERE eventSource = 'ec2.amazonaws.com' AND eventName = 'RunInstances' AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) GROUP BY amiId ORDER BY finalTime DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT amiId, count(*) as CountOfInstances, max(eventTime) as finalTime, min(eventTime) as initialTime FROM ctl_ec2 LATERAL VIEW explode(from_json(get_json_object(requestParameters['instancesSet'], '$.items[*].imageId'), 'array<string>')) t AS amiId WHERE eventSource = 'ec2.amazonaws.com' AND eventName = 'RunInstances' AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) GROUP BY amiId ORDER BY finalTime DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT amiId, count(*) as CountOfInstances, max(eventTime) as finalTime, min(eventTime) as initialTime FROM ctl_ec2 
+</span>
+<span class="diff-removed">
+CROSS JOIN UNNEST
+</span>
+<span class="diff-added">
+LATERAL VIEW explode
+</span>
+<span class="unchanged">
+(
+</span>
+<span class="diff-removed">
+cast
+</span>
+<span class="diff-added">
+from_json
+</span>
+<span class="unchanged">
+(
+</span>
+<span class="diff-removed">
+json_extract(element_at
+</span>
+<span class="diff-added">
+get_json_object
+</span>
+<span class="unchanged">
+(requestParameters
+</span>
+<span class="diff-removed">
+, '
+</span>
+<span class="diff-added">
+['
+</span>
+<span class="unchanged">
+instancesSet
+</span>
+<span class="diff-removed">
+')
+</span>
+<span class="diff-added">
+']
+</span>
+<span class="unchanged">
+, '$.items[*].imageId'
+</span>
+<span class="diff-removed">
+) as 
+</span>
+<span class="diff-added">
+), '
+</span>
+<span class="unchanged">
+array
+</span>
+<span class="diff-removed">
+(varchar)
+</span>
+<span class="diff-added">
+<string>'
+</span>
+<span class="unchanged">
+)) 
+</span>
+<span class="diff-removed">
+as 
+</span>
+<span class="unchanged">
+t 
+</span>
+<span class="diff-removed">
+(amiId) 
+</span>
+<span class="diff-added">
+AS amiId 
+</span>
+<span class="unchanged">
+WHERE eventSource = 'ec2.amazonaws.com' AND eventName = 'RunInstances' AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'week'
+</span>
+<span class="diff-added">
+WEEK
+</span>
+<span class="unchanged">
+, -1, CURRENT_TIMESTAMP) GROUP BY amiId ORDER BY finalTime DESC
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT amiId, count(*) as CountOfInstances, max(eventTime) as finalTime, min(eventTime) as initialTime FROM ctl_ec2 CROSS JOIN UNNEST(cast(json_extract(element_at(requestParameters, 'instancesSet'), '$.items[*].imageId') as array(varchar))) as t (amiId) WHERE eventSource = 'ec2.amazonaws.com' AND eventName = 'RunInstances' AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) GROUP BY amiId ORDER BY finalTime DESC</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT amiId, count(*) as CountOfInstances, max(eventTime) as finalTime, min(eventTime) as initialTime FROM ctl_ec2 LATERAL VIEW explode(from_json(get_json_object(requestParameters['instancesSet'], '$.items[*].imageId'), 'array<string>')) t AS amiId WHERE eventSource = 'ec2.amazonaws.com' AND eventName = 'RunInstances' AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) GROUP BY amiId ORDER BY finalTime DESC</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="8" data-presto="false" data-spark="true" class="improved">
+            <td>8</td>
+            <td>Detect EBS default encryption disablement events</td>
+            <td class="error">Failed</td>
+            <td class="success">Success</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message"></td>
+            <td class="actions">
+                <button onclick="toggleQuery(8)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-8" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT * FROM ctl_ec2 WHERE eventSource = 'ec2.amazonaws.com' AND eventName = 'DisableEbsEncryptionByDefault' AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP)</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT * FROM ctl_ec2 WHERE eventSource = 'ec2.amazonaws.com' AND eventName = 'DisableEbsEncryptionByDefault' AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP)</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT * FROM ctl_ec2 WHERE eventSource = 'ec2.amazonaws.com' AND eventName = 'DisableEbsEncryptionByDefault' AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'week'
+</span>
+<span class="diff-added">
+WEEK
+</span>
+<span class="unchanged">
+, -1, CURRENT_TIMESTAMP)
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT * FROM ctl_ec2 WHERE eventSource = 'ec2.amazonaws.com' AND eventName = 'DisableEbsEncryptionByDefault' AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP)</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT * FROM ctl_ec2 WHERE eventSource = 'ec2.amazonaws.com' AND eventName = 'DisableEbsEncryptionByDefault' AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP)</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="9" data-presto="false" data-spark="true" class="improved">
+            <td>9</td>
+            <td>Detect when an EBS snapshot is made public</td>
+            <td class="error">Failed</td>
+            <td class="success">Success</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message"></td>
+            <td class="actions">
+                <button onclick="toggleQuery(9)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-9" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT * FROM ctl_ec2 WHERE eventSource = 'ec2.amazonaws.com' AND eventName = 'ModifySnapshotAttribute' AND element_at(requestparameters, 'attributeType') = 'CREATE_VOLUME_PERMISSION' AND element_at(requestparameters, 'createVolumePermission') is not NULL AND json_array_length(json_extract(element_at(requestparameters, 'createVolumePermission'), '$.add.items[?(@.group === "all")]')) > 0 AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP)</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT * FROM ctl_ec2 WHERE eventSource = 'ec2.amazonaws.com' AND eventName = 'ModifySnapshotAttribute' AND requestparameters['attributeType'] = 'CREATE_VOLUME_PERMISSION' AND requestparameters['createVolumePermission'] is not NULL AND json_array_length(get_json_object(requestparameters['createVolumePermission'], '$.add.items[?(@.group === "all")]')) > 0 AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP)</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT * FROM ctl_ec2 WHERE eventSource = 'ec2.amazonaws.com' AND eventName = 'ModifySnapshotAttribute' AND 
+</span>
+<span class="diff-removed">
+element_at(
+</span>
+<span class="unchanged">
+requestparameters
+</span>
+<span class="diff-removed">
+, '
+</span>
+<span class="diff-added">
+['
+</span>
+<span class="unchanged">
+attributeType
+</span>
+<span class="diff-removed">
+') 
+</span>
+<span class="diff-added">
+'] 
+</span>
+<span class="unchanged">
+= 'CREATE_VOLUME_PERMISSION' AND 
+</span>
+<span class="diff-removed">
+element_at(
+</span>
+<span class="unchanged">
+requestparameters
+</span>
+<span class="diff-removed">
+, '
+</span>
+<span class="diff-added">
+['
+</span>
+<span class="unchanged">
+createVolumePermission
+</span>
+<span class="diff-removed">
+') 
+</span>
+<span class="diff-added">
+'] 
+</span>
+<span class="unchanged">
+is not NULL AND json_array_length(
+</span>
+<span class="diff-removed">
+json_extract(element_at
+</span>
+<span class="diff-added">
+get_json_object
+</span>
+<span class="unchanged">
+(requestparameters
+</span>
+<span class="diff-removed">
+, '
+</span>
+<span class="diff-added">
+['
+</span>
+<span class="unchanged">
+createVolumePermission
+</span>
+<span class="diff-removed">
+')
+</span>
+<span class="diff-added">
+']
+</span>
+<span class="unchanged">
+, '$.add.items[?(@.group === "all")]')) > 0 AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'week'
+</span>
+<span class="diff-added">
+WEEK
+</span>
+<span class="unchanged">
+, -1, CURRENT_TIMESTAMP)
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT * FROM ctl_ec2 WHERE eventSource = 'ec2.amazonaws.com' AND eventName = 'ModifySnapshotAttribute' AND element_at(requestparameters, 'attributeType') = 'CREATE_VOLUME_PERMISSION' AND element_at(requestparameters, 'createVolumePermission') is not NULL AND json_array_length(json_extract(element_at(requestparameters, 'createVolumePermission'), '$.add.items[?(@.group === "all")]')) > 0 AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP)</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT * FROM ctl_ec2 WHERE eventSource = 'ec2.amazonaws.com' AND eventName = 'ModifySnapshotAttribute' AND requestparameters['attributeType'] = 'CREATE_VOLUME_PERMISSION' AND requestparameters['createVolumePermission'] is not NULL AND json_array_length(get_json_object(requestparameters['createVolumePermission'], '$.add.items[?(@.group === "all")]')) > 0 AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP)</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="10" data-presto="false" data-spark="true" class="improved">
+            <td>10</td>
+            <td>Detect the possible exfiltration of an EBS snapshot</td>
+            <td class="error">Failed</td>
+            <td class="success">Success</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message"></td>
+            <td class="actions">
+                <button onclick="toggleQuery(10)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-10" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT createSnapshotDataStore.* FROM ctl_ec2 as createSnapshotDataStore JOIN ctl_ec2 as modifySnapshotDataStore ON element_at(createSnapshotDataStore.responseelements, 'snapshotId') = element_at(modifySnapshotDataStore.requestparameters, 'snapshotId') WHERE createSnapshotDataStore.eventSource = 'ec2.amazonaws.com' AND modifySnapshotDataStore.eventSource = 'ec2.amazonaws.com' AND createSnapshotDataStore.eventName = 'CreateSnapshot' AND modifySnapshotDataStore.eventName = 'ModifySnapshotAttribute' AND element_at(modifySnapshotDataStore.requestparameters, 'attributeType') = 'CREATE_VOLUME_PERMISSION' AND createSnapshotDataStore.eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) AND modifySnapshotDataStore.eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP)</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT createSnapshotDataStore.* FROM ctl_ec2 as createSnapshotDataStore JOIN ctl_ec2 as modifySnapshotDataStore ON createSnapshotDataStore.responseelements['snapshotId'] = modifySnapshotDataStore.requestparameters['snapshotId'] WHERE createSnapshotDataStore.eventSource = 'ec2.amazonaws.com' AND modifySnapshotDataStore.eventSource = 'ec2.amazonaws.com' AND createSnapshotDataStore.eventName = 'CreateSnapshot' AND modifySnapshotDataStore.eventName = 'ModifySnapshotAttribute' AND modifySnapshotDataStore.requestparameters['attributeType'] = 'CREATE_VOLUME_PERMISSION' AND createSnapshotDataStore.eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) AND modifySnapshotDataStore.eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP)</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT createSnapshotDataStore.* FROM ctl_ec2 as createSnapshotDataStore JOIN ctl_ec2 as modifySnapshotDataStore ON 
+</span>
+<span class="diff-removed">
+element_at(
+</span>
+<span class="unchanged">
+createSnapshotDataStore.responseelements
+</span>
+<span class="diff-removed">
+, '
+</span>
+<span class="diff-added">
+['
+</span>
+<span class="unchanged">
+snapshotId
+</span>
+<span class="diff-removed">
+') 
+</span>
+<span class="diff-added">
+'] 
+</span>
+<span class="unchanged">
+= 
+</span>
+<span class="diff-removed">
+element_at(
+</span>
+<span class="unchanged">
+modifySnapshotDataStore.requestparameters
+</span>
+<span class="diff-removed">
+, '
+</span>
+<span class="diff-added">
+['
+</span>
+<span class="unchanged">
+snapshotId
+</span>
+<span class="diff-removed">
+') 
+</span>
+<span class="diff-added">
+'] 
+</span>
+<span class="unchanged">
+WHERE createSnapshotDataStore.eventSource = 'ec2.amazonaws.com' AND modifySnapshotDataStore.eventSource = 'ec2.amazonaws.com' AND createSnapshotDataStore.eventName = 'CreateSnapshot' AND modifySnapshotDataStore.eventName = 'ModifySnapshotAttribute' AND 
+</span>
+<span class="diff-removed">
+element_at(
+</span>
+<span class="unchanged">
+modifySnapshotDataStore.requestparameters
+</span>
+<span class="diff-removed">
+, '
+</span>
+<span class="diff-added">
+['
+</span>
+<span class="unchanged">
+attributeType
+</span>
+<span class="diff-removed">
+') 
+</span>
+<span class="diff-added">
+'] 
+</span>
+<span class="unchanged">
+= 'CREATE_VOLUME_PERMISSION' AND createSnapshotDataStore.eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'week'
+</span>
+<span class="diff-added">
+WEEK
+</span>
+<span class="unchanged">
+, -1, CURRENT_TIMESTAMP) AND modifySnapshotDataStore.eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'week'
+</span>
+<span class="diff-added">
+WEEK
+</span>
+<span class="unchanged">
+, -1, CURRENT_TIMESTAMP)
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT createSnapshotDataStore.* FROM ctl_ec2 as createSnapshotDataStore JOIN ctl_ec2 as modifySnapshotDataStore ON element_at(createSnapshotDataStore.responseelements, 'snapshotId') = element_at(modifySnapshotDataStore.requestparameters, 'snapshotId') WHERE createSnapshotDataStore.eventSource = 'ec2.amazonaws.com' AND modifySnapshotDataStore.eventSource = 'ec2.amazonaws.com' AND createSnapshotDataStore.eventName = 'CreateSnapshot' AND modifySnapshotDataStore.eventName = 'ModifySnapshotAttribute' AND element_at(modifySnapshotDataStore.requestparameters, 'attributeType') = 'CREATE_VOLUME_PERMISSION' AND createSnapshotDataStore.eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) AND modifySnapshotDataStore.eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP)</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT createSnapshotDataStore.* FROM ctl_ec2 as createSnapshotDataStore JOIN ctl_ec2 as modifySnapshotDataStore ON createSnapshotDataStore.responseelements['snapshotId'] = modifySnapshotDataStore.requestparameters['snapshotId'] WHERE createSnapshotDataStore.eventSource = 'ec2.amazonaws.com' AND modifySnapshotDataStore.eventSource = 'ec2.amazonaws.com' AND createSnapshotDataStore.eventName = 'CreateSnapshot' AND modifySnapshotDataStore.eventName = 'ModifySnapshotAttribute' AND modifySnapshotDataStore.requestparameters['attributeType'] = 'CREATE_VOLUME_PERMISSION' AND createSnapshotDataStore.eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) AND modifySnapshotDataStore.eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP)</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+    </table>
+</body>
+</html>
+    
