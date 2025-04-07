@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Presto to Spark SQL Report</title>
+    <style>
+        body { font-family: Arial; margin: 20px; }
+        .header { background-color: #4a86e8; color: white; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
+        .summary { margin-bottom: 20px; }
+        .progress-bar { width: 100%; background-color: #f3f3f3; height: 30px; border-radius: 5px; margin-bottom: 20px; }
+        .progress { height: 100%; background-color: #4CAF50; text-align: center; line-height: 30px; color: white; border-radius: 5px; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; vertical-align: top; }
+        th { background-color: #f2f2f2; }
+        tr:hover { background-color: #f5f5f5; }
+        .success { color: green; }
+        .error { color: red; }
+        .query { max-width: 400px; overflow-x: auto; }
+        .actions { white-space: nowrap; }
+        .filter-bar { margin-bottom: 15px; }
+        .tabs { display: flex; }
+        .tab { padding: 5px 10px; cursor: pointer; border: 1px solid #ccc; }
+        .tab.active { background-color: #4a86e8; color: white; }
+        .improved { background-color: #d4edda; }
+        pre { margin: 0; white-space: pre-wrap; }
+        .hidden { display: none; }
+        input[type=text] { padding: 5px; width: 30%; }
+        button { padding: 5px 10px; margin-right: 5px; cursor: pointer; }
+        
+        /* Diff styling */
+        .diff {
+            font-family: monospace;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-top: 10px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .diff-section { margin-bottom: 15px; }
+        .diff-line { white-space: pre-wrap; font-size: 14px; line-height: 1.5; }
+        .diff-removed { background-color: #ffdddd; color: #994444; }
+        .diff-added { background-color: #ddffdd; color: #449944; }
+        .unchanged { color: #666; }
+        .full-queries { margin-top: 15px; border-top: 1px solid #eee; padding-top: 10px; }
+        .error-message { white-space: pre-wrap; color: #d9534f; }
+    </style>
+    <script>
+        function toggleQuery(id) {
+            const elem = document.getElementById('query-'+id);
+            elem.classList.toggle('hidden');
+        }
+        
+        function filterStatus(status) {
+            const rows = document.querySelectorAll('#resultsTable tr[data-id]');
+            rows.forEach(row => {
+                if (status === 'all' || 
+                    (status === 'success' && row.getAttribute('data-spark') === 'true') ||
+                    (status === 'failed' && row.getAttribute('data-spark') === 'false') ||
+                    (status === 'improved' && row.getAttribute('data-presto') === 'false' && row.getAttribute('data-spark') === 'true')) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+            
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.getElementById('tab-'+status).classList.add('active');
+        }
+        
+        function filterText() {
+            const filter = document.getElementById('filterInput').value.toLowerCase();
+            const rows = document.querySelectorAll('#resultsTable tr[data-id]');
+            
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                if (text.includes(filter)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+    <div class="header">
+        <h1>Presto to Spark SQL Compatibility Report</h1>
+        <p>Table: ctl_network | Spark: 3.5.5 | Date: 2025-04-04 15:48</p>
+        <p>Translation Method: Custom Rules</p>
+    </div>
+    
+    <div class="summary">
+        <p>Total queries: <b>4</b></p>
+        <p>Presto success: <b>0</b> (0.0%)</p>
+        <p>Spark success: <b>4</b> (100.0%)</p>
+        <p>Improvement from translation: <b>4</b> queries</p>
+        
+        <div class="progress-bar">
+            <div class="progress" style="width: 100.0%;">
+                100.0%
+            </div>
+        </div>
+    </div>
+    
+    <div class="filter-bar">
+        <div class="tabs">
+            <div id="tab-all" class="tab active" onclick="filterStatus('all')">All Queries</div>
+            <div id="tab-success" class="tab" onclick="filterStatus('success')">Successful</div>
+            <div id="tab-failed" class="tab" onclick="filterStatus('failed')">Failed</div>
+            <div id="tab-improved" class="tab" onclick="filterStatus('improved')">Improved</div>
+        </div>
+        <div style="margin-top: 10px;">
+            <input type="text" id="filterInput" onkeyup="filterText()" placeholder="Search...">
+        </div>
+    </div>
+    
+    <table id="resultsTable">
+        <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Presto</th>
+            <th>Spark</th>
+            <th>Presto Error</th>
+            <th>Spark Error</th>
+            <th>Details</th>
+        </tr>
+    
+        <tr data-id="1" data-presto="false" data-spark="true" class="improved">
+            <td>1</td>
+            <td>Track route table changes</td>
+            <td class="error">Failed</td>
+            <td class="success">Success</td>
+            <td class="error-message">
+[DATATYPE_MISSING_SIZE] DataType "VARCHAR" requires a length parameter, for example "VARCHAR"(10). Please specify the length.(line 1, pos 146)
+
+== SQ...</td>
+            <td class="error-message"></td>
+            <td class="actions">
+                <button onclick="toggleQuery(1)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-1" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT coalesce(element_at(requestParameters, 'routeTableId'), cast(json_extract(element_at(responseelements, 'routeTable'), '$.routeTableId') as varchar)) as routeTableId, element_at(requestParameters, 'vpcId') as vpcId, eventTime, requestParameters, responseElements FROM ctl_network WHERE eventsource = 'ec2.amazonaws.com' AND eventName in ('CreateRoute', 'ReplaceRoute', 'DeleteRoute', 'CreateRouteTable', 'DeleteRouteTable', 'DisassociateRouteTable', 'ReplaceRouteTableAssociation') AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP)</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT coalesce(element_at(requestParameters, 'routeTableId'), cast(get_json_object(element_at(responseelements, 'routeTable'), '$.routeTableId') AS STRING)) as routeTableId, element_at(requestParameters, 'vpcId') as vpcId, eventTime, requestParameters, responseElements FROM ctl_network WHERE eventsource = 'ec2.amazonaws.com' AND eventName in ('CreateRoute', 'ReplaceRoute', 'DeleteRoute', 'CreateRouteTable', 'DeleteRouteTable', 'DisassociateRouteTable', 'ReplaceRouteTableAssociation') AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP)</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT coalesce(element_at(requestParameters, 'routeTableId'), cast(
+</span>
+<span class="diff-removed">
+json_extract
+</span>
+<span class="diff-added">
+get_json_object
+</span>
+<span class="unchanged">
+(element_at(responseelements, 'routeTable'), '$.routeTableId') 
+</span>
+<span class="diff-removed">
+as varchar
+</span>
+<span class="diff-added">
+AS STRING
+</span>
+<span class="unchanged">
+)) as routeTableId, element_at(requestParameters, 'vpcId') as vpcId, eventTime, requestParameters, responseElements FROM ctl_network WHERE eventsource = 'ec2.amazonaws.com' AND eventName in ('CreateRoute', 'ReplaceRoute', 'DeleteRoute', 'CreateRouteTable', 'DeleteRouteTable', 'DisassociateRouteTable', 'ReplaceRouteTableAssociation') AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'week'
+</span>
+<span class="diff-added">
+WEEK
+</span>
+<span class="unchanged">
+, -1, CURRENT_TIMESTAMP)
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT coalesce(element_at(requestParameters, 'routeTableId'), cast(json_extract(element_at(responseelements, 'routeTable'), '$.routeTableId') as varchar)) as routeTableId, element_at(requestParameters, 'vpcId') as vpcId, eventTime, requestParameters, responseElements FROM ctl_network WHERE eventsource = 'ec2.amazonaws.com' AND eventName in ('CreateRoute', 'ReplaceRoute', 'DeleteRoute', 'CreateRouteTable', 'DeleteRouteTable', 'DisassociateRouteTable', 'ReplaceRouteTableAssociation') AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP)</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT coalesce(element_at(requestParameters, 'routeTableId'), cast(get_json_object(element_at(responseelements, 'routeTable'), '$.routeTableId') AS STRING)) as routeTableId, element_at(requestParameters, 'vpcId') as vpcId, eventTime, requestParameters, responseElements FROM ctl_network WHERE eventsource = 'ec2.amazonaws.com' AND eventName in ('CreateRoute', 'ReplaceRoute', 'DeleteRoute', 'CreateRouteTable', 'DeleteRouteTable', 'DisassociateRouteTable', 'ReplaceRouteTableAssociation') AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP)</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="2" data-presto="false" data-spark="true" class="improved">
+            <td>2</td>
+            <td>Track route table changes</td>
+            <td class="error">Failed</td>
+            <td class="success">Success</td>
+            <td class="error-message">
+[DATATYPE_MISSING_SIZE] DataType "VARCHAR" requires a length parameter, for example "VARCHAR"(10). Please specify the length.(line 1, pos 146)
+
+== SQ...</td>
+            <td class="error-message"></td>
+            <td class="actions">
+                <button onclick="toggleQuery(2)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-2" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT coalesce(element_at(requestParameters, 'routeTableId'), cast(json_extract(element_at(responseelements, 'routeTable'), '$.routeTableId') as varchar)) as routeTableId, element_at(requestParameters, 'vpcId') as vpcId, eventTime, requestParameters, responseElements FROM ctl_network WHERE eventsource = 'ec2.amazonaws.com' AND eventName in ('CreateRoute', 'ReplaceRoute', 'DeleteRoute', 'CreateRouteTable', 'DeleteRouteTable', 'DisassociateRouteTable', 'ReplaceRouteTableAssociation') AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP)</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT coalesce(element_at(requestParameters, 'routeTableId'), cast(get_json_object(element_at(responseelements, 'routeTable'), '$.routeTableId') AS STRING)) as routeTableId, element_at(requestParameters, 'vpcId') as vpcId, eventTime, requestParameters, responseElements FROM ctl_network WHERE eventsource = 'ec2.amazonaws.com' AND eventName in ('CreateRoute', 'ReplaceRoute', 'DeleteRoute', 'CreateRouteTable', 'DeleteRouteTable', 'DisassociateRouteTable', 'ReplaceRouteTableAssociation') AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP)</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT coalesce(element_at(requestParameters, 'routeTableId'), cast(
+</span>
+<span class="diff-removed">
+json_extract
+</span>
+<span class="diff-added">
+get_json_object
+</span>
+<span class="unchanged">
+(element_at(responseelements, 'routeTable'), '$.routeTableId') 
+</span>
+<span class="diff-removed">
+as varchar
+</span>
+<span class="diff-added">
+AS STRING
+</span>
+<span class="unchanged">
+)) as routeTableId, element_at(requestParameters, 'vpcId') as vpcId, eventTime, requestParameters, responseElements FROM ctl_network WHERE eventsource = 'ec2.amazonaws.com' AND eventName in ('CreateRoute', 'ReplaceRoute', 'DeleteRoute', 'CreateRouteTable', 'DeleteRouteTable', 'DisassociateRouteTable', 'ReplaceRouteTableAssociation') AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'week'
+</span>
+<span class="diff-added">
+WEEK
+</span>
+<span class="unchanged">
+, -1, CURRENT_TIMESTAMP)
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT coalesce(element_at(requestParameters, 'routeTableId'), cast(json_extract(element_at(responseelements, 'routeTable'), '$.routeTableId') as varchar)) as routeTableId, element_at(requestParameters, 'vpcId') as vpcId, eventTime, requestParameters, responseElements FROM ctl_network WHERE eventsource = 'ec2.amazonaws.com' AND eventName in ('CreateRoute', 'ReplaceRoute', 'DeleteRoute', 'CreateRouteTable', 'DeleteRouteTable', 'DisassociateRouteTable', 'ReplaceRouteTableAssociation') AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP)</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT coalesce(element_at(requestParameters, 'routeTableId'), cast(get_json_object(element_at(responseelements, 'routeTable'), '$.routeTableId') AS STRING)) as routeTableId, element_at(requestParameters, 'vpcId') as vpcId, eventTime, requestParameters, responseElements FROM ctl_network WHERE eventsource = 'ec2.amazonaws.com' AND eventName in ('CreateRoute', 'ReplaceRoute', 'DeleteRoute', 'CreateRouteTable', 'DeleteRouteTable', 'DisassociateRouteTable', 'ReplaceRouteTableAssociation') AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP)</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="3" data-presto="false" data-spark="true" class="improved">
+            <td>3</td>
+            <td>Track VPC deletion calls</td>
+            <td class="error">Failed</td>
+            <td class="success">Success</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message"></td>
+            <td class="actions">
+                <button onclick="toggleQuery(3)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-3" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT * FROM ctl_network WHERE eventSource = 'ec2.amazonaws.com' AND eventName = 'DeleteVpc' AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP)</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT * FROM ctl_network WHERE eventSource = 'ec2.amazonaws.com' AND eventName = 'DeleteVpc' AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP)</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT * FROM ctl_network WHERE eventSource = 'ec2.amazonaws.com' AND eventName = 'DeleteVpc' AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'week'
+</span>
+<span class="diff-added">
+WEEK
+</span>
+<span class="unchanged">
+, -1, CURRENT_TIMESTAMP)
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT * FROM ctl_network WHERE eventSource = 'ec2.amazonaws.com' AND eventName = 'DeleteVpc' AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP)</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT * FROM ctl_network WHERE eventSource = 'ec2.amazonaws.com' AND eventName = 'DeleteVpc' AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP)</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="4" data-presto="false" data-spark="true" class="improved">
+            <td>4</td>
+            <td>Track network ACL configuration changes</td>
+            <td class="error">Failed</td>
+            <td class="success">Success</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message"></td>
+            <td class="actions">
+                <button onclick="toggleQuery(4)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-4" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT * FROM ctl_network WHERE eventSource = 'ec2.amazonaws.com' AND eventName in ('CreateNetworkAcl', 'CreateNetworkAclEntry', 'DeleteNetworkAcl', 'DeleteNetworkAclEntry', 'ReplaceNetworkAclEntry', 'ReplaceNetworkAclAssociation') AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP)</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT * FROM ctl_network WHERE eventSource = 'ec2.amazonaws.com' AND eventName in ('CreateNetworkAcl', 'CreateNetworkAclEntry', 'DeleteNetworkAcl', 'DeleteNetworkAclEntry', 'ReplaceNetworkAclEntry', 'ReplaceNetworkAclAssociation') AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP)</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT * FROM ctl_network WHERE eventSource = 'ec2.amazonaws.com' AND eventName in ('CreateNetworkAcl', 'CreateNetworkAclEntry', 'DeleteNetworkAcl', 'DeleteNetworkAclEntry', 'ReplaceNetworkAclEntry', 'ReplaceNetworkAclAssociation') AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'week'
+</span>
+<span class="diff-added">
+WEEK
+</span>
+<span class="unchanged">
+, -1, CURRENT_TIMESTAMP)
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT * FROM ctl_network WHERE eventSource = 'ec2.amazonaws.com' AND eventName in ('CreateNetworkAcl', 'CreateNetworkAclEntry', 'DeleteNetworkAcl', 'DeleteNetworkAclEntry', 'ReplaceNetworkAclEntry', 'ReplaceNetworkAclAssociation') AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP)</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT * FROM ctl_network WHERE eventSource = 'ec2.amazonaws.com' AND eventName in ('CreateNetworkAcl', 'CreateNetworkAclEntry', 'DeleteNetworkAcl', 'DeleteNetworkAclEntry', 'ReplaceNetworkAclEntry', 'ReplaceNetworkAclAssociation') AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP)</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+    </table>
+</body>
+</html>
+    

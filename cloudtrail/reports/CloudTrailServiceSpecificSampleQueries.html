@@ -1,0 +1,1433 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Presto to Spark SQL Report</title>
+    <style>
+        body { font-family: Arial; margin: 20px; }
+        .header { background-color: #4a86e8; color: white; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
+        .summary { margin-bottom: 20px; }
+        .progress-bar { width: 100%; background-color: #f3f3f3; height: 30px; border-radius: 5px; margin-bottom: 20px; }
+        .progress { height: 100%; background-color: #4CAF50; text-align: center; line-height: 30px; color: white; border-radius: 5px; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; vertical-align: top; }
+        th { background-color: #f2f2f2; }
+        tr:hover { background-color: #f5f5f5; }
+        .success { color: green; }
+        .error { color: red; }
+        .query { max-width: 400px; overflow-x: auto; }
+        .actions { white-space: nowrap; }
+        .filter-bar { margin-bottom: 15px; }
+        .tabs { display: flex; }
+        .tab { padding: 5px 10px; cursor: pointer; border: 1px solid #ccc; }
+        .tab.active { background-color: #4a86e8; color: white; }
+        .improved { background-color: #d4edda; }
+        pre { margin: 0; white-space: pre-wrap; }
+        .hidden { display: none; }
+        input[type=text] { padding: 5px; width: 30%; }
+        button { padding: 5px 10px; margin-right: 5px; cursor: pointer; }
+        
+        /* Diff styling */
+        .diff {
+            font-family: monospace;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-top: 10px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .diff-section { margin-bottom: 15px; }
+        .diff-line { white-space: pre-wrap; font-size: 14px; line-height: 1.5; }
+        .diff-removed { background-color: #ffdddd; color: #994444; }
+        .diff-added { background-color: #ddffdd; color: #449944; }
+        .unchanged { color: #666; }
+        .full-queries { margin-top: 15px; border-top: 1px solid #eee; padding-top: 10px; }
+        .error-message { white-space: pre-wrap; color: #d9534f; }
+    </style>
+    <script>
+        function toggleQuery(id) {
+            const elem = document.getElementById('query-'+id);
+            elem.classList.toggle('hidden');
+        }
+        
+        function filterStatus(status) {
+            const rows = document.querySelectorAll('#resultsTable tr[data-id]');
+            rows.forEach(row => {
+                if (status === 'all' || 
+                    (status === 'success' && row.getAttribute('data-spark') === 'true') ||
+                    (status === 'failed' && row.getAttribute('data-spark') === 'false') ||
+                    (status === 'improved' && row.getAttribute('data-presto') === 'false' && row.getAttribute('data-spark') === 'true')) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+            
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.getElementById('tab-'+status).classList.add('active');
+        }
+        
+        function filterText() {
+            const filter = document.getElementById('filterInput').value.toLowerCase();
+            const rows = document.querySelectorAll('#resultsTable tr[data-id]');
+            
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                if (text.includes(filter)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+    <div class="header">
+        <h1>Presto to Spark SQL Compatibility Report</h1>
+        <p>Table: ctl_specific | Spark: 3.5.5 | Date: 2025-04-07 15:20</p>
+        <p>Translation Method: Custom Rules</p>
+    </div>
+    
+    <div class="summary">
+        <p>Total queries: <b>24</b></p>
+        <p>Presto success: <b>0</b> (0.0%)</p>
+        <p>Spark success: <b>8</b> (33.3%)</p>
+        <p>Improvement from translation: <b>8</b> queries</p>
+        
+        <div class="progress-bar">
+            <div class="progress" style="width: 33.3%;">
+                33.3%
+            </div>
+        </div>
+    </div>
+    
+    <div class="filter-bar">
+        <div class="tabs">
+            <div id="tab-all" class="tab active" onclick="filterStatus('all')">All Queries</div>
+            <div id="tab-success" class="tab" onclick="filterStatus('success')">Successful</div>
+            <div id="tab-failed" class="tab" onclick="filterStatus('failed')">Failed</div>
+            <div id="tab-improved" class="tab" onclick="filterStatus('improved')">Improved</div>
+        </div>
+        <div style="margin-top: 10px;">
+            <input type="text" id="filterInput" onkeyup="filterText()" placeholder="Search...">
+        </div>
+    </div>
+    
+    <table id="resultsTable">
+        <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Presto</th>
+            <th>Spark</th>
+            <th>Presto Error</th>
+            <th>Spark Error</th>
+            <th>Details</th>
+        </tr>
+    
+        <tr data-id="1" data-presto="false" data-spark="true" class="improved">
+            <td>1</td>
+            <td>Get age of non-terminated RDS instances</td>
+            <td class="error">Failed</td>
+            <td class="success">Success</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_DIFF` is invalid: expects one of the units without quotes YEAR, QUA...</td>
+            <td class="error-message"></td>
+            <td class="actions">
+                <button onclick="toggleQuery(1)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-1" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT element_at(requestParameters, 'dBInstanceIdentifier') as instanceIdentifier, DATE_DIFF('millisecond', eventTime, now()) AS instance_age_ms FROM ctl_specific WHERE eventsource = 'rds.amazonaws.com' AND eventname like 'Create%' AND element_at(requestParameters, 'dBInstanceIdentifier') != '' AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) AND element_at(requestParameters, 'dBInstanceIdentifier') not in ( SELECT element_at(requestParameters, 'dBInstanceIdentifier') FROM ctl_specific WHERE eventsource = 'rds.amazonaws.com' AND eventname like 'Delete%' AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) )</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT element_at(requestParameters, 'dBInstanceIdentifier') as instanceIdentifier, DATE_DIFF(MILLISECOND, eventTime, now()) AS instance_age_ms FROM ctl_specific WHERE eventsource = 'rds.amazonaws.com' AND eventname like 'Create%' AND element_at(requestParameters, 'dBInstanceIdentifier') != '' AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) AND element_at(requestParameters, 'dBInstanceIdentifier') not in ( SELECT element_at(requestParameters, 'dBInstanceIdentifier') FROM ctl_specific WHERE eventsource = 'rds.amazonaws.com' AND eventname like 'Delete%' AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) )</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT element_at(requestParameters, 'dBInstanceIdentifier') as instanceIdentifier, DATE_DIFF(
+</span>
+<span class="diff-removed">
+'millisecond'
+</span>
+<span class="diff-added">
+MILLISECOND
+</span>
+<span class="unchanged">
+, eventTime, now()) AS instance_age_ms FROM ctl_specific WHERE eventsource = 'rds.amazonaws.com' AND eventname like 'Create%' AND element_at(requestParameters, 'dBInstanceIdentifier') != '' AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'week'
+</span>
+<span class="diff-added">
+WEEK
+</span>
+<span class="unchanged">
+, -1, CURRENT_TIMESTAMP) AND element_at(requestParameters, 'dBInstanceIdentifier') not in ( SELECT element_at(requestParameters, 'dBInstanceIdentifier') FROM ctl_specific WHERE eventsource = 'rds.amazonaws.com' AND eventname like 'Delete%' AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'week'
+</span>
+<span class="diff-added">
+WEEK
+</span>
+<span class="unchanged">
+, -1, CURRENT_TIMESTAMP) )
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT element_at(requestParameters, 'dBInstanceIdentifier') as instanceIdentifier, DATE_DIFF('millisecond', eventTime, now()) AS instance_age_ms FROM ctl_specific WHERE eventsource = 'rds.amazonaws.com' AND eventname like 'Create%' AND element_at(requestParameters, 'dBInstanceIdentifier') != '' AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) AND element_at(requestParameters, 'dBInstanceIdentifier') not in ( SELECT element_at(requestParameters, 'dBInstanceIdentifier') FROM ctl_specific WHERE eventsource = 'rds.amazonaws.com' AND eventname like 'Delete%' AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) )</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT element_at(requestParameters, 'dBInstanceIdentifier') as instanceIdentifier, DATE_DIFF(MILLISECOND, eventTime, now()) AS instance_age_ms FROM ctl_specific WHERE eventsource = 'rds.amazonaws.com' AND eventname like 'Create%' AND element_at(requestParameters, 'dBInstanceIdentifier') != '' AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) AND element_at(requestParameters, 'dBInstanceIdentifier') not in ( SELECT element_at(requestParameters, 'dBInstanceIdentifier') FROM ctl_specific WHERE eventsource = 'rds.amazonaws.com' AND eventname like 'Delete%' AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) )</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="2" data-presto="false" data-spark="false" class="">
+            <td>2</td>
+            <td>Get most frequently used KMS keys</td>
+            <td class="error">Failed</td>
+            <td class="error">Failed</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message">[UNRESOLVED_COLUMN.WITHOUT_SUGGESTION] A column or function parameter with name `resources` cannot be resolved. ; line 1 pos 81;
+'Sort ['keyUsageCount...</td>
+            <td class="actions">
+                <button onclick="toggleQuery(2)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-2" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT kmsKey.arn, count(*) as keyUsageCount FROM ctl_specific CROSS JOIN UNNEST(resources) as kmsKey (accountid, type, arn, last) WHERE eventsource='kms.amazonaws.com' AND eventName in ('Decrypt', 'Encrypt', 'GenerateDataKey', 'GenerateDataKeyWithoutPlaintext') AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) GROUP BY kmsKey.arn ORDER BY keyUsageCount DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT kmsKey.arn, count(*) as keyUsageCount FROM ctl_specific CROSS JOIN UNNEST(resources) as kmsKey (accountid, type, arn, last) WHERE eventsource='kms.amazonaws.com' AND eventName in ('Decrypt', 'Encrypt', 'GenerateDataKey', 'GenerateDataKeyWithoutPlaintext') AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) GROUP BY kmsKey.arn ORDER BY keyUsageCount DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT kmsKey.arn, count(*) as keyUsageCount FROM ctl_specific CROSS JOIN UNNEST(resources) as kmsKey (accountid, type, arn, last) WHERE eventsource='kms.amazonaws.com' AND eventName in ('Decrypt', 'Encrypt', 'GenerateDataKey', 'GenerateDataKeyWithoutPlaintext') AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'week'
+</span>
+<span class="diff-added">
+WEEK
+</span>
+<span class="unchanged">
+, -1, CURRENT_TIMESTAMP) GROUP BY kmsKey.arn ORDER BY keyUsageCount DESC
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT kmsKey.arn, count(*) as keyUsageCount FROM ctl_specific CROSS JOIN UNNEST(resources) as kmsKey (accountid, type, arn, last) WHERE eventsource='kms.amazonaws.com' AND eventName in ('Decrypt', 'Encrypt', 'GenerateDataKey', 'GenerateDataKeyWithoutPlaintext') AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) GROUP BY kmsKey.arn ORDER BY keyUsageCount DESC</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT kmsKey.arn, count(*) as keyUsageCount FROM ctl_specific CROSS JOIN UNNEST(resources) as kmsKey (accountid, type, arn, last) WHERE eventsource='kms.amazonaws.com' AND eventName in ('Decrypt', 'Encrypt', 'GenerateDataKey', 'GenerateDataKeyWithoutPlaintext') AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) GROUP BY kmsKey.arn ORDER BY keyUsageCount DESC</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="3" data-presto="false" data-spark="false" class="">
+            <td>3</td>
+            <td>Get most frequent users of KMS keys</td>
+            <td class="error">Failed</td>
+            <td class="error">Failed</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message">[UNRESOLVED_COLUMN.WITHOUT_SUGGESTION] A column or function parameter with name `resources` cannot be resolved. ; line 1 pos 140;
+'Sort ['keyUsageCoun...</td>
+            <td class="actions">
+                <button onclick="toggleQuery(3)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-3" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT distinct kmsKey.arn as keyArn, useridentity.arn as userArn, userAgent, count(*) as keyUsageCount FROM ctl_specific CROSS JOIN UNNEST(resources) as kmsKey (accountid, type, arn, last) WHERE eventsource='kms.amazonaws.com' AND eventName in ('Decrypt', 'Encrypt', 'GenerateDataKey', 'GenerateDataKeyWithoutPlaintext') AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) GROUP BY kmsKey.arn, useridentity.arn, userAgent ORDER BY keyUsageCount DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT distinct kmsKey.arn as keyArn, useridentity.arn as userArn, userAgent, count(*) as keyUsageCount FROM ctl_specific CROSS JOIN UNNEST(resources) as kmsKey (accountid, type, arn, last) WHERE eventsource='kms.amazonaws.com' AND eventName in ('Decrypt', 'Encrypt', 'GenerateDataKey', 'GenerateDataKeyWithoutPlaintext') AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) GROUP BY kmsKey.arn, useridentity.arn, userAgent ORDER BY keyUsageCount DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT distinct kmsKey.arn as keyArn, useridentity.arn as userArn, userAgent, count(*) as keyUsageCount FROM ctl_specific CROSS JOIN UNNEST(resources) as kmsKey (accountid, type, arn, last) WHERE eventsource='kms.amazonaws.com' AND eventName in ('Decrypt', 'Encrypt', 'GenerateDataKey', 'GenerateDataKeyWithoutPlaintext') AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'week'
+</span>
+<span class="diff-added">
+WEEK
+</span>
+<span class="unchanged">
+, -1, CURRENT_TIMESTAMP) GROUP BY kmsKey.arn, useridentity.arn, userAgent ORDER BY keyUsageCount DESC
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT distinct kmsKey.arn as keyArn, useridentity.arn as userArn, userAgent, count(*) as keyUsageCount FROM ctl_specific CROSS JOIN UNNEST(resources) as kmsKey (accountid, type, arn, last) WHERE eventsource='kms.amazonaws.com' AND eventName in ('Decrypt', 'Encrypt', 'GenerateDataKey', 'GenerateDataKeyWithoutPlaintext') AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) GROUP BY kmsKey.arn, useridentity.arn, userAgent ORDER BY keyUsageCount DESC</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT distinct kmsKey.arn as keyArn, useridentity.arn as userArn, userAgent, count(*) as keyUsageCount FROM ctl_specific CROSS JOIN UNNEST(resources) as kmsKey (accountid, type, arn, last) WHERE eventsource='kms.amazonaws.com' AND eventName in ('Decrypt', 'Encrypt', 'GenerateDataKey', 'GenerateDataKeyWithoutPlaintext') AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) GROUP BY kmsKey.arn, useridentity.arn, userAgent ORDER BY keyUsageCount DESC</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="4" data-presto="false" data-spark="false" class="">
+            <td>4</td>
+            <td>Get most frequently used KMS keys by month</td>
+            <td class="error">Failed</td>
+            <td class="error">Failed</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message">[UNRESOLVED_COLUMN.WITHOUT_SUGGESTION] A column or function parameter with name `resources` cannot be resolved. ; line 1 pos 122;
+'Sort ['month DESC N...</td>
+            <td class="actions">
+                <button onclick="toggleQuery(4)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-4" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT kmsKey.arn, date_trunc('month', eventTime) as month, count(*) as keyUsageCount FROM ctl_specific CROSS JOIN UNNEST(resources) as kmsKey (accountid, type, arn, last) WHERE eventsource='kms.amazonaws.com' AND eventName in ('Decrypt', 'Encrypt', 'GenerateDataKey', 'GenerateDataKeyWithoutPlaintext') AND eventTime > DATE_ADD('month', -6, CURRENT_TIMESTAMP) GROUP BY kmsKey.arn, date_trunc('month', eventTime) ORDER BY month desc, keyUsageCount DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT kmsKey.arn, date_trunc('month', eventTime) as month, count(*) as keyUsageCount FROM ctl_specific CROSS JOIN UNNEST(resources) as kmsKey (accountid, type, arn, last) WHERE eventsource='kms.amazonaws.com' AND eventName in ('Decrypt', 'Encrypt', 'GenerateDataKey', 'GenerateDataKeyWithoutPlaintext') AND eventTime > DATE_ADD(MONTH, -6, CURRENT_TIMESTAMP) GROUP BY kmsKey.arn, date_trunc('month', eventTime) ORDER BY month desc, keyUsageCount DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT kmsKey.arn, date_trunc('month', eventTime) as month, count(*) as keyUsageCount FROM ctl_specific CROSS JOIN UNNEST(resources) as kmsKey (accountid, type, arn, last) WHERE eventsource='kms.amazonaws.com' AND eventName in ('Decrypt', 'Encrypt', 'GenerateDataKey', 'GenerateDataKeyWithoutPlaintext') AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'month'
+</span>
+<span class="diff-added">
+MONTH
+</span>
+<span class="unchanged">
+, -6, CURRENT_TIMESTAMP) GROUP BY kmsKey.arn, date_trunc('month', eventTime) ORDER BY month desc, keyUsageCount DESC
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT kmsKey.arn, date_trunc('month', eventTime) as month, count(*) as keyUsageCount FROM ctl_specific CROSS JOIN UNNEST(resources) as kmsKey (accountid, type, arn, last) WHERE eventsource='kms.amazonaws.com' AND eventName in ('Decrypt', 'Encrypt', 'GenerateDataKey', 'GenerateDataKeyWithoutPlaintext') AND eventTime > DATE_ADD('month', -6, CURRENT_TIMESTAMP) GROUP BY kmsKey.arn, date_trunc('month', eventTime) ORDER BY month desc, keyUsageCount DESC</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT kmsKey.arn, date_trunc('month', eventTime) as month, count(*) as keyUsageCount FROM ctl_specific CROSS JOIN UNNEST(resources) as kmsKey (accountid, type, arn, last) WHERE eventsource='kms.amazonaws.com' AND eventName in ('Decrypt', 'Encrypt', 'GenerateDataKey', 'GenerateDataKeyWithoutPlaintext') AND eventTime > DATE_ADD(MONTH, -6, CURRENT_TIMESTAMP) GROUP BY kmsKey.arn, date_trunc('month', eventTime) ORDER BY month desc, keyUsageCount DESC</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="5" data-presto="false" data-spark="true" class="improved">
+            <td>5</td>
+            <td>Get all aliases that have been assigned to each KMS key</td>
+            <td class="error">Failed</td>
+            <td class="success">Success</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message"></td>
+            <td class="actions">
+                <button onclick="toggleQuery(5)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-5" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT element_at(requestParameters, 'targetKeyId') as keyId, array_agg(distinct element_at(requestParameters, 'aliasName')) as aliases FROM ctl_specific WHERE eventsource ='kms.amazonaws.com' AND eventName in ('CreateAlias', 'UpdateAlias') AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'targetKeyId')</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT element_at(requestParameters, 'targetKeyId') as keyId, array_agg(distinct element_at(requestParameters, 'aliasName')) as aliases FROM ctl_specific WHERE eventsource ='kms.amazonaws.com' AND eventName in ('CreateAlias', 'UpdateAlias') AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'targetKeyId')</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT element_at(requestParameters, 'targetKeyId') as keyId, array_agg(distinct element_at(requestParameters, 'aliasName')) as aliases FROM ctl_specific WHERE eventsource ='kms.amazonaws.com' AND eventName in ('CreateAlias', 'UpdateAlias') AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'week'
+</span>
+<span class="diff-added">
+WEEK
+</span>
+<span class="unchanged">
+, -1, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'targetKeyId')
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT element_at(requestParameters, 'targetKeyId') as keyId, array_agg(distinct element_at(requestParameters, 'aliasName')) as aliases FROM ctl_specific WHERE eventsource ='kms.amazonaws.com' AND eventName in ('CreateAlias', 'UpdateAlias') AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'targetKeyId')</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT element_at(requestParameters, 'targetKeyId') as keyId, array_agg(distinct element_at(requestParameters, 'aliasName')) as aliases FROM ctl_specific WHERE eventsource ='kms.amazonaws.com' AND eventName in ('CreateAlias', 'UpdateAlias') AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'targetKeyId')</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="6" data-presto="false" data-spark="true" class="improved">
+            <td>6</td>
+            <td>Get the alias most recently assigned to each KMS key</td>
+            <td class="error">Failed</td>
+            <td class="success">Success</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message"></td>
+            <td class="actions">
+                <button onclick="toggleQuery(6)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-6" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT element_at(requestParameters, 'targetKeyId') as keyId, max_by(distinct element_at(requestParameters, 'aliasName'), eventTime) as mostRecentAlias FROM ctl_specific WHERE eventsource = 'kms.amazonaws.com' AND eventName in ('CreateAlias', 'UpdateAlias') AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'targetKeyId')</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT element_at(requestParameters, 'targetKeyId') as keyId, max_by(distinct element_at(requestParameters, 'aliasName'), eventTime) as mostRecentAlias FROM ctl_specific WHERE eventsource = 'kms.amazonaws.com' AND eventName in ('CreateAlias', 'UpdateAlias') AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'targetKeyId')</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT element_at(requestParameters, 'targetKeyId') as keyId, max_by(distinct element_at(requestParameters, 'aliasName'), eventTime) as mostRecentAlias FROM ctl_specific WHERE eventsource = 'kms.amazonaws.com' AND eventName in ('CreateAlias', 'UpdateAlias') AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'week'
+</span>
+<span class="diff-added">
+WEEK
+</span>
+<span class="unchanged">
+, -1, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'targetKeyId')
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT element_at(requestParameters, 'targetKeyId') as keyId, max_by(distinct element_at(requestParameters, 'aliasName'), eventTime) as mostRecentAlias FROM ctl_specific WHERE eventsource = 'kms.amazonaws.com' AND eventName in ('CreateAlias', 'UpdateAlias') AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'targetKeyId')</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT element_at(requestParameters, 'targetKeyId') as keyId, max_by(distinct element_at(requestParameters, 'aliasName'), eventTime) as mostRecentAlias FROM ctl_specific WHERE eventsource = 'kms.amazonaws.com' AND eventName in ('CreateAlias', 'UpdateAlias') AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'targetKeyId')</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="7" data-presto="false" data-spark="false" class="">
+            <td>7</td>
+            <td>Track the users whose KMS API calls failed due to missing IAM permissions</td>
+            <td class="error">Failed</td>
+            <td class="error">Failed</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message">[UNRESOLVED_COLUMN.WITHOUT_SUGGESTION] A column or function parameter with name `resources` cannot be resolved. ; line 1 pos 149;
+'Sort ['accessDenied...</td>
+            <td class="actions">
+                <button onclick="toggleQuery(7)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-7" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT distinct kmsKey.arn as keyArn, useridentity.arn as userArn, userAgent, count(*) as accessDeniedErrorCount FROM ctl_specific CROSS JOIN UNNEST(resources) as kmsKey (accountid, type, arn, last) WHERE eventsource = 'kms.amazonaws.com' AND errorcode = 'AccessDenied' AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) GROUP BY kmsKey.arn, useridentity.arn, userAgent ORDER BY accessDeniedErrorCount DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT distinct kmsKey.arn as keyArn, useridentity.arn as userArn, userAgent, count(*) as accessDeniedErrorCount FROM ctl_specific CROSS JOIN UNNEST(resources) as kmsKey (accountid, type, arn, last) WHERE eventsource = 'kms.amazonaws.com' AND errorcode = 'AccessDenied' AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) GROUP BY kmsKey.arn, useridentity.arn, userAgent ORDER BY accessDeniedErrorCount DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT distinct kmsKey.arn as keyArn, useridentity.arn as userArn, userAgent, count(*) as accessDeniedErrorCount FROM ctl_specific CROSS JOIN UNNEST(resources) as kmsKey (accountid, type, arn, last) WHERE eventsource = 'kms.amazonaws.com' AND errorcode = 'AccessDenied' AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'week'
+</span>
+<span class="diff-added">
+WEEK
+</span>
+<span class="unchanged">
+, -1, CURRENT_TIMESTAMP) GROUP BY kmsKey.arn, useridentity.arn, userAgent ORDER BY accessDeniedErrorCount DESC
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT distinct kmsKey.arn as keyArn, useridentity.arn as userArn, userAgent, count(*) as accessDeniedErrorCount FROM ctl_specific CROSS JOIN UNNEST(resources) as kmsKey (accountid, type, arn, last) WHERE eventsource = 'kms.amazonaws.com' AND errorcode = 'AccessDenied' AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) GROUP BY kmsKey.arn, useridentity.arn, userAgent ORDER BY accessDeniedErrorCount DESC</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT distinct kmsKey.arn as keyArn, useridentity.arn as userArn, userAgent, count(*) as accessDeniedErrorCount FROM ctl_specific CROSS JOIN UNNEST(resources) as kmsKey (accountid, type, arn, last) WHERE eventsource = 'kms.amazonaws.com' AND errorcode = 'AccessDenied' AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) GROUP BY kmsKey.arn, useridentity.arn, userAgent ORDER BY accessDeniedErrorCount DESC</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="8" data-presto="false" data-spark="true" class="improved">
+            <td>8</td>
+            <td>Get a list of resources subscribed to an SNS topic</td>
+            <td class="error">Failed</td>
+            <td class="success">Success</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message"></td>
+            <td class="actions">
+                <button onclick="toggleQuery(8)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-8" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT distinct element_at(subscribed.requestparameters, 'endpoint') as subscribedResources, element_at(subscribed.requestParameters, 'topicArn') as topicArn, element_at(subscribed.responseelements, 'subscriptionArn') as subscriptionArn FROM ctl_specific as subscribed WHERE subscribed.eventSource = 'sns.amazonaws.com' AND subscribed.eventName = 'Subscribe' AND subscribed.errorCode is NULL AND element_at(subscribed.requestParameters, 'topicArn') = 'arn:aws:sns:us-east-1:123456789012:topicName' AND subscribed.eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) AND not exists ( SELECT element_at(unsubscribed.requestparameters, 'subscriptionArn') FROM ctl_specific as unsubscribed WHERE unsubscribed.eventSource = 'sns.amazonaws.com' AND unsubscribed.eventName = 'Unsubscribe' AND unsubscribed.errorCode is NULL AND element_at(subscribed.responseelements, 'subscriptionArn') = element_at(unsubscribed.requestParameters, 'subscriptionArn') AND unsubscribed.eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) )</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT distinct element_at(subscribed.requestparameters, 'endpoint') as subscribedResources, element_at(subscribed.requestParameters, 'topicArn') as topicArn, element_at(subscribed.responseelements, 'subscriptionArn') as subscriptionArn FROM ctl_specific as subscribed WHERE subscribed.eventSource = 'sns.amazonaws.com' AND subscribed.eventName = 'Subscribe' AND subscribed.errorCode is NULL AND element_at(subscribed.requestParameters, 'topicArn') = 'arn:aws:sns:us-east-1:123456789012:topicName' AND subscribed.eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) AND not exists ( SELECT element_at(unsubscribed.requestparameters, 'subscriptionArn') FROM ctl_specific as unsubscribed WHERE unsubscribed.eventSource = 'sns.amazonaws.com' AND unsubscribed.eventName = 'Unsubscribe' AND unsubscribed.errorCode is NULL AND element_at(subscribed.responseelements, 'subscriptionArn') = element_at(unsubscribed.requestParameters, 'subscriptionArn') AND unsubscribed.eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) )</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT distinct element_at(subscribed.requestparameters, 'endpoint') as subscribedResources, element_at(subscribed.requestParameters, 'topicArn') as topicArn, element_at(subscribed.responseelements, 'subscriptionArn') as subscriptionArn FROM ctl_specific as subscribed WHERE subscribed.eventSource = 'sns.amazonaws.com' AND subscribed.eventName = 'Subscribe' AND subscribed.errorCode is NULL AND element_at(subscribed.requestParameters, 'topicArn') = 'arn:aws:sns:us-east-1:123456789012:topicName' AND subscribed.eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'week'
+</span>
+<span class="diff-added">
+WEEK
+</span>
+<span class="unchanged">
+, -1, CURRENT_TIMESTAMP) AND not exists ( SELECT element_at(unsubscribed.requestparameters, 'subscriptionArn') FROM ctl_specific as unsubscribed WHERE unsubscribed.eventSource = 'sns.amazonaws.com' AND unsubscribed.eventName = 'Unsubscribe' AND unsubscribed.errorCode is NULL AND element_at(subscribed.responseelements, 'subscriptionArn') = element_at(unsubscribed.requestParameters, 'subscriptionArn') AND unsubscribed.eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'week'
+</span>
+<span class="diff-added">
+WEEK
+</span>
+<span class="unchanged">
+, -1, CURRENT_TIMESTAMP) )
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT distinct element_at(subscribed.requestparameters, 'endpoint') as subscribedResources, element_at(subscribed.requestParameters, 'topicArn') as topicArn, element_at(subscribed.responseelements, 'subscriptionArn') as subscriptionArn FROM ctl_specific as subscribed WHERE subscribed.eventSource = 'sns.amazonaws.com' AND subscribed.eventName = 'Subscribe' AND subscribed.errorCode is NULL AND element_at(subscribed.requestParameters, 'topicArn') = 'arn:aws:sns:us-east-1:123456789012:topicName' AND subscribed.eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) AND not exists ( SELECT element_at(unsubscribed.requestparameters, 'subscriptionArn') FROM ctl_specific as unsubscribed WHERE unsubscribed.eventSource = 'sns.amazonaws.com' AND unsubscribed.eventName = 'Unsubscribe' AND unsubscribed.errorCode is NULL AND element_at(subscribed.responseelements, 'subscriptionArn') = element_at(unsubscribed.requestParameters, 'subscriptionArn') AND unsubscribed.eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) )</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT distinct element_at(subscribed.requestparameters, 'endpoint') as subscribedResources, element_at(subscribed.requestParameters, 'topicArn') as topicArn, element_at(subscribed.responseelements, 'subscriptionArn') as subscriptionArn FROM ctl_specific as subscribed WHERE subscribed.eventSource = 'sns.amazonaws.com' AND subscribed.eventName = 'Subscribe' AND subscribed.errorCode is NULL AND element_at(subscribed.requestParameters, 'topicArn') = 'arn:aws:sns:us-east-1:123456789012:topicName' AND subscribed.eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) AND not exists ( SELECT element_at(unsubscribed.requestparameters, 'subscriptionArn') FROM ctl_specific as unsubscribed WHERE unsubscribed.eventSource = 'sns.amazonaws.com' AND unsubscribed.eventName = 'Unsubscribe' AND unsubscribed.errorCode is NULL AND element_at(subscribed.responseelements, 'subscriptionArn') = element_at(unsubscribed.requestParameters, 'subscriptionArn') AND unsubscribed.eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) )</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="9" data-presto="false" data-spark="false" class="">
+            <td>9</td>
+            <td>Count the number of messages published per SNS topic</td>
+            <td class="error">Failed</td>
+            <td class="error">Failed</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message">[UNRESOLVED_ROUTINE] Cannot resolve function `json_parse` on search path [`system`.`builtin`, `system`.`session`, `spark_catalog`.`default`].; line 1 ...</td>
+            <td class="actions">
+                <button onclick="toggleQuery(9)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-9" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT element_at(requestParameters, 'topicArn') as topicArn, sum(coalesce(json_array_length(json_parse(element_at(responseelements, 'successful'))), 1)) as totalNumberOfMessages FROM ctl_specific as subscribed WHERE eventSource = 'sns.amazonaws.com' AND eventName LIKE 'Publish%' AND errorCode is null AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'topicArn') ORDER BY totalNumberOfMessages DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT element_at(requestParameters, 'topicArn') as topicArn, sum(coalesce(json_array_length(json_parse(element_at(responseelements, 'successful'))), 1)) as totalNumberOfMessages FROM ctl_specific as subscribed WHERE eventSource = 'sns.amazonaws.com' AND eventName LIKE 'Publish%' AND errorCode is null AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'topicArn') ORDER BY totalNumberOfMessages DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT element_at(requestParameters, 'topicArn') as topicArn, sum(coalesce(json_array_length(json_parse(element_at(responseelements, 'successful'))), 1)) as totalNumberOfMessages FROM ctl_specific as subscribed WHERE eventSource = 'sns.amazonaws.com' AND eventName LIKE 'Publish%' AND errorCode is null AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'week'
+</span>
+<span class="diff-added">
+WEEK
+</span>
+<span class="unchanged">
+, -1, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'topicArn') ORDER BY totalNumberOfMessages DESC
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT element_at(requestParameters, 'topicArn') as topicArn, sum(coalesce(json_array_length(json_parse(element_at(responseelements, 'successful'))), 1)) as totalNumberOfMessages FROM ctl_specific as subscribed WHERE eventSource = 'sns.amazonaws.com' AND eventName LIKE 'Publish%' AND errorCode is null AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'topicArn') ORDER BY totalNumberOfMessages DESC</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT element_at(requestParameters, 'topicArn') as topicArn, sum(coalesce(json_array_length(json_parse(element_at(responseelements, 'successful'))), 1)) as totalNumberOfMessages FROM ctl_specific as subscribed WHERE eventSource = 'sns.amazonaws.com' AND eventName LIKE 'Publish%' AND errorCode is null AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'topicArn') ORDER BY totalNumberOfMessages DESC</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="10" data-presto="false" data-spark="false" class="">
+            <td>10</td>
+            <td>Count messages published by each SNS topic per month</td>
+            <td class="error">Failed</td>
+            <td class="error">Failed</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message">[UNRESOLVED_ROUTINE] Cannot resolve function `json_parse` on search path [`system`.`builtin`, `system`.`session`, `spark_catalog`.`default`].; line 1 ...</td>
+            <td class="actions">
+                <button onclick="toggleQuery(10)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-10" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT element_at(requestParameters, 'topicArn') as topicArn, date_trunc('month', eventTime) as month, sum(coalesce(json_array_length(json_parse(element_at(responseelements, 'successful'))), 1)) as totalNumberOfMessages FROM ctl_specific as subscribed WHERE eventSource = 'sns.amazonaws.com' AND eventName LIKE 'Publish%' AND errorCode is null AND eventTime > DATE_ADD('month', -6, CURRENT_TIMESTAMP) GROUP BY date_trunc('month', eventTime) , element_at(requestParameters, 'topicArn') ORDER BY date_trunc('month', eventTime) DESC, totalNumberOfMessages DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT element_at(requestParameters, 'topicArn') as topicArn, date_trunc('month', eventTime) as month, sum(coalesce(json_array_length(json_parse(element_at(responseelements, 'successful'))), 1)) as totalNumberOfMessages FROM ctl_specific as subscribed WHERE eventSource = 'sns.amazonaws.com' AND eventName LIKE 'Publish%' AND errorCode is null AND eventTime > DATE_ADD(MONTH, -6, CURRENT_TIMESTAMP) GROUP BY date_trunc('month', eventTime) , element_at(requestParameters, 'topicArn') ORDER BY date_trunc('month', eventTime) DESC, totalNumberOfMessages DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT element_at(requestParameters, 'topicArn') as topicArn, date_trunc('month', eventTime) as month, sum(coalesce(json_array_length(json_parse(element_at(responseelements, 'successful'))), 1)) as totalNumberOfMessages FROM ctl_specific as subscribed WHERE eventSource = 'sns.amazonaws.com' AND eventName LIKE 'Publish%' AND errorCode is null AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'month'
+</span>
+<span class="diff-added">
+MONTH
+</span>
+<span class="unchanged">
+, -6, CURRENT_TIMESTAMP) GROUP BY date_trunc('month', eventTime) , element_at(requestParameters, 'topicArn') ORDER BY date_trunc('month', eventTime) DESC, totalNumberOfMessages DESC
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT element_at(requestParameters, 'topicArn') as topicArn, date_trunc('month', eventTime) as month, sum(coalesce(json_array_length(json_parse(element_at(responseelements, 'successful'))), 1)) as totalNumberOfMessages FROM ctl_specific as subscribed WHERE eventSource = 'sns.amazonaws.com' AND eventName LIKE 'Publish%' AND errorCode is null AND eventTime > DATE_ADD('month', -6, CURRENT_TIMESTAMP) GROUP BY date_trunc('month', eventTime) , element_at(requestParameters, 'topicArn') ORDER BY date_trunc('month', eventTime) DESC, totalNumberOfMessages DESC</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT element_at(requestParameters, 'topicArn') as topicArn, date_trunc('month', eventTime) as month, sum(coalesce(json_array_length(json_parse(element_at(responseelements, 'successful'))), 1)) as totalNumberOfMessages FROM ctl_specific as subscribed WHERE eventSource = 'sns.amazonaws.com' AND eventName LIKE 'Publish%' AND errorCode is null AND eventTime > DATE_ADD(MONTH, -6, CURRENT_TIMESTAMP) GROUP BY date_trunc('month', eventTime) , element_at(requestParameters, 'topicArn') ORDER BY date_trunc('month', eventTime) DESC, totalNumberOfMessages DESC</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="11" data-presto="false" data-spark="false" class="">
+            <td>11</td>
+            <td>Count the number of SNS messages published per month</td>
+            <td class="error">Failed</td>
+            <td class="error">Failed</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message">[UNRESOLVED_ROUTINE] Cannot resolve function `json_parse` on search path [`system`.`builtin`, `system`.`session`, `spark_catalog`.`default`].; line 1 ...</td>
+            <td class="actions">
+                <button onclick="toggleQuery(11)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-11" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT date_trunc('month', eventTime) as month, sum(coalesce(json_array_length(json_parse(element_at(responseelements, 'successful'))), 1)) as totalNumberOfMessages FROM ctl_specific as subscribed WHERE eventSource = 'sns.amazonaws.com' AND eventName LIKE 'Publish%' AND errorCode is null AND eventTime > DATE_ADD('month', -6, CURRENT_TIMESTAMP) GROUP BY date_trunc('month', eventTime) ORDER BY date_trunc('month', eventTime) DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT date_trunc('month', eventTime) as month, sum(coalesce(json_array_length(json_parse(element_at(responseelements, 'successful'))), 1)) as totalNumberOfMessages FROM ctl_specific as subscribed WHERE eventSource = 'sns.amazonaws.com' AND eventName LIKE 'Publish%' AND errorCode is null AND eventTime > DATE_ADD(MONTH, -6, CURRENT_TIMESTAMP) GROUP BY date_trunc('month', eventTime) ORDER BY date_trunc('month', eventTime) DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT date_trunc('month', eventTime) as month, sum(coalesce(json_array_length(json_parse(element_at(responseelements, 'successful'))), 1)) as totalNumberOfMessages FROM ctl_specific as subscribed WHERE eventSource = 'sns.amazonaws.com' AND eventName LIKE 'Publish%' AND errorCode is null AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'month'
+</span>
+<span class="diff-added">
+MONTH
+</span>
+<span class="unchanged">
+, -6, CURRENT_TIMESTAMP) GROUP BY date_trunc('month', eventTime) ORDER BY date_trunc('month', eventTime) DESC
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT date_trunc('month', eventTime) as month, sum(coalesce(json_array_length(json_parse(element_at(responseelements, 'successful'))), 1)) as totalNumberOfMessages FROM ctl_specific as subscribed WHERE eventSource = 'sns.amazonaws.com' AND eventName LIKE 'Publish%' AND errorCode is null AND eventTime > DATE_ADD('month', -6, CURRENT_TIMESTAMP) GROUP BY date_trunc('month', eventTime) ORDER BY date_trunc('month', eventTime) DESC</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT date_trunc('month', eventTime) as month, sum(coalesce(json_array_length(json_parse(element_at(responseelements, 'successful'))), 1)) as totalNumberOfMessages FROM ctl_specific as subscribed WHERE eventSource = 'sns.amazonaws.com' AND eventName LIKE 'Publish%' AND errorCode is null AND eventTime > DATE_ADD(MONTH, -6, CURRENT_TIMESTAMP) GROUP BY date_trunc('month', eventTime) ORDER BY date_trunc('month', eventTime) DESC</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="12" data-presto="false" data-spark="false" class="">
+            <td>12</td>
+            <td>Count the number of throttled SNS messages per topic</td>
+            <td class="error">Failed</td>
+            <td class="error">Failed</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message">[UNRESOLVED_ROUTINE] Cannot resolve function `json_parse` on search path [`system`.`builtin`, `system`.`session`, `spark_catalog`.`default`].; line 1 ...</td>
+            <td class="actions">
+                <button onclick="toggleQuery(12)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-12" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT element_at(requestParameters, 'topicArn') as topicArn, sum(coalesce(json_array_length(json_parse(element_at(responseelements, 'failed'))), 1)) as totalNumberOfMessages FROM ctl_specific as subscribed WHERE eventSource = 'sns.amazonaws.com' AND eventName LIKE 'Publish%' AND errorCode LIKE 'Throttling%' AND eventTime > DATE_ADD('month', -6, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'topicArn') ORDER BY totalNumberOfMessages DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT element_at(requestParameters, 'topicArn') as topicArn, sum(coalesce(json_array_length(json_parse(element_at(responseelements, 'failed'))), 1)) as totalNumberOfMessages FROM ctl_specific as subscribed WHERE eventSource = 'sns.amazonaws.com' AND eventName LIKE 'Publish%' AND errorCode LIKE 'Throttling%' AND eventTime > DATE_ADD(MONTH, -6, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'topicArn') ORDER BY totalNumberOfMessages DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT element_at(requestParameters, 'topicArn') as topicArn, sum(coalesce(json_array_length(json_parse(element_at(responseelements, 'failed'))), 1)) as totalNumberOfMessages FROM ctl_specific as subscribed WHERE eventSource = 'sns.amazonaws.com' AND eventName LIKE 'Publish%' AND errorCode LIKE 'Throttling%' AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'month'
+</span>
+<span class="diff-added">
+MONTH
+</span>
+<span class="unchanged">
+, -6, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'topicArn') ORDER BY totalNumberOfMessages DESC
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT element_at(requestParameters, 'topicArn') as topicArn, sum(coalesce(json_array_length(json_parse(element_at(responseelements, 'failed'))), 1)) as totalNumberOfMessages FROM ctl_specific as subscribed WHERE eventSource = 'sns.amazonaws.com' AND eventName LIKE 'Publish%' AND errorCode LIKE 'Throttling%' AND eventTime > DATE_ADD('month', -6, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'topicArn') ORDER BY totalNumberOfMessages DESC</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT element_at(requestParameters, 'topicArn') as topicArn, sum(coalesce(json_array_length(json_parse(element_at(responseelements, 'failed'))), 1)) as totalNumberOfMessages FROM ctl_specific as subscribed WHERE eventSource = 'sns.amazonaws.com' AND eventName LIKE 'Publish%' AND errorCode LIKE 'Throttling%' AND eventTime > DATE_ADD(MONTH, -6, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'topicArn') ORDER BY totalNumberOfMessages DESC</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="13" data-presto="false" data-spark="false" class="">
+            <td>13</td>
+            <td>Count the number of throttled SNS messages per month</td>
+            <td class="error">Failed</td>
+            <td class="error">Failed</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message">[UNRESOLVED_ROUTINE] Cannot resolve function `json_parse` on search path [`system`.`builtin`, `system`.`session`, `spark_catalog`.`default`].; line 1 ...</td>
+            <td class="actions">
+                <button onclick="toggleQuery(13)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-13" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT date_trunc('month', eventTime) as month, sum(coalesce(json_array_length(json_parse(element_at(responseelements, 'failed'))), 1)) as totalNumberOfMessages FROM ctl_specific as subscribed WHERE eventSource = 'sns.amazonaws.com' AND eventName LIKE 'Publish%' AND errorCode LIKE 'Throttling%' AND eventTime > DATE_ADD('month', -6, CURRENT_TIMESTAMP) GROUP BY date_trunc('month', eventTime) ORDER BY date_trunc('month', eventTime) DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT date_trunc('month', eventTime) as month, sum(coalesce(json_array_length(json_parse(element_at(responseelements, 'failed'))), 1)) as totalNumberOfMessages FROM ctl_specific as subscribed WHERE eventSource = 'sns.amazonaws.com' AND eventName LIKE 'Publish%' AND errorCode LIKE 'Throttling%' AND eventTime > DATE_ADD(MONTH, -6, CURRENT_TIMESTAMP) GROUP BY date_trunc('month', eventTime) ORDER BY date_trunc('month', eventTime) DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT date_trunc('month', eventTime) as month, sum(coalesce(json_array_length(json_parse(element_at(responseelements, 'failed'))), 1)) as totalNumberOfMessages FROM ctl_specific as subscribed WHERE eventSource = 'sns.amazonaws.com' AND eventName LIKE 'Publish%' AND errorCode LIKE 'Throttling%' AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'month'
+</span>
+<span class="diff-added">
+MONTH
+</span>
+<span class="unchanged">
+, -6, CURRENT_TIMESTAMP) GROUP BY date_trunc('month', eventTime) ORDER BY date_trunc('month', eventTime) DESC
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT date_trunc('month', eventTime) as month, sum(coalesce(json_array_length(json_parse(element_at(responseelements, 'failed'))), 1)) as totalNumberOfMessages FROM ctl_specific as subscribed WHERE eventSource = 'sns.amazonaws.com' AND eventName LIKE 'Publish%' AND errorCode LIKE 'Throttling%' AND eventTime > DATE_ADD('month', -6, CURRENT_TIMESTAMP) GROUP BY date_trunc('month', eventTime) ORDER BY date_trunc('month', eventTime) DESC</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT date_trunc('month', eventTime) as month, sum(coalesce(json_array_length(json_parse(element_at(responseelements, 'failed'))), 1)) as totalNumberOfMessages FROM ctl_specific as subscribed WHERE eventSource = 'sns.amazonaws.com' AND eventName LIKE 'Publish%' AND errorCode LIKE 'Throttling%' AND eventTime > DATE_ADD(MONTH, -6, CURRENT_TIMESTAMP) GROUP BY date_trunc('month', eventTime) ORDER BY date_trunc('month', eventTime) DESC</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="14" data-presto="false" data-spark="false" class="">
+            <td>14</td>
+            <td>Count throttled SNS messages by each topic per month</td>
+            <td class="error">Failed</td>
+            <td class="error">Failed</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message">[UNRESOLVED_ROUTINE] Cannot resolve function `json_parse` on search path [`system`.`builtin`, `system`.`session`, `spark_catalog`.`default`].; line 1 ...</td>
+            <td class="actions">
+                <button onclick="toggleQuery(14)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-14" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT element_at(requestParameters, 'topicArn') as topicArn, date_trunc('month', eventTime) as month, sum(coalesce(json_array_length(json_parse(element_at(responseelements, 'failed'))), 1)) as totalNumberOfMessages FROM ctl_specific as subscribed WHERE eventSource = 'sns.amazonaws.com' AND eventName LIKE 'Publish%' AND errorCode LIKE 'Throttling%' AND eventTime > DATE_ADD('month', -6, CURRENT_TIMESTAMP) GROUP BY date_trunc('month', eventTime) , element_at(requestParameters, 'topicArn') ORDER BY date_trunc('month', eventTime) DESC, totalNumberOfMessages DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT element_at(requestParameters, 'topicArn') as topicArn, date_trunc('month', eventTime) as month, sum(coalesce(json_array_length(json_parse(element_at(responseelements, 'failed'))), 1)) as totalNumberOfMessages FROM ctl_specific as subscribed WHERE eventSource = 'sns.amazonaws.com' AND eventName LIKE 'Publish%' AND errorCode LIKE 'Throttling%' AND eventTime > DATE_ADD(MONTH, -6, CURRENT_TIMESTAMP) GROUP BY date_trunc('month', eventTime) , element_at(requestParameters, 'topicArn') ORDER BY date_trunc('month', eventTime) DESC, totalNumberOfMessages DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT element_at(requestParameters, 'topicArn') as topicArn, date_trunc('month', eventTime) as month, sum(coalesce(json_array_length(json_parse(element_at(responseelements, 'failed'))), 1)) as totalNumberOfMessages FROM ctl_specific as subscribed WHERE eventSource = 'sns.amazonaws.com' AND eventName LIKE 'Publish%' AND errorCode LIKE 'Throttling%' AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'month'
+</span>
+<span class="diff-added">
+MONTH
+</span>
+<span class="unchanged">
+, -6, CURRENT_TIMESTAMP) GROUP BY date_trunc('month', eventTime) , element_at(requestParameters, 'topicArn') ORDER BY date_trunc('month', eventTime) DESC, totalNumberOfMessages DESC
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT element_at(requestParameters, 'topicArn') as topicArn, date_trunc('month', eventTime) as month, sum(coalesce(json_array_length(json_parse(element_at(responseelements, 'failed'))), 1)) as totalNumberOfMessages FROM ctl_specific as subscribed WHERE eventSource = 'sns.amazonaws.com' AND eventName LIKE 'Publish%' AND errorCode LIKE 'Throttling%' AND eventTime > DATE_ADD('month', -6, CURRENT_TIMESTAMP) GROUP BY date_trunc('month', eventTime) , element_at(requestParameters, 'topicArn') ORDER BY date_trunc('month', eventTime) DESC, totalNumberOfMessages DESC</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT element_at(requestParameters, 'topicArn') as topicArn, date_trunc('month', eventTime) as month, sum(coalesce(json_array_length(json_parse(element_at(responseelements, 'failed'))), 1)) as totalNumberOfMessages FROM ctl_specific as subscribed WHERE eventSource = 'sns.amazonaws.com' AND eventName LIKE 'Publish%' AND errorCode LIKE 'Throttling%' AND eventTime > DATE_ADD(MONTH, -6, CURRENT_TIMESTAMP) GROUP BY date_trunc('month', eventTime) , element_at(requestParameters, 'topicArn') ORDER BY date_trunc('month', eventTime) DESC, totalNumberOfMessages DESC</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="15" data-presto="false" data-spark="false" class="">
+            <td>15</td>
+            <td>Count SQS messages sent to each queue</td>
+            <td class="error">Failed</td>
+            <td class="error">Failed</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message">[UNRESOLVED_ROUTINE] Cannot resolve function `json_parse` on search path [`system`.`builtin`, `system`.`session`, `spark_catalog`.`default`].; line 1 ...</td>
+            <td class="actions">
+                <button onclick="toggleQuery(15)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-15" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT element_at(requestParameters, 'queueUrl') as queueUrl, sum(coalesce(json_array_length(json_parse(element_at(responseelements, 'successful'))), 1)) as totalNumberOfMessages FROM ctl_specific WHERE eventSource = 'sqs.amazonaws.com' AND eventName LIKE 'SendMessage%' AND errorcode is null AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'queueUrl') ORDER BY totalNumberOfMessages DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT element_at(requestParameters, 'queueUrl') as queueUrl, sum(coalesce(json_array_length(json_parse(element_at(responseelements, 'successful'))), 1)) as totalNumberOfMessages FROM ctl_specific WHERE eventSource = 'sqs.amazonaws.com' AND eventName LIKE 'SendMessage%' AND errorcode is null AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'queueUrl') ORDER BY totalNumberOfMessages DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT element_at(requestParameters, 'queueUrl') as queueUrl, sum(coalesce(json_array_length(json_parse(element_at(responseelements, 'successful'))), 1)) as totalNumberOfMessages FROM ctl_specific WHERE eventSource = 'sqs.amazonaws.com' AND eventName LIKE 'SendMessage%' AND errorcode is null AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'week'
+</span>
+<span class="diff-added">
+WEEK
+</span>
+<span class="unchanged">
+, -1, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'queueUrl') ORDER BY totalNumberOfMessages DESC
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT element_at(requestParameters, 'queueUrl') as queueUrl, sum(coalesce(json_array_length(json_parse(element_at(responseelements, 'successful'))), 1)) as totalNumberOfMessages FROM ctl_specific WHERE eventSource = 'sqs.amazonaws.com' AND eventName LIKE 'SendMessage%' AND errorcode is null AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'queueUrl') ORDER BY totalNumberOfMessages DESC</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT element_at(requestParameters, 'queueUrl') as queueUrl, sum(coalesce(json_array_length(json_parse(element_at(responseelements, 'successful'))), 1)) as totalNumberOfMessages FROM ctl_specific WHERE eventSource = 'sqs.amazonaws.com' AND eventName LIKE 'SendMessage%' AND errorcode is null AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'queueUrl') ORDER BY totalNumberOfMessages DESC</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="16" data-presto="false" data-spark="false" class="">
+            <td>16</td>
+            <td>Count SQS messages sent by each queue per month</td>
+            <td class="error">Failed</td>
+            <td class="error">Failed</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message">[UNRESOLVED_ROUTINE] Cannot resolve function `json_parse` on search path [`system`.`builtin`, `system`.`session`, `spark_catalog`.`default`].; line 1 ...</td>
+            <td class="actions">
+                <button onclick="toggleQuery(16)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-16" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT element_at(requestParameters, 'queueUrl') as queueUrl, date_trunc('month', eventTime) as month, sum(coalesce(json_array_length(json_parse(element_at(responseelements, 'successful'))), 1)) as totalNumberOfMessages FROM ctl_specific WHERE eventSource = 'sqs.amazonaws.com' AND eventName LIKE 'SendMessage%' AND errorcode is null AND eventTime > DATE_ADD('month', -6, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'queueUrl'), date_trunc('month', eventTime) ORDER BY month DESC, totalNumberOfMessages DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT element_at(requestParameters, 'queueUrl') as queueUrl, date_trunc('month', eventTime) as month, sum(coalesce(json_array_length(json_parse(element_at(responseelements, 'successful'))), 1)) as totalNumberOfMessages FROM ctl_specific WHERE eventSource = 'sqs.amazonaws.com' AND eventName LIKE 'SendMessage%' AND errorcode is null AND eventTime > DATE_ADD(MONTH, -6, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'queueUrl'), date_trunc('month', eventTime) ORDER BY month DESC, totalNumberOfMessages DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT element_at(requestParameters, 'queueUrl') as queueUrl, date_trunc('month', eventTime) as month, sum(coalesce(json_array_length(json_parse(element_at(responseelements, 'successful'))), 1)) as totalNumberOfMessages FROM ctl_specific WHERE eventSource = 'sqs.amazonaws.com' AND eventName LIKE 'SendMessage%' AND errorcode is null AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'month'
+</span>
+<span class="diff-added">
+MONTH
+</span>
+<span class="unchanged">
+, -6, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'queueUrl'), date_trunc('month', eventTime) ORDER BY month DESC, totalNumberOfMessages DESC
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT element_at(requestParameters, 'queueUrl') as queueUrl, date_trunc('month', eventTime) as month, sum(coalesce(json_array_length(json_parse(element_at(responseelements, 'successful'))), 1)) as totalNumberOfMessages FROM ctl_specific WHERE eventSource = 'sqs.amazonaws.com' AND eventName LIKE 'SendMessage%' AND errorcode is null AND eventTime > DATE_ADD('month', -6, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'queueUrl'), date_trunc('month', eventTime) ORDER BY month DESC, totalNumberOfMessages DESC</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT element_at(requestParameters, 'queueUrl') as queueUrl, date_trunc('month', eventTime) as month, sum(coalesce(json_array_length(json_parse(element_at(responseelements, 'successful'))), 1)) as totalNumberOfMessages FROM ctl_specific WHERE eventSource = 'sqs.amazonaws.com' AND eventName LIKE 'SendMessage%' AND errorcode is null AND eventTime > DATE_ADD(MONTH, -6, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'queueUrl'), date_trunc('month', eventTime) ORDER BY month DESC, totalNumberOfMessages DESC</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="17" data-presto="false" data-spark="false" class="">
+            <td>17</td>
+            <td>Count total SQS messages sent per month</td>
+            <td class="error">Failed</td>
+            <td class="error">Failed</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message">[UNRESOLVED_ROUTINE] Cannot resolve function `json_parse` on search path [`system`.`builtin`, `system`.`session`, `spark_catalog`.`default`].; line 1 ...</td>
+            <td class="actions">
+                <button onclick="toggleQuery(17)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-17" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT date_trunc('month', eventTime) as month, sum(coalesce(json_array_length(json_parse(element_at(responseelements, 'successful'))), 1)) as totalNumberOfMessages FROM ctl_specific WHERE eventSource = 'sqs.amazonaws.com' AND eventName LIKE 'SendMessage%' AND errorcode is null AND eventTime > DATE_ADD('month', -6, CURRENT_TIMESTAMP) GROUP BY date_trunc('month', eventTime) ORDER BY month DESC, totalNumberOfMessages DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT date_trunc('month', eventTime) as month, sum(coalesce(json_array_length(json_parse(element_at(responseelements, 'successful'))), 1)) as totalNumberOfMessages FROM ctl_specific WHERE eventSource = 'sqs.amazonaws.com' AND eventName LIKE 'SendMessage%' AND errorcode is null AND eventTime > DATE_ADD(MONTH, -6, CURRENT_TIMESTAMP) GROUP BY date_trunc('month', eventTime) ORDER BY month DESC, totalNumberOfMessages DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT date_trunc('month', eventTime) as month, sum(coalesce(json_array_length(json_parse(element_at(responseelements, 'successful'))), 1)) as totalNumberOfMessages FROM ctl_specific WHERE eventSource = 'sqs.amazonaws.com' AND eventName LIKE 'SendMessage%' AND errorcode is null AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'month'
+</span>
+<span class="diff-added">
+MONTH
+</span>
+<span class="unchanged">
+, -6, CURRENT_TIMESTAMP) GROUP BY date_trunc('month', eventTime) ORDER BY month DESC, totalNumberOfMessages DESC
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT date_trunc('month', eventTime) as month, sum(coalesce(json_array_length(json_parse(element_at(responseelements, 'successful'))), 1)) as totalNumberOfMessages FROM ctl_specific WHERE eventSource = 'sqs.amazonaws.com' AND eventName LIKE 'SendMessage%' AND errorcode is null AND eventTime > DATE_ADD('month', -6, CURRENT_TIMESTAMP) GROUP BY date_trunc('month', eventTime) ORDER BY month DESC, totalNumberOfMessages DESC</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT date_trunc('month', eventTime) as month, sum(coalesce(json_array_length(json_parse(element_at(responseelements, 'successful'))), 1)) as totalNumberOfMessages FROM ctl_specific WHERE eventSource = 'sqs.amazonaws.com' AND eventName LIKE 'SendMessage%' AND errorcode is null AND eventTime > DATE_ADD(MONTH, -6, CURRENT_TIMESTAMP) GROUP BY date_trunc('month', eventTime) ORDER BY month DESC, totalNumberOfMessages DESC</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="18" data-presto="false" data-spark="false" class="">
+            <td>18</td>
+            <td>Count throttled SQS messages in each queue</td>
+            <td class="error">Failed</td>
+            <td class="error">Failed</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message">[UNRESOLVED_ROUTINE] Cannot resolve function `json_parse` on search path [`system`.`builtin`, `system`.`session`, `spark_catalog`.`default`].; line 1 ...</td>
+            <td class="actions">
+                <button onclick="toggleQuery(18)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-18" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT element_at(requestParameters, 'queueUrl') as queueUrl, sum(coalesce(json_array_length(json_parse(element_at(responseelements, 'failed'))), 1)) as totalNumberOfMessages FROM ctl_specific WHERE eventSource = 'sqs.amazonaws.com' AND eventName LIKE 'SendMessage%' AND errorcode like 'Throttling%' AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'queueUrl') ORDER BY totalNumberOfMessages DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT element_at(requestParameters, 'queueUrl') as queueUrl, sum(coalesce(json_array_length(json_parse(element_at(responseelements, 'failed'))), 1)) as totalNumberOfMessages FROM ctl_specific WHERE eventSource = 'sqs.amazonaws.com' AND eventName LIKE 'SendMessage%' AND errorcode like 'Throttling%' AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'queueUrl') ORDER BY totalNumberOfMessages DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT element_at(requestParameters, 'queueUrl') as queueUrl, sum(coalesce(json_array_length(json_parse(element_at(responseelements, 'failed'))), 1)) as totalNumberOfMessages FROM ctl_specific WHERE eventSource = 'sqs.amazonaws.com' AND eventName LIKE 'SendMessage%' AND errorcode like 'Throttling%' AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'week'
+</span>
+<span class="diff-added">
+WEEK
+</span>
+<span class="unchanged">
+, -1, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'queueUrl') ORDER BY totalNumberOfMessages DESC
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT element_at(requestParameters, 'queueUrl') as queueUrl, sum(coalesce(json_array_length(json_parse(element_at(responseelements, 'failed'))), 1)) as totalNumberOfMessages FROM ctl_specific WHERE eventSource = 'sqs.amazonaws.com' AND eventName LIKE 'SendMessage%' AND errorcode like 'Throttling%' AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'queueUrl') ORDER BY totalNumberOfMessages DESC</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT element_at(requestParameters, 'queueUrl') as queueUrl, sum(coalesce(json_array_length(json_parse(element_at(responseelements, 'failed'))), 1)) as totalNumberOfMessages FROM ctl_specific WHERE eventSource = 'sqs.amazonaws.com' AND eventName LIKE 'SendMessage%' AND errorcode like 'Throttling%' AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'queueUrl') ORDER BY totalNumberOfMessages DESC</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="19" data-presto="false" data-spark="false" class="">
+            <td>19</td>
+            <td>Count throttled SQS messages in queues by month</td>
+            <td class="error">Failed</td>
+            <td class="error">Failed</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message">[UNRESOLVED_ROUTINE] Cannot resolve function `json_parse` on search path [`system`.`builtin`, `system`.`session`, `spark_catalog`.`default`].; line 1 ...</td>
+            <td class="actions">
+                <button onclick="toggleQuery(19)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-19" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT element_at(requestParameters, 'queueUrl') as queueUrl, date_trunc('month', eventTime) as month, sum(coalesce(json_array_length(json_parse(element_at(responseelements, 'failed'))), 1)) as totalNumberOfMessages FROM ctl_specific WHERE eventSource = 'sqs.amazonaws.com' AND eventName LIKE 'SendMessage%' AND errorcode like 'Throttling%' AND eventTime > DATE_ADD('month', -6, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'queueUrl'), date_trunc('month', eventTime) ORDER BY month DESC, totalNumberOfMessages DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT element_at(requestParameters, 'queueUrl') as queueUrl, date_trunc('month', eventTime) as month, sum(coalesce(json_array_length(json_parse(element_at(responseelements, 'failed'))), 1)) as totalNumberOfMessages FROM ctl_specific WHERE eventSource = 'sqs.amazonaws.com' AND eventName LIKE 'SendMessage%' AND errorcode like 'Throttling%' AND eventTime > DATE_ADD(MONTH, -6, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'queueUrl'), date_trunc('month', eventTime) ORDER BY month DESC, totalNumberOfMessages DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT element_at(requestParameters, 'queueUrl') as queueUrl, date_trunc('month', eventTime) as month, sum(coalesce(json_array_length(json_parse(element_at(responseelements, 'failed'))), 1)) as totalNumberOfMessages FROM ctl_specific WHERE eventSource = 'sqs.amazonaws.com' AND eventName LIKE 'SendMessage%' AND errorcode like 'Throttling%' AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'month'
+</span>
+<span class="diff-added">
+MONTH
+</span>
+<span class="unchanged">
+, -6, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'queueUrl'), date_trunc('month', eventTime) ORDER BY month DESC, totalNumberOfMessages DESC
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT element_at(requestParameters, 'queueUrl') as queueUrl, date_trunc('month', eventTime) as month, sum(coalesce(json_array_length(json_parse(element_at(responseelements, 'failed'))), 1)) as totalNumberOfMessages FROM ctl_specific WHERE eventSource = 'sqs.amazonaws.com' AND eventName LIKE 'SendMessage%' AND errorcode like 'Throttling%' AND eventTime > DATE_ADD('month', -6, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'queueUrl'), date_trunc('month', eventTime) ORDER BY month DESC, totalNumberOfMessages DESC</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT element_at(requestParameters, 'queueUrl') as queueUrl, date_trunc('month', eventTime) as month, sum(coalesce(json_array_length(json_parse(element_at(responseelements, 'failed'))), 1)) as totalNumberOfMessages FROM ctl_specific WHERE eventSource = 'sqs.amazonaws.com' AND eventName LIKE 'SendMessage%' AND errorcode like 'Throttling%' AND eventTime > DATE_ADD(MONTH, -6, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'queueUrl'), date_trunc('month', eventTime) ORDER BY month DESC, totalNumberOfMessages DESC</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="20" data-presto="false" data-spark="false" class="">
+            <td>20</td>
+            <td>Count the number of throttled SQS messages per month</td>
+            <td class="error">Failed</td>
+            <td class="error">Failed</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message">[UNRESOLVED_ROUTINE] Cannot resolve function `json_parse` on search path [`system`.`builtin`, `system`.`session`, `spark_catalog`.`default`].; line 1 ...</td>
+            <td class="actions">
+                <button onclick="toggleQuery(20)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-20" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT date_trunc('month', eventTime) as month, sum(coalesce(json_array_length(json_parse(element_at(responseelements, 'failed'))), 1)) as totalNumberOfMessages FROM ctl_specific WHERE eventSource = 'sqs.amazonaws.com' AND eventName LIKE 'SendMessage%' AND errorcode like 'Throttling%' AND eventTime > DATE_ADD('month', -6, CURRENT_TIMESTAMP) GROUP BY date_trunc('month', eventTime) ORDER BY month DESC, totalNumberOfMessages DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT date_trunc('month', eventTime) as month, sum(coalesce(json_array_length(json_parse(element_at(responseelements, 'failed'))), 1)) as totalNumberOfMessages FROM ctl_specific WHERE eventSource = 'sqs.amazonaws.com' AND eventName LIKE 'SendMessage%' AND errorcode like 'Throttling%' AND eventTime > DATE_ADD(MONTH, -6, CURRENT_TIMESTAMP) GROUP BY date_trunc('month', eventTime) ORDER BY month DESC, totalNumberOfMessages DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT date_trunc('month', eventTime) as month, sum(coalesce(json_array_length(json_parse(element_at(responseelements, 'failed'))), 1)) as totalNumberOfMessages FROM ctl_specific WHERE eventSource = 'sqs.amazonaws.com' AND eventName LIKE 'SendMessage%' AND errorcode like 'Throttling%' AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'month'
+</span>
+<span class="diff-added">
+MONTH
+</span>
+<span class="unchanged">
+, -6, CURRENT_TIMESTAMP) GROUP BY date_trunc('month', eventTime) ORDER BY month DESC, totalNumberOfMessages DESC
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT date_trunc('month', eventTime) as month, sum(coalesce(json_array_length(json_parse(element_at(responseelements, 'failed'))), 1)) as totalNumberOfMessages FROM ctl_specific WHERE eventSource = 'sqs.amazonaws.com' AND eventName LIKE 'SendMessage%' AND errorcode like 'Throttling%' AND eventTime > DATE_ADD('month', -6, CURRENT_TIMESTAMP) GROUP BY date_trunc('month', eventTime) ORDER BY month DESC, totalNumberOfMessages DESC</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT date_trunc('month', eventTime) as month, sum(coalesce(json_array_length(json_parse(element_at(responseelements, 'failed'))), 1)) as totalNumberOfMessages FROM ctl_specific WHERE eventSource = 'sqs.amazonaws.com' AND eventName LIKE 'SendMessage%' AND errorcode like 'Throttling%' AND eventTime > DATE_ADD(MONTH, -6, CURRENT_TIMESTAMP) GROUP BY date_trunc('month', eventTime) ORDER BY month DESC, totalNumberOfMessages DESC</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="21" data-presto="false" data-spark="true" class="improved">
+            <td>21</td>
+            <td>Detect EventBridge rule disablement and deletion events</td>
+            <td class="error">Failed</td>
+            <td class="success">Success</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message"></td>
+            <td class="actions">
+                <button onclick="toggleQuery(21)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-21" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT * FROM ctl_specific WHERE eventsource = 'events.amazonaws.com' AND eventName in ('DeleteRule', 'DisableRule') AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP)</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT * FROM ctl_specific WHERE eventsource = 'events.amazonaws.com' AND eventName in ('DeleteRule', 'DisableRule') AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP)</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT * FROM ctl_specific WHERE eventsource = 'events.amazonaws.com' AND eventName in ('DeleteRule', 'DisableRule') AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'week'
+</span>
+<span class="diff-added">
+WEEK
+</span>
+<span class="unchanged">
+, -1, CURRENT_TIMESTAMP)
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT * FROM ctl_specific WHERE eventsource = 'events.amazonaws.com' AND eventName in ('DeleteRule', 'DisableRule') AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP)</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT * FROM ctl_specific WHERE eventsource = 'events.amazonaws.com' AND eventName in ('DeleteRule', 'DisableRule') AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP)</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="22" data-presto="false" data-spark="true" class="improved">
+            <td>22</td>
+            <td>Get list of distinct KMS key IDs</td>
+            <td class="error">Failed</td>
+            <td class="success">Success</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message"></td>
+            <td class="actions">
+                <button onclick="toggleQuery(22)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-22" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT distinct element_at(requestParameters, 'keyId') as kmsKeyId FROM ctl_specific WHERE eventSource = 'kms.amazonaws.com' AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP)</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT distinct element_at(requestParameters, 'keyId') as kmsKeyId FROM ctl_specific WHERE eventSource = 'kms.amazonaws.com' AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP)</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT distinct element_at(requestParameters, 'keyId') as kmsKeyId FROM ctl_specific WHERE eventSource = 'kms.amazonaws.com' AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'week'
+</span>
+<span class="diff-added">
+WEEK
+</span>
+<span class="unchanged">
+, -1, CURRENT_TIMESTAMP)
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT distinct element_at(requestParameters, 'keyId') as kmsKeyId FROM ctl_specific WHERE eventSource = 'kms.amazonaws.com' AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP)</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT distinct element_at(requestParameters, 'keyId') as kmsKeyId FROM ctl_specific WHERE eventSource = 'kms.amazonaws.com' AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP)</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="23" data-presto="false" data-spark="true" class="improved">
+            <td>23</td>
+            <td>Count readOnly calls made to Glue by different users</td>
+            <td class="error">Failed</td>
+            <td class="success">Success</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message"></td>
+            <td class="actions">
+                <button onclick="toggleQuery(23)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-23" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT useridentity.sessioncontext.sessionissuer.arn, COUNT(*) AS countOfReadOnlyCalls FROM ctl_specific WHERE eventsource = 'glue.amazonaws.com' AND readonly = true AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) GROUP BY useridentity.sessioncontext.sessionissuer.arn ORDER BY countOfReadOnlyCalls DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT useridentity.sessioncontext.sessionissuer.arn, COUNT(*) AS countOfReadOnlyCalls FROM ctl_specific WHERE eventsource = 'glue.amazonaws.com' AND readonly = true AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) GROUP BY useridentity.sessioncontext.sessionissuer.arn ORDER BY countOfReadOnlyCalls DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT useridentity.sessioncontext.sessionissuer.arn, COUNT(*) AS countOfReadOnlyCalls FROM ctl_specific WHERE eventsource = 'glue.amazonaws.com' AND readonly = true AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'week'
+</span>
+<span class="diff-added">
+WEEK
+</span>
+<span class="unchanged">
+, -1, CURRENT_TIMESTAMP) GROUP BY useridentity.sessioncontext.sessionissuer.arn ORDER BY countOfReadOnlyCalls DESC
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT useridentity.sessioncontext.sessionissuer.arn, COUNT(*) AS countOfReadOnlyCalls FROM ctl_specific WHERE eventsource = 'glue.amazonaws.com' AND readonly = true AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) GROUP BY useridentity.sessioncontext.sessionissuer.arn ORDER BY countOfReadOnlyCalls DESC</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT useridentity.sessioncontext.sessionissuer.arn, COUNT(*) AS countOfReadOnlyCalls FROM ctl_specific WHERE eventsource = 'glue.amazonaws.com' AND readonly = true AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) GROUP BY useridentity.sessioncontext.sessionissuer.arn ORDER BY countOfReadOnlyCalls DESC</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="24" data-presto="false" data-spark="true" class="improved">
+            <td>24</td>
+            <td>Get second of the day with the most readOnly Glue calls</td>
+            <td class="error">Failed</td>
+            <td class="success">Success</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message"></td>
+            <td class="actions">
+                <button onclick="toggleQuery(24)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-24" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT eventtime, COUNT(*) AS countOfReadOnlyCalls FROM ctl_specific WHERE eventsource = 'glue.amazonaws.com' AND readonly = true AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) GROUP BY eventtime ORDER BY countOfReadOnlyCalls DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT eventtime, COUNT(*) AS countOfReadOnlyCalls FROM ctl_specific WHERE eventsource = 'glue.amazonaws.com' AND readonly = true AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) GROUP BY eventtime ORDER BY countOfReadOnlyCalls DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT eventtime, COUNT(*) AS countOfReadOnlyCalls FROM ctl_specific WHERE eventsource = 'glue.amazonaws.com' AND readonly = true AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'week'
+</span>
+<span class="diff-added">
+WEEK
+</span>
+<span class="unchanged">
+, -1, CURRENT_TIMESTAMP) GROUP BY eventtime ORDER BY countOfReadOnlyCalls DESC
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT eventtime, COUNT(*) AS countOfReadOnlyCalls FROM ctl_specific WHERE eventsource = 'glue.amazonaws.com' AND readonly = true AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) GROUP BY eventtime ORDER BY countOfReadOnlyCalls DESC</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT eventtime, COUNT(*) AS countOfReadOnlyCalls FROM ctl_specific WHERE eventsource = 'glue.amazonaws.com' AND readonly = true AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) GROUP BY eventtime ORDER BY countOfReadOnlyCalls DESC</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+    </table>
+</body>
+</html>
+    

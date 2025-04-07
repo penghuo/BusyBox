@@ -1,0 +1,1783 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Presto to Spark SQL Report</title>
+    <style>
+        body { font-family: Arial; margin: 20px; }
+        .header { background-color: #4a86e8; color: white; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
+        .summary { margin-bottom: 20px; }
+        .progress-bar { width: 100%; background-color: #f3f3f3; height: 30px; border-radius: 5px; margin-bottom: 20px; }
+        .progress { height: 100%; background-color: #4CAF50; text-align: center; line-height: 30px; color: white; border-radius: 5px; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; vertical-align: top; }
+        th { background-color: #f2f2f2; }
+        tr:hover { background-color: #f5f5f5; }
+        .success { color: green; }
+        .error { color: red; }
+        .query { max-width: 400px; overflow-x: auto; }
+        .actions { white-space: nowrap; }
+        .filter-bar { margin-bottom: 15px; }
+        .tabs { display: flex; }
+        .tab { padding: 5px 10px; cursor: pointer; border: 1px solid #ccc; }
+        .tab.active { background-color: #4a86e8; color: white; }
+        .improved { background-color: #d4edda; }
+        pre { margin: 0; white-space: pre-wrap; }
+        .hidden { display: none; }
+        input[type=text] { padding: 5px; width: 30%; }
+        button { padding: 5px 10px; margin-right: 5px; cursor: pointer; }
+        
+        /* Diff styling */
+        .diff {
+            font-family: monospace;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-top: 10px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .diff-section { margin-bottom: 15px; }
+        .diff-line { white-space: pre-wrap; font-size: 14px; line-height: 1.5; }
+        .diff-removed { background-color: #ffdddd; color: #994444; }
+        .diff-added { background-color: #ddffdd; color: #449944; }
+        .unchanged { color: #666; }
+        .full-queries { margin-top: 15px; border-top: 1px solid #eee; padding-top: 10px; }
+        .error-message { white-space: pre-wrap; color: #d9534f; }
+    </style>
+    <script>
+        function toggleQuery(id) {
+            const elem = document.getElementById('query-'+id);
+            elem.classList.toggle('hidden');
+        }
+        
+        function filterStatus(status) {
+            const rows = document.querySelectorAll('#resultsTable tr[data-id]');
+            rows.forEach(row => {
+                if (status === 'all' || 
+                    (status === 'success' && row.getAttribute('data-spark') === 'true') ||
+                    (status === 'failed' && row.getAttribute('data-spark') === 'false') ||
+                    (status === 'improved' && row.getAttribute('data-presto') === 'false' && row.getAttribute('data-spark') === 'true')) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+            
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.getElementById('tab-'+status).classList.add('active');
+        }
+        
+        function filterText() {
+            const filter = document.getElementById('filterInput').value.toLowerCase();
+            const rows = document.querySelectorAll('#resultsTable tr[data-id]');
+            
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                if (text.includes(filter)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+    <div class="header">
+        <h1>Presto to Spark SQL Compatibility Report</h1>
+        <p>Table: ctl_sample | Spark: 3.5.5 | Date: 2025-04-07 14:54</p>
+        <p>Translation Method: Custom Rules</p>
+    </div>
+    
+    <div class="summary">
+        <p>Total queries: <b>31</b></p>
+        <p>Presto success: <b>0</b> (0.0%)</p>
+        <p>Spark success: <b>26</b> (83.9%)</p>
+        <p>Improvement from translation: <b>26</b> queries</p>
+        
+        <div class="progress-bar">
+            <div class="progress" style="width: 83.9%;">
+                83.9%
+            </div>
+        </div>
+    </div>
+    
+    <div class="filter-bar">
+        <div class="tabs">
+            <div id="tab-all" class="tab active" onclick="filterStatus('all')">All Queries</div>
+            <div id="tab-success" class="tab" onclick="filterStatus('success')">Successful</div>
+            <div id="tab-failed" class="tab" onclick="filterStatus('failed')">Failed</div>
+            <div id="tab-improved" class="tab" onclick="filterStatus('improved')">Improved</div>
+        </div>
+        <div style="margin-top: 10px;">
+            <input type="text" id="filterInput" onkeyup="filterText()" placeholder="Search...">
+        </div>
+    </div>
+    
+    <table id="resultsTable">
+        <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Presto</th>
+            <th>Spark</th>
+            <th>Presto Error</th>
+            <th>Spark Error</th>
+            <th>Details</th>
+        </tr>
+    
+        <tr data-id="1" data-presto="false" data-spark="true" class="improved">
+            <td>1</td>
+            <td>Investigate who called an API</td>
+            <td class="error">Failed</td>
+            <td class="success">Success</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message"></td>
+            <td class="actions">
+                <button onclick="toggleQuery(1)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-1" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT userIdentity.arn AS user, eventName FROM ctl_sample WHERE userIdentity.arn IS NOT NULL AND eventName='CreateBucket' AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) AND eventTime < DATE_ADD('day', -6, CURRENT_TIMESTAMP)</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT userIdentity.arn AS user, eventName FROM ctl_sample WHERE userIdentity.arn IS NOT NULL AND eventName='CreateBucket' AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) AND eventTime < DATE_ADD(DAY, -6, CURRENT_TIMESTAMP)</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT userIdentity.arn AS user, eventName FROM ctl_sample WHERE userIdentity.arn IS NOT NULL AND eventName='CreateBucket' AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'week'
+</span>
+<span class="diff-added">
+WEEK
+</span>
+<span class="unchanged">
+, -1, CURRENT_TIMESTAMP) AND eventTime < DATE_ADD(
+</span>
+<span class="diff-removed">
+'day'
+</span>
+<span class="diff-added">
+DAY
+</span>
+<span class="unchanged">
+, -6, CURRENT_TIMESTAMP)
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT userIdentity.arn AS user, eventName FROM ctl_sample WHERE userIdentity.arn IS NOT NULL AND eventName='CreateBucket' AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) AND eventTime < DATE_ADD('day', -6, CURRENT_TIMESTAMP)</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT userIdentity.arn AS user, eventName FROM ctl_sample WHERE userIdentity.arn IS NOT NULL AND eventName='CreateBucket' AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) AND eventTime < DATE_ADD(DAY, -6, CURRENT_TIMESTAMP)</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="2" data-presto="false" data-spark="true" class="improved">
+            <td>2</td>
+            <td>Investigate user actions</td>
+            <td class="error">Failed</td>
+            <td class="success">Success</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message"></td>
+            <td class="actions">
+                <button onclick="toggleQuery(2)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-2" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT eventID, eventName, eventSource, eventTime, userIdentity.arn AS user FROM ctl_sample WHERE userIdentity.arn LIKE '%<username>%' AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) AND eventTime < DATE_ADD('day', -4, CURRENT_TIMESTAMP)</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT eventID, eventName, eventSource, eventTime, userIdentity.arn AS user FROM ctl_sample WHERE userIdentity.arn LIKE '%<username>%' AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) AND eventTime < DATE_ADD(DAY, -4, CURRENT_TIMESTAMP)</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT eventID, eventName, eventSource, eventTime, userIdentity.arn AS user FROM ctl_sample WHERE userIdentity.arn LIKE '%<username>%' AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'week'
+</span>
+<span class="diff-added">
+WEEK
+</span>
+<span class="unchanged">
+, -1, CURRENT_TIMESTAMP) AND eventTime < DATE_ADD(
+</span>
+<span class="diff-removed">
+'day'
+</span>
+<span class="diff-added">
+DAY
+</span>
+<span class="unchanged">
+, -4, CURRENT_TIMESTAMP)
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT eventID, eventName, eventSource, eventTime, userIdentity.arn AS user FROM ctl_sample WHERE userIdentity.arn LIKE '%<username>%' AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) AND eventTime < DATE_ADD('day', -4, CURRENT_TIMESTAMP)</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT eventID, eventName, eventSource, eventTime, userIdentity.arn AS user FROM ctl_sample WHERE userIdentity.arn LIKE '%<username>%' AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) AND eventTime < DATE_ADD(DAY, -4, CURRENT_TIMESTAMP)</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="3" data-presto="false" data-spark="true" class="improved">
+            <td>3</td>
+            <td>Top APIs aggregated by source</td>
+            <td class="error">Failed</td>
+            <td class="success">Success</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message"></td>
+            <td class="actions">
+                <button onclick="toggleQuery(3)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-3" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT eventSource, eventName, COUNT(*) AS apiCount FROM ctl_sample WHERE eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) GROUP BY eventSource, eventName ORDER BY apiCount DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT eventSource, eventName, COUNT(*) AS apiCount FROM ctl_sample WHERE eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) GROUP BY eventSource, eventName ORDER BY apiCount DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT eventSource, eventName, COUNT(*) AS apiCount FROM ctl_sample WHERE eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'week'
+</span>
+<span class="diff-added">
+WEEK
+</span>
+<span class="unchanged">
+, -1, CURRENT_TIMESTAMP) GROUP BY eventSource, eventName ORDER BY apiCount DESC
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT eventSource, eventName, COUNT(*) AS apiCount FROM ctl_sample WHERE eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) GROUP BY eventSource, eventName ORDER BY apiCount DESC</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT eventSource, eventName, COUNT(*) AS apiCount FROM ctl_sample WHERE eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) GROUP BY eventSource, eventName ORDER BY apiCount DESC</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="4" data-presto="false" data-spark="true" class="improved">
+            <td>4</td>
+            <td>Multi-region console logins</td>
+            <td class="error">Failed</td>
+            <td class="success">Success</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message"></td>
+            <td class="actions">
+                <button onclick="toggleQuery(4)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-4" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT eventTime, userIdentity.arn AS user, awsRegion FROM ctl_sample WHERE awsRegion in ('us-east-1', 'us-west-2') AND eventName = 'ConsoleLogin' AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP)</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT eventTime, userIdentity.arn AS user, awsRegion FROM ctl_sample WHERE awsRegion in ('us-east-1', 'us-west-2') AND eventName = 'ConsoleLogin' AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP)</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT eventTime, userIdentity.arn AS user, awsRegion FROM ctl_sample WHERE awsRegion in ('us-east-1', 'us-west-2') AND eventName = 'ConsoleLogin' AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'week'
+</span>
+<span class="diff-added">
+WEEK
+</span>
+<span class="unchanged">
+, -1, CURRENT_TIMESTAMP)
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT eventTime, userIdentity.arn AS user, awsRegion FROM ctl_sample WHERE awsRegion in ('us-east-1', 'us-west-2') AND eventName = 'ConsoleLogin' AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP)</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT eventTime, userIdentity.arn AS user, awsRegion FROM ctl_sample WHERE awsRegion in ('us-east-1', 'us-west-2') AND eventName = 'ConsoleLogin' AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP)</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="5" data-presto="false" data-spark="true" class="improved">
+            <td>5</td>
+            <td>Explore queries</td>
+            <td class="error">Failed</td>
+            <td class="success">Success</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message"></td>
+            <td class="actions">
+                <button onclick="toggleQuery(5)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-5" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT element_at(responseElements, 'queryId'), element_at(requestParameters, 'queryStatement') FROM ctl_sample WHERE eventName='StartQuery' AND eventSource = 'cloudtrail.amazonaws.com' AND responseElements IS NOT NULL AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP)</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT element_at(responseElements, 'queryId'), element_at(requestParameters, 'queryStatement') FROM ctl_sample WHERE eventName='StartQuery' AND eventSource = 'cloudtrail.amazonaws.com' AND responseElements IS NOT NULL AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP)</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT element_at(responseElements, 'queryId'), element_at(requestParameters, 'queryStatement') FROM ctl_sample WHERE eventName='StartQuery' AND eventSource = 'cloudtrail.amazonaws.com' AND responseElements IS NOT NULL AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'week'
+</span>
+<span class="diff-added">
+WEEK
+</span>
+<span class="unchanged">
+, -1, CURRENT_TIMESTAMP)
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT element_at(responseElements, 'queryId'), element_at(requestParameters, 'queryStatement') FROM ctl_sample WHERE eventName='StartQuery' AND eventSource = 'cloudtrail.amazonaws.com' AND responseElements IS NOT NULL AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP)</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT element_at(responseElements, 'queryId'), element_at(requestParameters, 'queryStatement') FROM ctl_sample WHERE eventName='StartQuery' AND eventSource = 'cloudtrail.amazonaws.com' AND responseElements IS NOT NULL AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP)</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="6" data-presto="false" data-spark="true" class="improved">
+            <td>6</td>
+            <td>Find most frequent console users</td>
+            <td class="error">Failed</td>
+            <td class="success">Success</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message"></td>
+            <td class="actions">
+                <button onclick="toggleQuery(6)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-6" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT userIdentity.arn, COUNT(*) AS loginCount FROM ctl_sample WHERE eventName = 'ConsoleLogin' AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) GROUP BY userIdentity.arn ORDER BY count(*) DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT userIdentity.arn, COUNT(*) AS loginCount FROM ctl_sample WHERE eventName = 'ConsoleLogin' AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) GROUP BY userIdentity.arn ORDER BY count(*) DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT userIdentity.arn, COUNT(*) AS loginCount FROM ctl_sample WHERE eventName = 'ConsoleLogin' AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'week'
+</span>
+<span class="diff-added">
+WEEK
+</span>
+<span class="unchanged">
+, -1, CURRENT_TIMESTAMP) GROUP BY userIdentity.arn ORDER BY count(*) DESC
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT userIdentity.arn, COUNT(*) AS loginCount FROM ctl_sample WHERE eventName = 'ConsoleLogin' AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) GROUP BY userIdentity.arn ORDER BY count(*) DESC</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT userIdentity.arn, COUNT(*) AS loginCount FROM ctl_sample WHERE eventName = 'ConsoleLogin' AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) GROUP BY userIdentity.arn ORDER BY count(*) DESC</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="7" data-presto="false" data-spark="true" class="improved">
+            <td>7</td>
+            <td>List specific calls</td>
+            <td class="error">Failed</td>
+            <td class="success">Success</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message"></td>
+            <td class="actions">
+                <button onclick="toggleQuery(7)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-7" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT requestParameters FROM ctl_sample WHERE userIdentity.arn IS NOT NULL AND eventName='PutObject' AND element_at(requestParameters, 'bucketName') = 'bucketnamehere' AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP)</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT requestParameters FROM ctl_sample WHERE userIdentity.arn IS NOT NULL AND eventName='PutObject' AND element_at(requestParameters, 'bucketName') = 'bucketnamehere' AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP)</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT requestParameters FROM ctl_sample WHERE userIdentity.arn IS NOT NULL AND eventName='PutObject' AND element_at(requestParameters, 'bucketName') = 'bucketnamehere' AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'week'
+</span>
+<span class="diff-added">
+WEEK
+</span>
+<span class="unchanged">
+, -1, CURRENT_TIMESTAMP)
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT requestParameters FROM ctl_sample WHERE userIdentity.arn IS NOT NULL AND eventName='PutObject' AND element_at(requestParameters, 'bucketName') = 'bucketnamehere' AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP)</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT requestParameters FROM ctl_sample WHERE userIdentity.arn IS NOT NULL AND eventName='PutObject' AND element_at(requestParameters, 'bucketName') = 'bucketnamehere' AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP)</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="8" data-presto="false" data-spark="true" class="improved">
+            <td>8</td>
+            <td>Filter array of structures</td>
+            <td class="error">Failed</td>
+            <td class="success">Success</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message"></td>
+            <td class="actions">
+                <button onclick="toggleQuery(8)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-8" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT resources FROM ctl_sample WHERE element_at(resources, 1).arn LIKE '%<resource ARN>%' AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP)</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT resources FROM ctl_sample WHERE element_at(resources, 1).arn LIKE '%<resource ARN>%' AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP)</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT resources FROM ctl_sample WHERE element_at(resources, 1).arn LIKE '%<resource ARN>%' AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'week'
+</span>
+<span class="diff-added">
+WEEK
+</span>
+<span class="unchanged">
+, -1, CURRENT_TIMESTAMP)
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT resources FROM ctl_sample WHERE element_at(resources, 1).arn LIKE '%<resource ARN>%' AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP)</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT resources FROM ctl_sample WHERE element_at(resources, 1).arn LIKE '%<resource ARN>%' AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP)</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="9" data-presto="false" data-spark="true" class="improved">
+            <td>9</td>
+            <td>Rank the number of stored events per day</td>
+            <td class="error">Failed</td>
+            <td class="success">Success</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message"></td>
+            <td class="actions">
+                <button onclick="toggleQuery(9)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-9" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT date_trunc('day', eventtime), COUNT(*) AS eventCount FROM ctl_sample WHERE eventTime > DATE_ADD('month', -1, CURRENT_TIMESTAMP) GROUP BY date_trunc('day', eventtime) ORDER BY count(*) DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT date_trunc('day', eventtime), COUNT(*) AS eventCount FROM ctl_sample WHERE eventTime > DATE_ADD(MONTH, -1, CURRENT_TIMESTAMP) GROUP BY date_trunc('day', eventtime) ORDER BY count(*) DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT date_trunc('day', eventtime), COUNT(*) AS eventCount FROM ctl_sample WHERE eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'month'
+</span>
+<span class="diff-added">
+MONTH
+</span>
+<span class="unchanged">
+, -1, CURRENT_TIMESTAMP) GROUP BY date_trunc('day', eventtime) ORDER BY count(*) DESC
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT date_trunc('day', eventtime), COUNT(*) AS eventCount FROM ctl_sample WHERE eventTime > DATE_ADD('month', -1, CURRENT_TIMESTAMP) GROUP BY date_trunc('day', eventtime) ORDER BY count(*) DESC</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT date_trunc('day', eventtime), COUNT(*) AS eventCount FROM ctl_sample WHERE eventTime > DATE_ADD(MONTH, -1, CURRENT_TIMESTAMP) GROUP BY date_trunc('day', eventtime) ORDER BY count(*) DESC</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="10" data-presto="false" data-spark="true" class="improved">
+            <td>10</td>
+            <td>Count calls per service that were made using outdated TLS versions</td>
+            <td class="error">Failed</td>
+            <td class="success">Success</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message"></td>
+            <td class="actions">
+                <button onclick="toggleQuery(10)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-10" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT eventSource, COUNT(*) AS numOutdatedTlsCalls FROM ctl_sample WHERE tlsDetails.tlsVersion IN ('TLSv1', 'TLSv1.1') AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) GROUP BY eventSource ORDER BY numOutdatedTlsCalls DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT eventSource, COUNT(*) AS numOutdatedTlsCalls FROM ctl_sample WHERE tlsDetails.tlsVersion IN ('TLSv1', 'TLSv1.1') AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) GROUP BY eventSource ORDER BY numOutdatedTlsCalls DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT eventSource, COUNT(*) AS numOutdatedTlsCalls FROM ctl_sample WHERE tlsDetails.tlsVersion IN ('TLSv1', 'TLSv1.1') AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'week'
+</span>
+<span class="diff-added">
+WEEK
+</span>
+<span class="unchanged">
+, -1, CURRENT_TIMESTAMP) GROUP BY eventSource ORDER BY numOutdatedTlsCalls DESC
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT eventSource, COUNT(*) AS numOutdatedTlsCalls FROM ctl_sample WHERE tlsDetails.tlsVersion IN ('TLSv1', 'TLSv1.1') AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) GROUP BY eventSource ORDER BY numOutdatedTlsCalls DESC</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT eventSource, COUNT(*) AS numOutdatedTlsCalls FROM ctl_sample WHERE tlsDetails.tlsVersion IN ('TLSv1', 'TLSv1.1') AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) GROUP BY eventSource ORDER BY numOutdatedTlsCalls DESC</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="11" data-presto="false" data-spark="true" class="improved">
+            <td>11</td>
+            <td>Find who is making calls using outdated TLS versions</td>
+            <td class="error">Failed</td>
+            <td class="success">Success</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message"></td>
+            <td class="actions">
+                <button onclick="toggleQuery(11)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-11" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT recipientAccountId, year(eventTime) AS year_date, month(eventTime) AS month_date, eventSource, sourceIPAddress, userAgent, userIdentity.arn, userIdentity.accesskeyid, COUNT(*) AS numCalls FROM ctl_sample WHERE tlsDetails.tlsVersion IN ('TLSv1', 'TLSv1.1') AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) GROUP BY recipientAccountId, year(eventTime), month(eventTime), eventSource, sourceIPAddress, userAgent, userIdentity.arn, userIdentity.accesskeyid ORDER BY COUNT(*) DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT recipientAccountId, year(eventTime) AS year_date, month(eventTime) AS month_date, eventSource, sourceIPAddress, userAgent, userIdentity.arn, userIdentity.accesskeyid, COUNT(*) AS numCalls FROM ctl_sample WHERE tlsDetails.tlsVersion IN ('TLSv1', 'TLSv1.1') AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) GROUP BY recipientAccountId, year(eventTime), month(eventTime), eventSource, sourceIPAddress, userAgent, userIdentity.arn, userIdentity.accesskeyid ORDER BY COUNT(*) DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT recipientAccountId, year(eventTime) AS year_date, month(eventTime) AS month_date, eventSource, sourceIPAddress, userAgent, userIdentity.arn, userIdentity.accesskeyid, COUNT(*) AS numCalls FROM ctl_sample WHERE tlsDetails.tlsVersion IN ('TLSv1', 'TLSv1.1') AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'week'
+</span>
+<span class="diff-added">
+WEEK
+</span>
+<span class="unchanged">
+, -1, CURRENT_TIMESTAMP) GROUP BY recipientAccountId, year(eventTime), month(eventTime), eventSource, sourceIPAddress, userAgent, userIdentity.arn, userIdentity.accesskeyid ORDER BY COUNT(*) DESC
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT recipientAccountId, year(eventTime) AS year_date, month(eventTime) AS month_date, eventSource, sourceIPAddress, userAgent, userIdentity.arn, userIdentity.accesskeyid, COUNT(*) AS numCalls FROM ctl_sample WHERE tlsDetails.tlsVersion IN ('TLSv1', 'TLSv1.1') AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) GROUP BY recipientAccountId, year(eventTime), month(eventTime), eventSource, sourceIPAddress, userAgent, userIdentity.arn, userIdentity.accesskeyid ORDER BY COUNT(*) DESC</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT recipientAccountId, year(eventTime) AS year_date, month(eventTime) AS month_date, eventSource, sourceIPAddress, userAgent, userIdentity.arn, userIdentity.accesskeyid, COUNT(*) AS numCalls FROM ctl_sample WHERE tlsDetails.tlsVersion IN ('TLSv1', 'TLSv1.1') AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) GROUP BY recipientAccountId, year(eventTime), month(eventTime), eventSource, sourceIPAddress, userAgent, userIdentity.arn, userIdentity.accesskeyid ORDER BY COUNT(*) DESC</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="12" data-presto="false" data-spark="true" class="improved">
+            <td>12</td>
+            <td>Investigate who made console changes</td>
+            <td class="error">Failed</td>
+            <td class="success">Success</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message"></td>
+            <td class="actions">
+                <button onclick="toggleQuery(12)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-12" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT userIdentity.arn AS user, eventName, eventTime, awsRegion, requestParameters AS resourceChangedManually FROM ctl_sample WHERE sessionCredentialFromConsole='true' AND errorCode IS NULL AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP)</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT userIdentity.arn AS user, eventName, eventTime, awsRegion, requestParameters AS resourceChangedManually FROM ctl_sample WHERE sessionCredentialFromConsole='true' AND errorCode IS NULL AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP)</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT userIdentity.arn AS user, eventName, eventTime, awsRegion, requestParameters AS resourceChangedManually FROM ctl_sample WHERE sessionCredentialFromConsole='true' AND errorCode IS NULL AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'week'
+</span>
+<span class="diff-added">
+WEEK
+</span>
+<span class="unchanged">
+, -1, CURRENT_TIMESTAMP)
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT userIdentity.arn AS user, eventName, eventTime, awsRegion, requestParameters AS resourceChangedManually FROM ctl_sample WHERE sessionCredentialFromConsole='true' AND errorCode IS NULL AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP)</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT userIdentity.arn AS user, eventName, eventTime, awsRegion, requestParameters AS resourceChangedManually FROM ctl_sample WHERE sessionCredentialFromConsole='true' AND errorCode IS NULL AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP)</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="13" data-presto="false" data-spark="true" class="improved">
+            <td>13</td>
+            <td>Investigate who ran ECS Commands</td>
+            <td class="error">Failed</td>
+            <td class="success">Success</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message"></td>
+            <td class="actions">
+                <button onclick="toggleQuery(13)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-13" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT userIdentity.arn AS user, element_at(requestParameters, 'container') AS container, element_at(requestParameters, 'command') AS command, eventTime FROM ctl_sample WHERE eventSource='ecs.amazon.com' AND eventName='ExecuteCommand' AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP)</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT userIdentity.arn AS user, element_at(requestParameters, 'container') AS container, element_at(requestParameters, 'command') AS command, eventTime FROM ctl_sample WHERE eventSource='ecs.amazon.com' AND eventName='ExecuteCommand' AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP)</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT userIdentity.arn AS user, element_at(requestParameters, 'container') AS container, element_at(requestParameters, 'command') AS command, eventTime FROM ctl_sample WHERE eventSource='ecs.amazon.com' AND eventName='ExecuteCommand' AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'week'
+</span>
+<span class="diff-added">
+WEEK
+</span>
+<span class="unchanged">
+, -1, CURRENT_TIMESTAMP)
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT userIdentity.arn AS user, element_at(requestParameters, 'container') AS container, element_at(requestParameters, 'command') AS command, eventTime FROM ctl_sample WHERE eventSource='ecs.amazon.com' AND eventName='ExecuteCommand' AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP)</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT userIdentity.arn AS user, element_at(requestParameters, 'container') AS container, element_at(requestParameters, 'command') AS command, eventTime FROM ctl_sample WHERE eventSource='ecs.amazon.com' AND eventName='ExecuteCommand' AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP)</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="14" data-presto="false" data-spark="true" class="improved">
+            <td>14</td>
+            <td>Monitor security group changes</td>
+            <td class="error">Failed</td>
+            <td class="success">Success</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message"></td>
+            <td class="actions">
+                <button onclick="toggleQuery(14)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-14" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT eventName, userIdentity.arn AS user, sourceIPAddress, eventTime, element_at(requestParameters, 'groupId') AS securityGroup, element_at(requestParameters, 'ipPermissions') AS ipPermissions FROM ctl_sample WHERE (element_at(requestParameters, 'groupId') LIKE '%sg-%') AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) ORDER BY eventTime ASC</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT eventName, userIdentity.arn AS user, sourceIPAddress, eventTime, element_at(requestParameters, 'groupId') AS securityGroup, element_at(requestParameters, 'ipPermissions') AS ipPermissions FROM ctl_sample WHERE (element_at(requestParameters, 'groupId') LIKE '%sg-%') AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) ORDER BY eventTime ASC</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT eventName, userIdentity.arn AS user, sourceIPAddress, eventTime, element_at(requestParameters, 'groupId') AS securityGroup, element_at(requestParameters, 'ipPermissions') AS ipPermissions FROM ctl_sample WHERE (element_at(requestParameters, 'groupId') LIKE '%sg-%') AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'week'
+</span>
+<span class="diff-added">
+WEEK
+</span>
+<span class="unchanged">
+, -1, CURRENT_TIMESTAMP) ORDER BY eventTime ASC
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT eventName, userIdentity.arn AS user, sourceIPAddress, eventTime, element_at(requestParameters, 'groupId') AS securityGroup, element_at(requestParameters, 'ipPermissions') AS ipPermissions FROM ctl_sample WHERE (element_at(requestParameters, 'groupId') LIKE '%sg-%') AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) ORDER BY eventTime ASC</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT eventName, userIdentity.arn AS user, sourceIPAddress, eventTime, element_at(requestParameters, 'groupId') AS securityGroup, element_at(requestParameters, 'ipPermissions') AS ipPermissions FROM ctl_sample WHERE (element_at(requestParameters, 'groupId') LIKE '%sg-%') AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) ORDER BY eventTime ASC</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="15" data-presto="false" data-spark="true" class="improved">
+            <td>15</td>
+            <td>Monitor security group and network ACL changes</td>
+            <td class="error">Failed</td>
+            <td class="success">Success</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message"></td>
+            <td class="actions">
+                <button onclick="toggleQuery(15)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-15" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT * FROM ctl_sample WHERE ((eventName LIKE '%SecurityGroup%' OR eventName LIKE '%NetworkAcl%') AND eventName NOT LIKE 'Describe%') AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) ORDER BY eventTime ASC</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT * FROM ctl_sample WHERE ((eventName LIKE '%SecurityGroup%' OR eventName LIKE '%NetworkAcl%') AND eventName NOT LIKE 'Describe%') AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) ORDER BY eventTime ASC</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT * FROM ctl_sample WHERE ((eventName LIKE '%SecurityGroup%' OR eventName LIKE '%NetworkAcl%') AND eventName NOT LIKE 'Describe%') AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'week'
+</span>
+<span class="diff-added">
+WEEK
+</span>
+<span class="unchanged">
+, -1, CURRENT_TIMESTAMP) ORDER BY eventTime ASC
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT * FROM ctl_sample WHERE ((eventName LIKE '%SecurityGroup%' OR eventName LIKE '%NetworkAcl%') AND eventName NOT LIKE 'Describe%') AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) ORDER BY eventTime ASC</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT * FROM ctl_sample WHERE ((eventName LIKE '%SecurityGroup%' OR eventName LIKE '%NetworkAcl%') AND eventName NOT LIKE 'Describe%') AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) ORDER BY eventTime ASC</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="16" data-presto="false" data-spark="true" class="improved">
+            <td>16</td>
+            <td>Investigate service limit increases</td>
+            <td class="error">Failed</td>
+            <td class="success">Success</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message"></td>
+            <td class="actions">
+                <button onclick="toggleQuery(16)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-16" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT userIdentity.arn AS user, awsRegion, element_at(serviceEventDetails, 'serviceName') AS ServiceName, element_at(serviceEventDetails, 'quotaName') AS QuotaName, element_at(serviceEventDetails, 'createTime') AS RequestedOn, element_at(serviceEventDetails, 'newQuotaValue') AS NewLimitValue, element_at(serviceEventDetails, 'newStatus') AS Status FROM ctl_sample WHERE eventSource='servicequotas.amazonaws.com' AND eventName in ('UpdateServiceQuotaIncreaseRequestStatus', 'RequestServiceQuotaIncrease') AND element_at(serviceEventDetails, 'serviceName') != '' AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) ORDER BY eventTime ASC</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT userIdentity.arn AS user, awsRegion, element_at(serviceEventDetails, 'serviceName') AS ServiceName, element_at(serviceEventDetails, 'quotaName') AS QuotaName, element_at(serviceEventDetails, 'createTime') AS RequestedOn, element_at(serviceEventDetails, 'newQuotaValue') AS NewLimitValue, element_at(serviceEventDetails, 'newStatus') AS Status FROM ctl_sample WHERE eventSource='servicequotas.amazonaws.com' AND eventName in ('UpdateServiceQuotaIncreaseRequestStatus', 'RequestServiceQuotaIncrease') AND element_at(serviceEventDetails, 'serviceName') != '' AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) ORDER BY eventTime ASC</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT userIdentity.arn AS user, awsRegion, element_at(serviceEventDetails, 'serviceName') AS ServiceName, element_at(serviceEventDetails, 'quotaName') AS QuotaName, element_at(serviceEventDetails, 'createTime') AS RequestedOn, element_at(serviceEventDetails, 'newQuotaValue') AS NewLimitValue, element_at(serviceEventDetails, 'newStatus') AS Status FROM ctl_sample WHERE eventSource='servicequotas.amazonaws.com' AND eventName in ('UpdateServiceQuotaIncreaseRequestStatus', 'RequestServiceQuotaIncrease') AND element_at(serviceEventDetails, 'serviceName') != '' AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'week'
+</span>
+<span class="diff-added">
+WEEK
+</span>
+<span class="unchanged">
+, -1, CURRENT_TIMESTAMP) ORDER BY eventTime ASC
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT userIdentity.arn AS user, awsRegion, element_at(serviceEventDetails, 'serviceName') AS ServiceName, element_at(serviceEventDetails, 'quotaName') AS QuotaName, element_at(serviceEventDetails, 'createTime') AS RequestedOn, element_at(serviceEventDetails, 'newQuotaValue') AS NewLimitValue, element_at(serviceEventDetails, 'newStatus') AS Status FROM ctl_sample WHERE eventSource='servicequotas.amazonaws.com' AND eventName in ('UpdateServiceQuotaIncreaseRequestStatus', 'RequestServiceQuotaIncrease') AND element_at(serviceEventDetails, 'serviceName') != '' AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) ORDER BY eventTime ASC</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT userIdentity.arn AS user, awsRegion, element_at(serviceEventDetails, 'serviceName') AS ServiceName, element_at(serviceEventDetails, 'quotaName') AS QuotaName, element_at(serviceEventDetails, 'createTime') AS RequestedOn, element_at(serviceEventDetails, 'newQuotaValue') AS NewLimitValue, element_at(serviceEventDetails, 'newStatus') AS Status FROM ctl_sample WHERE eventSource='servicequotas.amazonaws.com' AND eventName in ('UpdateServiceQuotaIncreaseRequestStatus', 'RequestServiceQuotaIncrease') AND element_at(serviceEventDetails, 'serviceName') != '' AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) ORDER BY eventTime ASC</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="17" data-presto="false" data-spark="true" class="improved">
+            <td>17</td>
+            <td>Investigate manually created resources</td>
+            <td class="error">Failed</td>
+            <td class="success">Success</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message"></td>
+            <td class="actions">
+                <button onclick="toggleQuery(17)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-17" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT userIdentity.arn AS user, userIdentity, eventTime, eventSource, eventName, awsRegion, requestParameters, resources, requestID, eventID FROM ctl_sample WHERE (eventName LIKE '%Create%') AND resources IS NOT NULL AND userIdentity.sessioncontext.sessionissuer.username NOT LIKE 'AWSServiceRole%' AND userIdentity.sessioncontext.sessionissuer.username IS NOT NULL AND sourceIpAddress != 'cloudformation.amazonaws.com' AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) ORDER BY eventTime DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT userIdentity.arn AS user, userIdentity, eventTime, eventSource, eventName, awsRegion, requestParameters, resources, requestID, eventID FROM ctl_sample WHERE (eventName LIKE '%Create%') AND resources IS NOT NULL AND userIdentity.sessioncontext.sessionissuer.username NOT LIKE 'AWSServiceRole%' AND userIdentity.sessioncontext.sessionissuer.username IS NOT NULL AND sourceIpAddress != 'cloudformation.amazonaws.com' AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) ORDER BY eventTime DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT userIdentity.arn AS user, userIdentity, eventTime, eventSource, eventName, awsRegion, requestParameters, resources, requestID, eventID FROM ctl_sample WHERE (eventName LIKE '%Create%') AND resources IS NOT NULL AND userIdentity.sessioncontext.sessionissuer.username NOT LIKE 'AWSServiceRole%' AND userIdentity.sessioncontext.sessionissuer.username IS NOT NULL AND sourceIpAddress != 'cloudformation.amazonaws.com' AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'week'
+</span>
+<span class="diff-added">
+WEEK
+</span>
+<span class="unchanged">
+, -1, CURRENT_TIMESTAMP) ORDER BY eventTime DESC
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT userIdentity.arn AS user, userIdentity, eventTime, eventSource, eventName, awsRegion, requestParameters, resources, requestID, eventID FROM ctl_sample WHERE (eventName LIKE '%Create%') AND resources IS NOT NULL AND userIdentity.sessioncontext.sessionissuer.username NOT LIKE 'AWSServiceRole%' AND userIdentity.sessioncontext.sessionissuer.username IS NOT NULL AND sourceIpAddress != 'cloudformation.amazonaws.com' AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) ORDER BY eventTime DESC</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT userIdentity.arn AS user, userIdentity, eventTime, eventSource, eventName, awsRegion, requestParameters, resources, requestID, eventID FROM ctl_sample WHERE (eventName LIKE '%Create%') AND resources IS NOT NULL AND userIdentity.sessioncontext.sessionissuer.username NOT LIKE 'AWSServiceRole%' AND userIdentity.sessioncontext.sessionissuer.username IS NOT NULL AND sourceIpAddress != 'cloudformation.amazonaws.com' AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) ORDER BY eventTime DESC</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="18" data-presto="false" data-spark="false" class="">
+            <td>18</td>
+            <td>Monitor LakeFormation operations</td>
+            <td class="error">Failed</td>
+            <td class="error">Failed</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message">[UNRESOLVED_ROUTINE] Cannot resolve function `json_array_contains` on search path [`system`.`builtin`, `system`.`session`, `spark_catalog`.`default`]....</td>
+            <td class="actions">
+                <button onclick="toggleQuery(18)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-18" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT eventSource, eventName, userIdentity.arn AS user, element_at(requestParameters, 'databaseName') AS DatabaseName, element_at(requestParameters, 'name') AS TableName, json_array_contains(json_parse(element_at(additionalEventData, 'insufficientLakeFormationPermissions')),'<DatabaseName>:<Table Name>') AS FailedAccess, eventTime FROM ctl_sample WHERE eventSource ='glue.amazonaws.com' AND element_at(requestParameters, 'databaseName') = '<Database Name>' AND element_at(requestParameters, 'name') = '<Table Name>' AND element_at(additionalEventData, 'lakeFormationPrincipal') != '<ARN of Data Lake Admin Role>' AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP)</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT eventSource, eventName, userIdentity.arn AS user, element_at(requestParameters, 'databaseName') AS DatabaseName, element_at(requestParameters, 'name') AS TableName, json_array_contains(json_parse(element_at(additionalEventData, 'insufficientLakeFormationPermissions')),'<DatabaseName>:<Table Name>') AS FailedAccess, eventTime FROM ctl_sample WHERE eventSource ='glue.amazonaws.com' AND element_at(requestParameters, 'databaseName') = '<Database Name>' AND element_at(requestParameters, 'name') = '<Table Name>' AND element_at(additionalEventData, 'lakeFormationPrincipal') != '<ARN of Data Lake Admin Role>' AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP)</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT eventSource, eventName, userIdentity.arn AS user, element_at(requestParameters, 'databaseName') AS DatabaseName, element_at(requestParameters, 'name') AS TableName, json_array_contains(json_parse(element_at(additionalEventData, 'insufficientLakeFormationPermissions')),'<DatabaseName>:<Table Name>') AS FailedAccess, eventTime FROM ctl_sample WHERE eventSource ='glue.amazonaws.com' AND element_at(requestParameters, 'databaseName') = '<Database Name>' AND element_at(requestParameters, 'name') = '<Table Name>' AND element_at(additionalEventData, 'lakeFormationPrincipal') != '<ARN of Data Lake Admin Role>' AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'week'
+</span>
+<span class="diff-added">
+WEEK
+</span>
+<span class="unchanged">
+, -1, CURRENT_TIMESTAMP)
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT eventSource, eventName, userIdentity.arn AS user, element_at(requestParameters, 'databaseName') AS DatabaseName, element_at(requestParameters, 'name') AS TableName, json_array_contains(json_parse(element_at(additionalEventData, 'insufficientLakeFormationPermissions')),'<DatabaseName>:<Table Name>') AS FailedAccess, eventTime FROM ctl_sample WHERE eventSource ='glue.amazonaws.com' AND element_at(requestParameters, 'databaseName') = '<Database Name>' AND element_at(requestParameters, 'name') = '<Table Name>' AND element_at(additionalEventData, 'lakeFormationPrincipal') != '<ARN of Data Lake Admin Role>' AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP)</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT eventSource, eventName, userIdentity.arn AS user, element_at(requestParameters, 'databaseName') AS DatabaseName, element_at(requestParameters, 'name') AS TableName, json_array_contains(json_parse(element_at(additionalEventData, 'insufficientLakeFormationPermissions')),'<DatabaseName>:<Table Name>') AS FailedAccess, eventTime FROM ctl_sample WHERE eventSource ='glue.amazonaws.com' AND element_at(requestParameters, 'databaseName') = '<Database Name>' AND element_at(requestParameters, 'name') = '<Table Name>' AND element_at(additionalEventData, 'lakeFormationPrincipal') != '<ARN of Data Lake Admin Role>' AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP)</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="19" data-presto="false" data-spark="true" class="improved">
+            <td>19</td>
+            <td>List Glue databases and tables</td>
+            <td class="error">Failed</td>
+            <td class="success">Success</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message"></td>
+            <td class="actions">
+                <button onclick="toggleQuery(19)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-19" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT element_at(requestParameters, 'databaseName') AS DatabaseName, element_at(requestParameters, 'name') AS TableName, eventName, userIdentity.arn AS user FROM ctl_sample WHERE eventSource ='glue.amazonaws.com' AND element_at(requestParameters, 'databaseName') IS NOT NULL AND element_at(requestParameters, 'name') IS NOT NULL AND element_at(additionalEventData, 'lakeFormationPrincipal') != '<ARN of Data Lake Admin>' AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP)</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT element_at(requestParameters, 'databaseName') AS DatabaseName, element_at(requestParameters, 'name') AS TableName, eventName, userIdentity.arn AS user FROM ctl_sample WHERE eventSource ='glue.amazonaws.com' AND element_at(requestParameters, 'databaseName') IS NOT NULL AND element_at(requestParameters, 'name') IS NOT NULL AND element_at(additionalEventData, 'lakeFormationPrincipal') != '<ARN of Data Lake Admin>' AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP)</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT element_at(requestParameters, 'databaseName') AS DatabaseName, element_at(requestParameters, 'name') AS TableName, eventName, userIdentity.arn AS user FROM ctl_sample WHERE eventSource ='glue.amazonaws.com' AND element_at(requestParameters, 'databaseName') IS NOT NULL AND element_at(requestParameters, 'name') IS NOT NULL AND element_at(additionalEventData, 'lakeFormationPrincipal') != '<ARN of Data Lake Admin>' AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'week'
+</span>
+<span class="diff-added">
+WEEK
+</span>
+<span class="unchanged">
+, -1, CURRENT_TIMESTAMP)
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT element_at(requestParameters, 'databaseName') AS DatabaseName, element_at(requestParameters, 'name') AS TableName, eventName, userIdentity.arn AS user FROM ctl_sample WHERE eventSource ='glue.amazonaws.com' AND element_at(requestParameters, 'databaseName') IS NOT NULL AND element_at(requestParameters, 'name') IS NOT NULL AND element_at(additionalEventData, 'lakeFormationPrincipal') != '<ARN of Data Lake Admin>' AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP)</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT element_at(requestParameters, 'databaseName') AS DatabaseName, element_at(requestParameters, 'name') AS TableName, eventName, userIdentity.arn AS user FROM ctl_sample WHERE eventSource ='glue.amazonaws.com' AND element_at(requestParameters, 'databaseName') IS NOT NULL AND element_at(requestParameters, 'name') IS NOT NULL AND element_at(additionalEventData, 'lakeFormationPrincipal') != '<ARN of Data Lake Admin>' AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP)</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="20" data-presto="false" data-spark="false" class="">
+            <td>20</td>
+            <td>Query over nested objects</td>
+            <td class="error">Failed</td>
+            <td class="error">Failed</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message">[UNRESOLVED_COLUMN.WITHOUT_SUGGESTION] A column or function parameter with name `t`.`resources` cannot be resolved. ; line 1 pos 139;
+'Project ['accou...</td>
+            <td class="actions">
+                <button onclick="toggleQuery(20)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-20" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT accountid, eventName, eventTime, replace(resourceArn, 'arn:aws:s3:::') as s3Resource, useragent FROM ctl_sample t CROSS JOIN UNNEST(t.resources) unnested (accountid, resourceType, resourceArn, resourceArnPrefix) WHERE eventSource='s3.amazonaws.com' AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP)</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT accountid, eventName, eventTime, replace(resourceArn, 'arn:aws:s3:::') as s3Resource, useragent FROM ctl_sample t CROSS JOIN UNNEST(t.resources) unnested (accountid, resourceType, resourceArn, resourceArnPrefix) WHERE eventSource='s3.amazonaws.com' AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP)</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT accountid, eventName, eventTime, replace(resourceArn, 'arn:aws:s3:::') as s3Resource, useragent FROM ctl_sample t CROSS JOIN UNNEST(t.resources) unnested (accountid, resourceType, resourceArn, resourceArnPrefix) WHERE eventSource='s3.amazonaws.com' AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'week'
+</span>
+<span class="diff-added">
+WEEK
+</span>
+<span class="unchanged">
+, -1, CURRENT_TIMESTAMP)
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT accountid, eventName, eventTime, replace(resourceArn, 'arn:aws:s3:::') as s3Resource, useragent FROM ctl_sample t CROSS JOIN UNNEST(t.resources) unnested (accountid, resourceType, resourceArn, resourceArnPrefix) WHERE eventSource='s3.amazonaws.com' AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP)</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT accountid, eventName, eventTime, replace(resourceArn, 'arn:aws:s3:::') as s3Resource, useragent FROM ctl_sample t CROSS JOIN UNNEST(t.resources) unnested (accountid, resourceType, resourceArn, resourceArnPrefix) WHERE eventSource='s3.amazonaws.com' AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP)</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="21" data-presto="false" data-spark="true" class="improved">
+            <td>21</td>
+            <td>Identify activities for a specific access key</td>
+            <td class="error">Failed</td>
+            <td class="success">Success</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message"></td>
+            <td class="actions">
+                <button onclick="toggleQuery(21)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-21" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT eventTime, eventName, userIdentity.principalId FROM ctl_sample WHERE userIdentity.accessKeyId LIKE '<accessKeyId>' AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) ORDER BY eventTime DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT eventTime, eventName, userIdentity.principalId FROM ctl_sample WHERE userIdentity.accessKeyId LIKE '<accessKeyId>' AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) ORDER BY eventTime DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT eventTime, eventName, userIdentity.principalId FROM ctl_sample WHERE userIdentity.accessKeyId LIKE '<accessKeyId>' AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'week'
+</span>
+<span class="diff-added">
+WEEK
+</span>
+<span class="unchanged">
+, -1, CURRENT_TIMESTAMP) ORDER BY eventTime DESC
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT eventTime, eventName, userIdentity.principalId FROM ctl_sample WHERE userIdentity.accessKeyId LIKE '<accessKeyId>' AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) ORDER BY eventTime DESC</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT eventTime, eventName, userIdentity.principalId FROM ctl_sample WHERE userIdentity.accessKeyId LIKE '<accessKeyId>' AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) ORDER BY eventTime DESC</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="22" data-presto="false" data-spark="true" class="improved">
+            <td>22</td>
+            <td>Identify failed console sign-in attempts</td>
+            <td class="error">Failed</td>
+            <td class="success">Success</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message"></td>
+            <td class="actions">
+                <button onclick="toggleQuery(22)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-22" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT sourceipaddress, useridentity.arn, errorMessage, additionaleventdata FROM ctl_sample WHERE eventname = 'ConsoleLogin' AND errorMessage IS NOT NULL AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) ORDER BY eventTime DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT sourceipaddress, useridentity.arn, errorMessage, additionaleventdata FROM ctl_sample WHERE eventname = 'ConsoleLogin' AND errorMessage IS NOT NULL AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) ORDER BY eventTime DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT sourceipaddress, useridentity.arn, errorMessage, additionaleventdata FROM ctl_sample WHERE eventname = 'ConsoleLogin' AND errorMessage IS NOT NULL AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'week'
+</span>
+<span class="diff-added">
+WEEK
+</span>
+<span class="unchanged">
+, -1, CURRENT_TIMESTAMP) ORDER BY eventTime DESC
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT sourceipaddress, useridentity.arn, errorMessage, additionaleventdata FROM ctl_sample WHERE eventname = 'ConsoleLogin' AND errorMessage IS NOT NULL AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) ORDER BY eventTime DESC</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT sourceipaddress, useridentity.arn, errorMessage, additionaleventdata FROM ctl_sample WHERE eventname = 'ConsoleLogin' AND errorMessage IS NOT NULL AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) ORDER BY eventTime DESC</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="23" data-presto="false" data-spark="true" class="improved">
+            <td>23</td>
+            <td>Identify missing IAM permissions</td>
+            <td class="error">Failed</td>
+            <td class="success">Success</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message"></td>
+            <td class="actions">
+                <button onclick="toggleQuery(23)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-23" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT count (*) as TotalEvents, eventsource, eventname, useridentity.arn, errorCode, errorMessage FROM ctl_sample WHERE (errorcode like '%Denied%' or errorcode like '%Unauthorized%') AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) GROUP BY eventsource, eventname, errorCode, errorMessage, useridentity.arn ORDER BY eventsource, eventname</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT count (*) as TotalEvents, eventsource, eventname, useridentity.arn, errorCode, errorMessage FROM ctl_sample WHERE (errorcode like '%Denied%' or errorcode like '%Unauthorized%') AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) GROUP BY eventsource, eventname, errorCode, errorMessage, useridentity.arn ORDER BY eventsource, eventname</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT count (*) as TotalEvents, eventsource, eventname, useridentity.arn, errorCode, errorMessage FROM ctl_sample WHERE (errorcode like '%Denied%' or errorcode like '%Unauthorized%') AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'week'
+</span>
+<span class="diff-added">
+WEEK
+</span>
+<span class="unchanged">
+, -1, CURRENT_TIMESTAMP) GROUP BY eventsource, eventname, errorCode, errorMessage, useridentity.arn ORDER BY eventsource, eventname
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT count (*) as TotalEvents, eventsource, eventname, useridentity.arn, errorCode, errorMessage FROM ctl_sample WHERE (errorcode like '%Denied%' or errorcode like '%Unauthorized%') AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) GROUP BY eventsource, eventname, errorCode, errorMessage, useridentity.arn ORDER BY eventsource, eventname</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT count (*) as TotalEvents, eventsource, eventname, useridentity.arn, errorCode, errorMessage FROM ctl_sample WHERE (errorcode like '%Denied%' or errorcode like '%Unauthorized%') AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) GROUP BY eventsource, eventname, errorCode, errorMessage, useridentity.arn ORDER BY eventsource, eventname</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="24" data-presto="false" data-spark="true" class="improved">
+            <td>24</td>
+            <td>Identify CloudTrail monthly cost increases</td>
+            <td class="error">Failed</td>
+            <td class="success">Success</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message"></td>
+            <td class="actions">
+                <button onclick="toggleQuery(24)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-24" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT eventName, count(eventName) AS apiCallCount, eventSource FROM ctl_sample WHERE eventTime > DATE_ADD('month', -1, CURRENT_TIMESTAMP) GROUP BY eventName, eventSource ORDER BY apiCallCount DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT eventName, count(eventName) AS apiCallCount, eventSource FROM ctl_sample WHERE eventTime > DATE_ADD(MONTH, -1, CURRENT_TIMESTAMP) GROUP BY eventName, eventSource ORDER BY apiCallCount DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT eventName, count(eventName) AS apiCallCount, eventSource FROM ctl_sample WHERE eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'month'
+</span>
+<span class="diff-added">
+MONTH
+</span>
+<span class="unchanged">
+, -1, CURRENT_TIMESTAMP) GROUP BY eventName, eventSource ORDER BY apiCallCount DESC
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT eventName, count(eventName) AS apiCallCount, eventSource FROM ctl_sample WHERE eventTime > DATE_ADD('month', -1, CURRENT_TIMESTAMP) GROUP BY eventName, eventSource ORDER BY apiCallCount DESC</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT eventName, count(eventName) AS apiCallCount, eventSource FROM ctl_sample WHERE eventTime > DATE_ADD(MONTH, -1, CURRENT_TIMESTAMP) GROUP BY eventName, eventSource ORDER BY apiCallCount DESC</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="25" data-presto="false" data-spark="true" class="improved">
+            <td>25</td>
+            <td>List all PutObject requests</td>
+            <td class="error">Failed</td>
+            <td class="success">Success</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message"></td>
+            <td class="actions">
+                <button onclick="toggleQuery(25)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-25" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT element_at(requestParameters, 'bucketName') AS s3BucketName, cast(element_at(additionalEventData, 'bytesTransferredIn') AS int) AS bytesTransferredIn FROM ctl_sample WHERE eventName='PutObject' AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) ORDER BY bytesTransferredIn DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT element_at(requestParameters, 'bucketName') AS s3BucketName, cast(element_at(additionalEventData, 'bytesTransferredIn') AS int) AS bytesTransferredIn FROM ctl_sample WHERE eventName='PutObject' AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) ORDER BY bytesTransferredIn DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT element_at(requestParameters, 'bucketName') AS s3BucketName, cast(element_at(additionalEventData, 'bytesTransferredIn') AS int) AS bytesTransferredIn FROM ctl_sample WHERE eventName='PutObject' AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'week'
+</span>
+<span class="diff-added">
+WEEK
+</span>
+<span class="unchanged">
+, -1, CURRENT_TIMESTAMP) ORDER BY bytesTransferredIn DESC
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT element_at(requestParameters, 'bucketName') AS s3BucketName, cast(element_at(additionalEventData, 'bytesTransferredIn') AS int) AS bytesTransferredIn FROM ctl_sample WHERE eventName='PutObject' AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) ORDER BY bytesTransferredIn DESC</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT element_at(requestParameters, 'bucketName') AS s3BucketName, cast(element_at(additionalEventData, 'bytesTransferredIn') AS int) AS bytesTransferredIn FROM ctl_sample WHERE eventName='PutObject' AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) ORDER BY bytesTransferredIn DESC</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="26" data-presto="false" data-spark="false" class="">
+            <td>26</td>
+            <td>Union results across multiple event data stores</td>
+            <td class="error">Failed</td>
+            <td class="error">Failed</td>
+            <td class="error-message">
+[PARSE_SYNTAX_ERROR] Syntax error at or near '$'.(line 1, pos 188)
+
+== SQL ==
+SELECT eventsource, eventname, eventtime FROM ctl_sample WHERE eventTim...</td>
+            <td class="error-message">
+[PARSE_SYNTAX_ERROR] Syntax error at or near '$'.(line 1, pos 188)
+
+== SQL ==
+SELECT eventsource, eventname, eventtime FROM ctl_sample WHERE eventTim...</td>
+            <td class="actions">
+                <button onclick="toggleQuery(26)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-26" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT eventsource, eventname, eventtime FROM ctl_sample WHERE eventTime > date_add('day', -7, now()) UNION ALL SELECT eventData.eventsource, eventData.eventname, eventData.eventtime FROM $INTEGRATION_EDS_ID WHERE eventData.eventtime > date_add('day', -7, now())</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT eventsource, eventname, eventtime FROM ctl_sample WHERE eventTime > date_add('day', -7, now()) UNION ALL SELECT eventData.eventsource, eventData.eventname, eventData.eventtime FROM $INTEGRATION_EDS_ID WHERE eventData.eventtime > date_add('day', -7, now())</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT eventsource, eventname, eventtime FROM ctl_sample WHERE eventTime > date_add('day', -7, now()) UNION ALL SELECT eventData.eventsource, eventData.eventname, eventData.eventtime FROM $INTEGRATION_EDS_ID WHERE eventData.eventtime > date_add('day', -7, now())
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT eventsource, eventname, eventtime FROM ctl_sample WHERE eventTime > date_add('day', -7, now()) UNION ALL SELECT eventData.eventsource, eventData.eventname, eventData.eventtime FROM $INTEGRATION_EDS_ID WHERE eventData.eventtime > date_add('day', -7, now())</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT eventsource, eventname, eventtime FROM ctl_sample WHERE eventTime > date_add('day', -7, now()) UNION ALL SELECT eventData.eventsource, eventData.eventname, eventData.eventtime FROM $INTEGRATION_EDS_ID WHERE eventData.eventtime > date_add('day', -7, now())</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="27" data-presto="false" data-spark="false" class="">
+            <td>27</td>
+            <td>List all abandoned S3 buckets</td>
+            <td class="error">Failed</td>
+            <td class="error">Failed</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `date_add` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `date_add` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="actions">
+                <button onclick="toggleQuery(27)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-27" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT element_at(requestParameters, 'bucketName') AS bucketName, max(eventtime) AS lastActivityTime FROM ctl_sample WHERE eventSource='s3.amazonaws.com' AND element_at(requestParameters, 'bucketName') IS NOT NULL GROUP BY 1 HAVING max(eventTime) < date_add('day', -365, now())</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT element_at(requestParameters, 'bucketName') AS bucketName, max(eventtime) AS lastActivityTime FROM ctl_sample WHERE eventSource='s3.amazonaws.com' AND element_at(requestParameters, 'bucketName') IS NOT NULL GROUP BY 1 HAVING max(eventTime) < date_add('day', -365, now())</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT element_at(requestParameters, 'bucketName') AS bucketName, max(eventtime) AS lastActivityTime FROM ctl_sample WHERE eventSource='s3.amazonaws.com' AND element_at(requestParameters, 'bucketName') IS NOT NULL GROUP BY 1 HAVING max(eventTime) < date_add('day', -365, now())
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT element_at(requestParameters, 'bucketName') AS bucketName, max(eventtime) AS lastActivityTime FROM ctl_sample WHERE eventSource='s3.amazonaws.com' AND element_at(requestParameters, 'bucketName') IS NOT NULL GROUP BY 1 HAVING max(eventTime) < date_add('day', -365, now())</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT element_at(requestParameters, 'bucketName') AS bucketName, max(eventtime) AS lastActivityTime FROM ctl_sample WHERE eventSource='s3.amazonaws.com' AND element_at(requestParameters, 'bucketName') IS NOT NULL GROUP BY 1 HAVING max(eventTime) < date_add('day', -365, now())</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="28" data-presto="false" data-spark="false" class="">
+            <td>28</td>
+            <td>List EC2 events</td>
+            <td class="error">Failed</td>
+            <td class="error">Failed</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `date_add` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `date_add` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="actions">
+                <button onclick="toggleQuery(28)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-28" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT eventName, eventTime, element_at(requestParameters, 'name') AS TableName, userIdentity.principalId FROM ctl_sample WHERE eventSource='ec2.amazonaws.com' AND eventTime > date_add('day', -3, now())</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT eventName, eventTime, element_at(requestParameters, 'name') AS TableName, userIdentity.principalId FROM ctl_sample WHERE eventSource='ec2.amazonaws.com' AND eventTime > date_add('day', -3, now())</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT eventName, eventTime, element_at(requestParameters, 'name') AS TableName, userIdentity.principalId FROM ctl_sample WHERE eventSource='ec2.amazonaws.com' AND eventTime > date_add('day', -3, now())
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT eventName, eventTime, element_at(requestParameters, 'name') AS TableName, userIdentity.principalId FROM ctl_sample WHERE eventSource='ec2.amazonaws.com' AND eventTime > date_add('day', -3, now())</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT eventName, eventTime, element_at(requestParameters, 'name') AS TableName, userIdentity.principalId FROM ctl_sample WHERE eventSource='ec2.amazonaws.com' AND eventTime > date_add('day', -3, now())</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="29" data-presto="false" data-spark="true" class="improved">
+            <td>29</td>
+            <td>List Athena StartQuery requestParameters</td>
+            <td class="error">Failed</td>
+            <td class="success">Success</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message"></td>
+            <td class="actions">
+                <button onclick="toggleQuery(29)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-29" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT eventTime, json_extract(element_at(requestParameters, 'queryExecutionContext'), '$.catalog') as catalog FROM ctl_sample WHERE eventSource='athena.amazonaws.com' AND eventName='StartQueryExecution' AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP)</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT eventTime, get_json_object(element_at(requestParameters, 'queryExecutionContext'), '$.catalog') as catalog FROM ctl_sample WHERE eventSource='athena.amazonaws.com' AND eventName='StartQueryExecution' AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP)</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT eventTime, 
+</span>
+<span class="diff-removed">
+json_extract
+</span>
+<span class="diff-added">
+get_json_object
+</span>
+<span class="unchanged">
+(element_at(requestParameters, 'queryExecutionContext'), '$.catalog') as catalog FROM ctl_sample WHERE eventSource='athena.amazonaws.com' AND eventName='StartQueryExecution' AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'week'
+</span>
+<span class="diff-added">
+WEEK
+</span>
+<span class="unchanged">
+, -1, CURRENT_TIMESTAMP)
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT eventTime, json_extract(element_at(requestParameters, 'queryExecutionContext'), '$.catalog') as catalog FROM ctl_sample WHERE eventSource='athena.amazonaws.com' AND eventName='StartQueryExecution' AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP)</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT eventTime, get_json_object(element_at(requestParameters, 'queryExecutionContext'), '$.catalog') as catalog FROM ctl_sample WHERE eventSource='athena.amazonaws.com' AND eventName='StartQueryExecution' AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP)</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="30" data-presto="false" data-spark="true" class="improved">
+            <td>30</td>
+            <td>Matching prefix</td>
+            <td class="error">Failed</td>
+            <td class="success">Success</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message"></td>
+            <td class="actions">
+                <button onclick="toggleQuery(30)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-30" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT element_at(requestParameters, 'bucketName') as s3BucketName, eventName, useridentity.arn FROM ctl_sample WHERE regexp_like(element_at(requestParameters, 'key'), 'AWSLogs') AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'bucketName'), eventName, useridentity.arn</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT element_at(requestParameters, 'bucketName') as s3BucketName, eventName, useridentity.arn FROM ctl_sample WHERE regexp_like(element_at(requestParameters, 'key'), 'AWSLogs') AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'bucketName'), eventName, useridentity.arn</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT element_at(requestParameters, 'bucketName') as s3BucketName, eventName, useridentity.arn FROM ctl_sample WHERE regexp_like(element_at(requestParameters, 'key'), 'AWSLogs') AND eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'week'
+</span>
+<span class="diff-added">
+WEEK
+</span>
+<span class="unchanged">
+, -1, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'bucketName'), eventName, useridentity.arn
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT element_at(requestParameters, 'bucketName') as s3BucketName, eventName, useridentity.arn FROM ctl_sample WHERE regexp_like(element_at(requestParameters, 'key'), 'AWSLogs') AND eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'bucketName'), eventName, useridentity.arn</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT element_at(requestParameters, 'bucketName') as s3BucketName, eventName, useridentity.arn FROM ctl_sample WHERE regexp_like(element_at(requestParameters, 'key'), 'AWSLogs') AND eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) GROUP BY element_at(requestParameters, 'bucketName'), eventName, useridentity.arn</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+        <tr data-id="31" data-presto="false" data-spark="true" class="improved">
+            <td>31</td>
+            <td>Get usage by part of the globe</td>
+            <td class="error">Failed</td>
+            <td class="success">Success</td>
+            <td class="error-message">
+[INVALID_PARAMETER_VALUE.DATETIME_UNIT] The value of parameter(s) `unit` in `DATE_ADD` is invalid: expects one of the units without quotes YEAR, QUAR...</td>
+            <td class="error-message"></td>
+            <td class="actions">
+                <button onclick="toggleQuery(31)">Show/Hide</button>
+            </td>
+        </tr>
+        <tr id="query-31" class="hidden">
+            <td colspan="6">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div>
+                        <h4>Presto SQL:</h4>
+                        <pre>SELECT substr(awsRegion, 1, 2) AS globalCode, count(*) AS totalNumberOfEvents FROM ctl_sample WHERE eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) GROUP BY 1 ORDER BY totalNumberOfEvents DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Spark SQL:</h4>
+                        <pre>SELECT substr(awsRegion, 1, 2) AS globalCode, count(*) AS totalNumberOfEvents FROM ctl_sample WHERE eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) GROUP BY 1 ORDER BY totalNumberOfEvents DESC</pre>
+                    </div>
+                    <div>
+                        <h4>Differences:</h4>
+                        <div class="diff">
+<div class="diff-section"><h4>Highlighted Changes:</h4>
+<div class="diff-line">
+<span class="unchanged">
+SELECT substr(awsRegion, 1, 2) AS globalCode, count(*) AS totalNumberOfEvents FROM ctl_sample WHERE eventTime > DATE_ADD(
+</span>
+<span class="diff-removed">
+'week'
+</span>
+<span class="diff-added">
+WEEK
+</span>
+<span class="unchanged">
+, -1, CURRENT_TIMESTAMP) GROUP BY 1 ORDER BY totalNumberOfEvents DESC
+</span>
+</div>
+<div class="full-queries">
+<h4>Original Presto SQL:</h4>
+<pre>SELECT substr(awsRegion, 1, 2) AS globalCode, count(*) AS totalNumberOfEvents FROM ctl_sample WHERE eventTime > DATE_ADD('week', -1, CURRENT_TIMESTAMP) GROUP BY 1 ORDER BY totalNumberOfEvents DESC</pre>
+<h4>Translated Spark SQL:</h4>
+<pre>SELECT substr(awsRegion, 1, 2) AS globalCode, count(*) AS totalNumberOfEvents FROM ctl_sample WHERE eventTime > DATE_ADD(WEEK, -1, CURRENT_TIMESTAMP) GROUP BY 1 ORDER BY totalNumberOfEvents DESC</pre>
+</div>
+</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        
+    </table>
+</body>
+</html>
+    
