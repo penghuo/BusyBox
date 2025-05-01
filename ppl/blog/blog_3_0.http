@@ -1,0 +1,82 @@
+@baseUrl = http://localhost:9200
+
+###
+GET {{baseUrl}}/_cat/indices
+
+###
+PUT {{baseUrl}}/_plugins/_query/settings
+Content-Type: application/x-ndjson
+
+{"persistent" : {"plugins.calcite.enabled" : true}}
+
+###
+POST {{baseUrl}}/_bulk/
+Content-Type: application/x-ndjson
+
+{"index": {"_index": "auth_logs"}}
+{"user_id": "jdoe", "status": "success", "ip_address": "192.168.1.1", "timestamp": "2024-04-29T10:00:00Z"}
+{"index": {"_index": "auth_logs"}}
+{"user_id": "asmith", "status": "failed", "ip_address": "192.168.1.2", "timestamp": "2024-04-29T10:05:00Z"}
+{"index": {"_index": "auth_logs"}}
+{"user_id": "jdoe", "status": "success", "ip_address": "192.168.1.1", "timestamp": "2024-04-29T10:10:00Z"}
+
+
+###
+POST {{baseUrl}}/_bulk/
+Content-Type: application/x-ndjson
+
+{"index": {"_index": "app_logs"}}
+{"user_id": "jdoe", "action": "login", "session_id": "abc123", "timestamp": "2024-04-29T10:00:05Z"}
+{"index": {"_index": "app_logs"}}
+{"user_id": "asmith", "action": "login", "session_id": "def456", "timestamp": "2024-04-29T10:05:10Z"}
+{"index": {"_index": "app_logs"}}
+{"user_id": "jdoe", "action": "logout", "session_id": "abc123", "timestamp": "2024-04-29T10:10:15Z"}
+
+
+
+###
+POST {{baseUrl}}/_bulk/
+Content-Type: application/x-ndjson
+
+{"index": {"_index": "user_info"}}
+{"user_id": "jdoe", "department": "HR"}
+{"index": {"_index": "user_info"}}
+{"user_id": "asmith", "department": "IT"}
+
+
+###
+DELETE {{baseUrl}}/auth_logs
+
+###
+POST {{baseUrl}}/_plugins/_ppl
+Content-Type: application/x-ndjson
+
+{
+    "query": "source=auth_logs | lookup user_info user_id | where status='failed'"
+}
+
+###
+POST {{baseUrl}}/_plugins/_ppl
+Content-Type: application/x-ndjson
+
+{
+    "query": "source=auth_logs | join left=l right=r ON l.user_id = r.user_id AND TIME_TO_SEC(TIMEDIFF(r.timestamp, l.timestamp)) <= 60 app_logs | sort timestamp | fields timestamp, user_id, action, status"
+}
+
+###
+POST {{baseUrl}}/_plugins/_ppl
+Content-Type: application/x-ndjson
+
+{
+    "query": "source=auth_logs | where exists [source=app_logs | where status='failed' AND user_id=auth_logs.user_id AND action='login']"
+}
+
+###
+POST {{baseUrl}}/_plugins/_ppl
+Content-Type: application/x-ndjson
+
+{
+    "query": "source=auth_logs | join left=l right=r ON l.user_id = r.user_id app_logs | eval diff=TIME_TO_SEC(TIMEDIFF(r.timestamp, l.timestamp)) | fields timestamp, user_id, action, diff "
+}
+
+
