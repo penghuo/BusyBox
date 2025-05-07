@@ -367,3 +367,59 @@ Content-Type: application/x-ndjson
 {
   "query" : "SELECT message.timestamp_received FROM sample-index"
 }
+
+###
+DELETE {{baseUrl}}/ltjin-test1
+
+###
+PUT {{baseUrl}}/ltjin-test1
+Content-Type: application/x-ndjson
+
+{
+  "mappings": {
+    "properties": {
+      "name": {
+        "type": "keyword"
+      },
+      "test.occupation": {
+        "type": "text"
+      },
+      "country": {
+        "type": "text"
+      },
+      "salary": {
+        "type": "integer"
+      },
+      "year": {
+        "type": "integer"
+      },
+      "month": {
+        "type": "integer"
+      }
+    }
+  }
+}
+
+###
+POST {{baseUrl}}/_bulk
+Content-Type: application/x-ndjson
+
+{"index":{"_index" : "ltjin-test1","_id":"1"}}
+{"name":"Jake","test.occupation":"Engineer","country":"England","salary":100000,"year":2023,"month":4}
+
+###
+GET  {{baseUrl}}/ltjin-test1
+
+
+###
+GET  {{baseUrl}}/ltjin-test1/_search
+
+###
+GET {{baseUrl}}/ltjin-test1/_search
+Content-Type: application/x-ndjson
+
+{
+  "fields": [
+    "test.occupation"
+  ]
+}

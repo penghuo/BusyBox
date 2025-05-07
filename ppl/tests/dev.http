@@ -1,0 +1,135 @@
+@baseUrl = http://localhost:9200
+
+###
+GET {{baseUrl}}/_cat/indices
+
+###
+PUT {{baseUrl}}/test00001
+
+###
+DELETE  {{baseUrl}}/test00001
+
+###
+POST {{baseUrl}}/test00001/_doc
+Content-Type: application/x-ndjson
+
+{
+  "mydate" : "2025-05-01T05:49:00-08:00"
+}
+
+###
+POST {{baseUrl}}/test00001/_doc
+Content-Type: application/x-ndjson
+
+{
+  "mydate" : "2025-05-01T06:49:00-08:00"
+}
+
+###
+POST {{baseUrl}}/test00001/_doc
+Content-Type: application/x-ndjson
+
+{
+  "mydate" : "2025-05-01T07:49:00-08:00"
+}
+
+###
+GET {{baseUrl}}/test00001/_search
+Content-Type: application/x-ndjson
+
+{
+  "_source": ["mydate"], 
+  "fields": ["*"]
+}
+
+###
+POST {{baseUrl}}/_plugins/_ppl
+Content-Type: application/x-ndjson
+
+{
+    "query": "source=test00001 | eval diff=TIMESTAMPDIFF(HOUR, mydate, '2022-05-15T15:49:00.000Z')"
+}
+
+###
+POST {{baseUrl}}/_plugins/_ppl
+Content-Type: application/x-ndjson
+
+{
+    "query": "source=test00001 | eval convert=convert_tz(mydate, '+00:00', '-07:00')"
+}
+
+###
+POST {{baseUrl}}/_plugins/_ppl
+Content-Type: application/x-ndjson
+
+{
+    "query": "source=test00001 | eval convert=convert_tz('2022-05-15 15:49:00', '+00:00', '-07:00')"
+}
+
+###
+POST {{baseUrl}}/_plugins/_ppl
+Content-Type: application/x-ndjson
+
+{
+    "query": "source=test00001 | eval t=TIMESTAMP('2022-05-15 15:49:00.000')"
+}
+
+
+###
+POST {{baseUrl}}/_plugins/_ppl
+Content-Type: application/x-ndjson
+
+{
+    "query": "source=test00001 | eval t=TIMESTAMP('2025-05-15T10:30:00.000Z')"
+}
+
+###
+POST {{baseUrl}}/_plugins/_ppl
+Content-Type: application/x-ndjson
+
+{
+    "query": "source=test00001 | eval t=timestamp('2025-05-02 11:30:00'), current=current_timestamp()"
+}
+
+###
+POST {{baseUrl}}/_plugins/_ppl
+Content-Type: application/x-ndjson
+
+{
+    "query": "source=test00001"
+}
+
+
+###
+POST {{baseUrl}}/_plugins/_ppl/_explain
+Content-Type: application/x-ndjson
+
+{
+    "query": "source=test00001 | where mydate > timestamp('2025-05-01 15:40:00')"
+}
+
+
+###
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+    "query": "source=test00001 | where mydate > timestamp('2025-05-01 13:50:00') | eval cur=current_timestamp()"
+}
+
+
+###
+POST {{baseUrl}}/_plugins/_ppl
+Content-Type: application/x-ndjson
+
+{
+    "query": "source=test00001 | eval mydatehour=hour(mydate), tsHour=hour(timestamp('2025-05-01 13:50:00')), currentHour=hour(current_timestamp())"
+}
+
+###
+POST {{baseUrl}}/_plugins/_ppl/_explain
+Content-Type: application/x-ndjson
+
+{
+    "query": "source=test00001 | where mydate > '2025-05-01 15:40:00'"
+}
