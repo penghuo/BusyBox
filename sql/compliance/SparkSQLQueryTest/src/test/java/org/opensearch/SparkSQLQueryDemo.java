@@ -18,9 +18,9 @@ public class SparkSQLQueryDemo {
         "jdbc:calcite:model=" + modelPath + ";conformance=BABEL;fun=standard,spark;lenientOperatorLookup=true;parserFactory=org.apache.calcite.server.ServerDdlExecutor#PARSER_FACTORY";
 
     List<String> queries = Arrays.asList(
-        "create view t as select * from (values (0), (1), (2)) as t(id)",
-        "create view t2 as select * from (values (0), (1)) as t(id)",
-        "WITH t(x, x) AS (SELECT 1, 2) SELECT * FROM t"
+        "create view data as select * from (values\n" + "  ('one', array[11, 12, 13], array[array[111, 112, 113], array[121, 122, 123]]),\n" + "  ('two', array[21, 22, 23], array[array[211, 212, 213], array[221, 222, 223]]))\n" + "  as data(a, b, c)",
+        "select b from data",
+        "select a, b[0], b[0] + b[1] from data"
     );
 
     try (
