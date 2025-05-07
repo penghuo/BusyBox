@@ -14,6 +14,7 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter'
     implementation 'org.apache.calcite:calcite-core:1.39.0'
     implementation 'org.apache.calcite:calcite-example-csv:1.21.0'
+    implementation 'org.apache.calcite:calcite-server:1.39.0'
 }
 
 test {
