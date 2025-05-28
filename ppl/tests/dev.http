@@ -4,6 +4,27 @@
 GET {{baseUrl}}/_cat/indices
 
 ###
+PUT {{baseUrl}}/_plugins/_query/settings
+Content-Type: application/x-ndjson
+
+{
+  "transient" : {
+    "plugins.calcite.enabled" : true
+  }
+}
+
+###
+PUT {{baseUrl}}/_plugins/_query/settings
+Content-Type: application/x-ndjson
+
+{
+  "transient" : {
+    "plugins.calcite.enabled" : false
+  }
+}
+
+
+###
 PUT {{baseUrl}}/test00001
 
 ###
@@ -47,76 +68,8 @@ POST {{baseUrl}}/_plugins/_ppl
 Content-Type: application/x-ndjson
 
 {
-    "query": "source=test00001 | eval diff=TIMESTAMPDIFF(HOUR, mydate, '2022-05-15T15:49:00.000Z')"
+    "query": "source=test00001 | eval hour=hour(mydate), hcurr=hour(now()), curr=now() | fields mydate, hour, curr, hcurr"
 }
-
-###
-POST {{baseUrl}}/_plugins/_ppl
-Content-Type: application/x-ndjson
-
-{
-    "query": "source=test00001 | eval convert=convert_tz(mydate, '+00:00', '-07:00')"
-}
-
-###
-POST {{baseUrl}}/_plugins/_ppl
-Content-Type: application/x-ndjson
-
-{
-    "query": "source=test00001 | eval convert=convert_tz('2022-05-15 15:49:00', '+00:00', '-07:00')"
-}
-
-###
-POST {{baseUrl}}/_plugins/_ppl
-Content-Type: application/x-ndjson
-
-{
-    "query": "source=test00001 | eval t=TIMESTAMP('2022-05-15 15:49:00.000')"
-}
-
-
-###
-POST {{baseUrl}}/_plugins/_ppl
-Content-Type: application/x-ndjson
-
-{
-    "query": "source=test00001 | eval t=TIMESTAMP('2025-05-15T10:30:00.000Z')"
-}
-
-###
-POST {{baseUrl}}/_plugins/_ppl
-Content-Type: application/x-ndjson
-
-{
-    "query": "source=test00001 | eval t=timestamp('2025-05-02 11:30:00'), current=current_timestamp()"
-}
-
-###
-POST {{baseUrl}}/_plugins/_ppl
-Content-Type: application/x-ndjson
-
-{
-    "query": "source=test00001"
-}
-
-
-###
-POST {{baseUrl}}/_plugins/_ppl/_explain
-Content-Type: application/x-ndjson
-
-{
-    "query": "source=test00001 | where mydate > timestamp('2025-05-01 15:40:00')"
-}
-
-
-###
-POST {{baseUrl}}/_plugins/_ppl/
-Content-Type: application/x-ndjson
-
-{
-    "query": "source=test00001 | where mydate > timestamp('2025-05-01 13:50:00') | eval cur=current_timestamp()"
-}
-
 
 ###
 POST {{baseUrl}}/_plugins/_ppl
@@ -127,9 +80,271 @@ Content-Type: application/x-ndjson
 }
 
 ###
+DELETE  {{baseUrl}}/test002/
+
+
+###
+POST {{baseUrl}}/test002/_doc
+Content-Type: application/x-ndjson
+
+{
+  "@timestamp": "2025-05-05T09:33:00Z",
+  "message": "text message 3",
+  "log": {
+    "file": "/var/log/msg"
+  }
+}
+
+###
+POST {{baseUrl}}/test001/_doc
+Content-Type: application/x-ndjson
+
+{
+  "log": {
+    "json": {
+      "uri": "/e2e/h/zap"
+    }
+  }
+}
+
+
+###
+POST {{baseUrl}}/test003/_doc
+Content-Type: application/x-ndjson
+
+{
+  "message": 3
+}
+
+###
+POST {{baseUrl}}/log/_doc
+Content-Type: application/x-ndjson
+
+{
+  "v": 100
+}
+
+###
 POST {{baseUrl}}/_plugins/_ppl/_explain
 Content-Type: application/x-ndjson
 
 {
-    "query": "source=test00001 | where mydate > '2025-05-01 15:40:00'"
+    "query": "source = test001 | where log.json.uri = '/e2e/h/zap'"
+}
+
+###
+POST {{baseUrl}}/_plugins/_ppl
+Content-Type: application/x-ndjson
+
+{
+    "query": "source = test001"
+}
+
+###
+POST {{baseUrl}}/_plugins/_ppl/_explain
+Content-Type: application/x-ndjson
+
+{
+    "query": "source = test0004 | where `log.json.uri` = 'ext message 3'"
+}
+
+###
+DELETE {{baseUrl}}/test0001
+
+###
+POST {{baseUrl}}/test0001/_doc
+Content-Type: application/x-ndjson
+
+{
+  "log": {
+    "url": {
+      "message": "/e2e/h/zap"
+    }
+  }
+}
+
+###
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+    "query": "source = test0001 | where log.url.message = '/e2e/h/zap'"
+}
+
+###
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+    "query": "source = test0001 | where `log.message` = 'value'"
+}
+
+
+
+###
+POST {{baseUrl}}/_plugins/_ppl
+Content-Type: application/x-ndjson
+
+{
+    "query": "source = test001 | where log.json.uri = '/e2e/h/zap'"
+}
+
+###
+POST {{baseUrl}}/_field_caps?fields=*&index=test*
+Content-Type: application/x-ndjson
+
+{
+
+}
+
+###
+DELETE  {{baseUrl}}/test0001/
+
+###
+POST {{baseUrl}}/test0001/_doc
+Content-Type: application/x-ndjson
+
+{
+  "message": "/e2e/h/zap"
+}
+
+###
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+    "query": "source = test0001 | where message = '/e2e/h/zap'"
+}
+
+
+###
+DELETE {{baseUrl}}/testindex
+
+###
+GET {{baseUrl}}/testindex
+
+###
+PUT {{baseUrl}}/testindex
+Content-Type: application/x-ndjson
+
+{
+        "mappings": {
+            "properties": {
+                "event": {
+                    "type": "object",
+                    "properties": {
+                        "user": {
+                            "type": "object",
+                            "properties": {
+                                "id": {"type": "keyword"},
+                                "name": {"type": "text"},
+                                "location": {
+                                    "type": "object",
+                                    "properties": {
+                                        "city": {"type": "keyword"}
+                                    }
+                                }
+                            }
+                        },
+                        "status": {"type": "keyword"}
+                    }
+                }
+            }
+        }
+}
+
+###
+PUT {{baseUrl}}/testindex/_doc/1
+Content-Type: application/x-ndjson
+
+{
+    "event": {
+        "user": {
+            "id": "u123",
+            "name": "Alice",
+            "location": {"city": "Seattle"}
+        },
+        "status": "ERROR"
+    }
+}
+
+###
+PUT {{baseUrl}}/testindex/_doc/2
+Content-Type: application/x-ndjson
+
+{
+  "event": {
+      "user": {
+          "id": "u456",
+          "name": "Bob",
+          "location": {"city": "Seattle"}
+      },
+      "status": "OK"
+  }
+}
+
+
+###
+PUT {{baseUrl}}/testindex/_doc/2
+Content-Type: application/x-ndjson
+
+{
+  "event": {
+      "user": "anonymous"
+  }
+}
+
+###
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+    "query": "source=testindex | where event.user.location.city='Seattle'"
+}
+
+
+###
+POST {{baseUrl}}/_plugins/_ppl/_explain
+Content-Type: application/x-ndjson
+
+{
+    "query": "source = test0001 | where log.url.message = '/e2e/h/zap'"
+}
+
+
+###
+POST {{baseUrl}}/test0001/_doc
+Content-Type: application/x-ndjson
+
+{
+  "log": {
+    "url": {
+      "message": "/e2e/h/zap"
+    }
+  }
+}
+
+###
+GET {{baseUrl}}/test-1
+
+###
+GET {{baseUrl}}/test-0
+
+###
+PUT {{baseUrl}}/_cluster/settings
+Content-Type: application/x-ndjson
+
+{
+  "persistent": {
+    "cluster.max_shards_per_node": "1500"
+  }
+}
+
+
+###
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+    "query": "describe test*"
 }
