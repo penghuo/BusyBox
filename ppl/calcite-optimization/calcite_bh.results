@@ -1,0 +1,69 @@
+## calcite disabled
+[2025-06-25T13:46:43,681] Query: source=testindex | where v=1, Latency: 4.95 ms
+[2025-06-25T13:46:43,686] Query: source=testindex | stats count(), Latency: 3.34 ms
+[2025-06-25T13:46:43,690] Query: source=testindex | where v=1 | stats count(), Latency: 3.38 ms
+
+[2025-06-25T13:46:43,683][INFO ][o.o.s.p.PPLService       ] [integTest-0] [54a16889-77cc-4602-bb2e-835ca6bcca61] Incoming request source=testindex | where v = ***
+[2025-06-25T13:46:43,683][WARN ][o.o.s.p.PPLService       ] [integTest-0] Parse Took: 0.10 ms
+[2025-06-25T13:46:43,683][WARN ][o.o.s.p.PPLService       ] [integTest-0] AST Took: 0.04 ms
+[2025-06-25T13:46:43,683][WARN ][o.o.s.e.QueryService     ] [integTest-0] Analyze Took: 0.32 ms
+[2025-06-25T13:46:43,684][WARN ][o.o.s.p.Planner          ] [integTest-0] Optimize Took: 0.61 ms
+[2025-06-25T13:46:43,684][WARN ][o.o.s.p.Planner          ] [integTest-0] Prepare Execution Took: 0.35 ms
+[2025-06-25T13:46:43,686][WARN ][o.o.s.o.e.OpenSearchExecutionEngine] [integTest-0] Execute Took: 1.41 ms
+[2025-06-25T13:46:43,686][WARN ][o.o.s.o.e.OpenSearchExecutionEngine] [integTest-0] Build Result Took: 0.08 ms
+
+[2025-06-25T13:46:43,688][INFO ][o.o.s.p.PPLService       ] [integTest-0] [ae51da5f-f3fc-4e37-af66-14f9de3b43ee] Incoming request source=testindex | stats count()
+[2025-06-25T13:46:43,688][WARN ][o.o.s.p.PPLService       ] [integTest-0] Parse Took: 0.07 ms
+[2025-06-25T13:46:43,688][WARN ][o.o.s.p.PPLService       ] [integTest-0] AST Took: 0.05 ms
+[2025-06-25T13:46:43,688][WARN ][o.o.s.e.QueryService     ] [integTest-0] Analyze Took: 0.33 ms
+[2025-06-25T13:46:43,688][WARN ][o.o.s.p.Planner          ] [integTest-0] Optimize Took: 0.10 ms
+[2025-06-25T13:46:43,688][WARN ][o.o.s.p.Planner          ] [integTest-0] Prepare Execution Took: 0.10 ms
+[2025-06-25T13:46:43,689][WARN ][o.o.s.o.e.OpenSearchExecutionEngine] [integTest-0] Execute Took: 0.63 ms
+[2025-06-25T13:46:43,689][WARN ][o.o.s.o.e.OpenSearchExecutionEngine] [integTest-0] Build Result Took: 0.04 ms
+
+[2025-06-25T13:46:43,691][INFO ][o.o.s.p.PPLService       ] [integTest-0] [a73eccc3-8ea2-41a5-a499-4ce0b1fcbdbd] Incoming request source=testindex | where v = *** | stats count()
+[2025-06-25T13:46:43,691][WARN ][o.o.s.p.PPLService       ] [integTest-0] Parse Took: 0.07 ms
+[2025-06-25T13:46:43,691][WARN ][o.o.s.p.PPLService       ] [integTest-0] AST Took: 0.05 ms
+[2025-06-25T13:46:43,692][WARN ][o.o.s.e.QueryService     ] [integTest-0] Analyze Took: 0.33 ms
+[2025-06-25T13:46:43,692][WARN ][o.o.s.p.Planner          ] [integTest-0] Optimize Took: 0.21 ms
+[2025-06-25T13:46:43,692][WARN ][o.o.s.p.Planner          ] [integTest-0] Prepare Execution Took: 0.07 ms
+[2025-06-25T13:46:43,693][WARN ][o.o.s.o.e.OpenSearchExecutionEngine] [integTest-0] Execute Took: 0.66 ms
+[2025-06-25T13:46:43,693][WARN ][o.o.s.o.e.OpenSearchExecutionEngine] [integTest-0] Build Result Took: 0.05 ms
+
+
+
+## calcite enabled
+[2025-06-25T13:47:31,645] Query: source=testindex | where v=1, Latency: 8.60 ms
+[2025-06-25T13:47:31,654] Query: source=testindex | stats count(), Latency: 7.47 ms
+[2025-06-25T13:47:31,662] Query: source=testindex | where v=1 | stats count(), Latency: 7.14 ms
+
+
+[2025-06-25T13:47:31,647][INFO ][o.o.s.p.PPLService       ] [integTest-0] [f2c1ac50-7f73-493a-bb13-8fc59ac94e88] Incoming request source=testindex | where v = ***
+[2025-06-25T13:47:31,647][WARN ][o.o.s.p.PPLService       ] [integTest-0] Parse Took: 0.09 ms
+[2025-06-25T13:47:31,647][WARN ][o.o.s.p.PPLService       ] [integTest-0] AST Took: 0.04 ms
+[2025-06-25T13:47:31,648][WARN ][o.o.s.e.QueryService     ] [integTest-0] Analyze Took: 0.50 ms
+[2025-06-25T13:47:31,648][WARN ][o.o.s.e.QueryService     ] [integTest-0] Optimize Took: 0.00 ms
+[2025-06-25T13:47:31,648][WARN ][o.o.s.e.QueryService     ] [integTest-0] Convert Took: 0.00 ms
+[2025-06-25T13:47:31,651][WARN ][o.o.s.c.u.CalciteToolsHelper] [integTest-0] Prepare Execution Took: 3.30 ms
+[2025-06-25T13:47:31,653][WARN ][o.o.s.o.e.OpenSearchExecutionEngine] [integTest-0] Execute Took: 1.35 ms
+[2025-06-25T13:47:31,654][WARN ][o.o.s.o.e.OpenSearchExecutionEngine] [integTest-0] Build Result Took: 0.71 ms
+
+[2025-06-25T13:47:31,656][INFO ][o.o.s.p.PPLService       ] [integTest-0] [908302da-d5e1-4982-8ca7-867933c7ef91] Incoming request source=testindex | stats count()
+[2025-06-25T13:47:31,656][WARN ][o.o.s.p.PPLService       ] [integTest-0] Parse Took: 0.06 ms
+[2025-06-25T13:47:31,656][WARN ][o.o.s.p.PPLService       ] [integTest-0] AST Took: 0.05 ms
+[2025-06-25T13:47:31,657][WARN ][o.o.s.e.QueryService     ] [integTest-0] Analyze Took: 0.50 ms
+[2025-06-25T13:47:31,657][WARN ][o.o.s.e.QueryService     ] [integTest-0] Optimize Took: 0.00 ms
+[2025-06-25T13:47:31,657][WARN ][o.o.s.e.QueryService     ] [integTest-0] Convert Took: 0.00 ms
+[2025-06-25T13:47:31,659][WARN ][o.o.s.c.u.CalciteToolsHelper] [integTest-0] Prepare Execution Took: 2.21 ms
+[2025-06-25T13:47:31,661][WARN ][o.o.s.o.e.OpenSearchExecutionEngine] [integTest-0] Execute Took: 1.90 ms
+[2025-06-25T13:47:31,661][WARN ][o.o.s.o.e.OpenSearchExecutionEngine] [integTest-0] Build Result Took: 0.19 ms
+
+[2025-06-25T13:47:31,663][INFO ][o.o.s.p.PPLService       ] [integTest-0] [b79a661e-725e-4432-95ac-116713ddc468] Incoming request source=testindex | where v = *** | stats count()
+[2025-06-25T13:47:31,663][WARN ][o.o.s.p.PPLService       ] [integTest-0] Parse Took: 0.09 ms
+[2025-06-25T13:47:31,663][WARN ][o.o.s.p.PPLService       ] [integTest-0] AST Took: 0.05 ms
+[2025-06-25T13:47:31,664][WARN ][o.o.s.e.QueryService     ] [integTest-0] Analyze Took: 0.51 ms
+[2025-06-25T13:47:31,664][WARN ][o.o.s.e.QueryService     ] [integTest-0] Optimize Took: 0.00 ms
+[2025-06-25T13:47:31,664][WARN ][o.o.s.e.QueryService     ] [integTest-0] Convert Took: 0.00 ms
+[2025-06-25T13:47:31,667][WARN ][o.o.s.c.u.CalciteToolsHelper] [integTest-0] Prepare Execution Took: 3.17 ms
+[2025-06-25T13:47:31,668][WARN ][o.o.s.o.e.OpenSearchExecutionEngine] [integTest-0] Execute Took: 0.98 ms
+[2025-06-25T13:47:31,669][WARN ][o.o.s.o.e.OpenSearchExecutionEngine] [integTest-0] Build Result Took: 0.15 ms

@@ -1,0 +1,71 @@
+@baseUrl = http://localhost:9200
+
+###
+GET {{baseUrl}}/_cat/indices
+
+###
+PUT {{baseUrl}}/_plugins/_query/settings
+Content-Type: application/x-ndjson
+
+{
+  "transient" : {
+    "plugins.calcite.enabled" : true
+  }
+}
+
+###
+PUT {{baseUrl}}/_plugins/_query/settings
+Content-Type: application/x-ndjson
+
+{
+  "transient" : {
+    "plugins.calcite.enabled" : false
+  }
+}
+
+###
+PUT {{baseUrl}}/testindex/_settings
+Content-Type: application/x-ndjson
+
+{
+  "index.requests.cache.enable": false
+}
+
+###
+DELETE {{baseUrl}}/testindex
+
+###
+PUT {{baseUrl}}/testindex
+Content-Type: application/x-ndjson
+
+{
+  "mappings": {
+    "properties": {
+      "timestamp" : {
+        "type" : "date",
+        "format" : "yyyy-MM-dd HH:mm:ss" 
+      },
+      "v":{
+        "type": "integer"
+      }
+    }
+  }
+}
+
+###
+POST {{baseUrl}}/testindex/_doc
+Content-Type: application/x-ndjson
+
+{
+  "timestamp" : "2025-05-01 05:49:00",
+  "v": 1
+}
+
+###
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+  "query": "source=testindex | where v=1"
+}
+
