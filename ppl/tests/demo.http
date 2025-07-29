@@ -1,0 +1,236 @@
+@baseUrl = http://localhost:9200
+
+###
+GET {{baseUrl}}/_cat/indices
+
+###
+PUT {{baseUrl}}/_plugins/_query/settings
+Content-Type: application/x-ndjson
+
+{
+  "persistent" : {
+    "plugins.calcite.enabled" : true
+  }
+}
+
+###
+PUT {{baseUrl}}/_cluster/settings
+Content-Type: application/x-ndjson
+
+{
+  "transient" : {
+    "script.context.aggs.max_compilations_rate" : "unlimited"
+  }
+}
+
+
+
+###
+PUT {{baseUrl}}/_plugins/_query/settings
+Content-Type: application/x-ndjson
+
+{
+  "transient" : {
+    "plugins.calcite.enabled" : true
+  }
+}
+
+###
+DELETE {{baseUrl}}/log-001
+
+###
+DELETE {{baseUrl}}/idtable001
+
+###
+DELETE {{baseUrl}}/idtable002
+
+###
+POST {{baseUrl}}/log-001/_bulk
+Content-Type: application/x-ndjson
+
+{"index": {}}
+{"regionId": 1, "gender": "M", "log": "my log 1"}
+{"index": {}}
+{"regionId": 2, "gender": "X", "log": "my log 2"}
+{"index": {}}
+{"regionId": 2, "gender": "F", "log": "my log 3"}
+{"index": {}}
+{"regionId": 3, "gender": "X", "log": "my log 4"}
+
+
+###
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+  "query": "source=log-001 | parse log 'log (?<logid>\\d)' | stats count() by logid"
+}
+
+
+###
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+  "query": "source=log-001 | parse log 'log (?<logid>\\d)' | eval ii=cast(logid AS int) | stats sum(ii) by gender"
+}
+
+###
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+  "query": "source=log-001 | parse log 'log (?<logid>\\d)' | eval ii=cast(logid AS int) | stats count() by ii"
+}
+
+###
+POST {{baseUrl}}/idtable001/_bulk
+Content-Type: application/x-ndjson
+
+{"index": {"_id": 1}}
+{"regionId": 1, "region": "us-east-1"}
+{"index": {"_id": 2}}
+{"regionId": 2, "region": "us-west-2"}
+{"index": {"_id": 3}}
+{"regionId": 3, "region": "eu-west-2"}
+
+###
+POST {{baseUrl}}/idtable002/_bulk
+Content-Type: application/x-ndjson
+
+{"index": {"_id": 1}}
+{"regionId": 1, "region": "iad"}
+{"index": {"_id": 2}}
+{"regionId": 2, "region": "pdx"}
+{"index": {"_id": 3}}
+{"regionId": 3, "region": "dub"}
+
+###
+POST {{baseUrl}}/_aliases
+Content-Type: application/x-ndjson
+
+{
+  "actions": [
+    {
+      "add": {
+        "index": "idtable002",
+        "alias": "idtable"
+      }
+    }
+  ]
+}
+
+###
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+  "query": "source=log-001 | lookup idtable001 regionId"
+}
+
+
+###
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+  "query": "source=`*`"
+}
+
+###
+POST {{baseUrl}}/idtable002/_update/1
+Content-Type: application/x-ndjson
+
+{
+    "doc": {
+        "region": "Latest"
+    }
+}
+
+###
+PUT {{baseUrl}}/demo-index
+Content-Type: application/x-ndjson
+
+{
+  "settings": {
+    "number_of_shards": 2,
+    "number_of_replicas": 0
+  },
+  "mappings": {
+    "properties": {
+      "region": { "type": "keyword" },
+      "sales": { "type": "integer" }
+    }
+  }
+}
+
+###
+POST {{baseUrl}}/demo-index/_bulk
+Content-Type: application/x-ndjson
+
+{ "index": {} }
+{ "region": "us-east", "sales": 100 }
+{ "index": {} }
+{ "region": "us-east", "sales": 200 }
+{ "index": {} }
+{ "region": "us-west", "sales": 300 }
+{ "index": {} }
+{ "region": "us-west", "sales": 400 }
+
+###
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+    "query": "source=demo-index | fields _id"
+}
+
+
+
+###
+POST {{baseUrl}}/demo-index/_search?preference=_shards:0
+Content-Type: application/x-ndjson
+
+{
+  "from": 0,
+  "size": 10
+}
+
+###
+POST {{baseUrl}}/demo-index/_search?preference=_shards:0
+Content-Type: application/x-ndjson
+
+{
+  "size": 0,
+  "aggs": {
+    "total_sales": {
+      "sum": {
+        "field": "sales"
+      }
+    }
+  }
+}
+
+###
+POST {{baseUrl}}/demo-index/_search?preference=_shards:1
+Content-Type: application/x-ndjson
+
+{
+  "from": 0,
+  "size": 10
+}
+
+###
+POST {{baseUrl}}/demo-index/_search?preference=_shards:1
+Content-Type: application/x-ndjson
+
+{
+  "size": 0,
+  "aggs": {
+    "total_sales": {
+      "sum": {
+        "field": "sales"
+      }
+    }
+  }
+}

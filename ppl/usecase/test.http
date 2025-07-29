@@ -1,0 +1,390 @@
+@baseUrl = http://localhost:9200
+
+###
+GET {{baseUrl}}/_cat/indices
+
+###
+PUT {{baseUrl}}/_plugins/_query/settings
+Content-Type: application/x-ndjson
+
+{
+  "transient" : {
+    "plugins.calcite.enabled" : true
+  }
+}
+
+###
+PUT {{baseUrl}}/_plugins/_query/settings
+Content-Type: application/x-ndjson
+
+{
+  "transient" : {
+    "plugins.calcite.enabled" : false
+  }
+}
+
+###
+DELETE {{baseUrl}}/test001
+
+
+
+
+###
+PUT {{baseUrl}}/test001
+Content-Type: application/x-ndjson
+
+{
+  "mappings": {
+    "properties": {
+      "@timestamp": { "type": "date" },
+      "message": { "type": "text" },
+      "context": {
+        "properties": {
+          "AppId": { "type": "keyword" },
+          "AppName": { "type": "keyword" }
+        }
+      }
+    }
+  }
+}
+
+###
+POST {{baseUrl}}/test001/_bulk
+Content-Type: application/x-ndjson
+
+{ "index": {} }
+{ "@timestamp": "2025-06-02T11:00:00", "message": "Response received endpoint=/purchase url=/buy status=500", "context": { "AppId": "app01", "AppName": "CheckoutService" } }
+{ "index": {} }
+{ "@timestamp": "2025-06-02T12:00:00", "message": "Response received endpoint=/purchase url=/buy status=500",  "context": { "AppId": "app01", "AppName": "CheckoutService" } }
+{ "index": {} }
+{ "@timestamp": "2025-06-02T13:00:00", "message": "Response received endpoint=/purchase url=/buy status=200", "context": { "AppId": "app01", "AppName": "CheckoutService" } }
+{ "index": {} }
+{ "@timestamp": "2025-06-02T14:00:00", "message": "Response sent endpoint=/cart url=/view status=503", "context": { "AppId": "app02", "AppName": "CartService" } }
+{ "index": {} }
+{ "@timestamp": "2025-06-02T15:00:00", "message": "Response sent endpoint=/cart url=/view status=503", "context": { "AppId": "app02", "AppName": "CartService" } }
+{ "index": {} }
+{ "@timestamp": "2025-06-02T16:00:00", "message": "Response sent endpoint=/cart url=/view status=503",  "context": { "AppId": "app02", "AppName": "CartService" } }
+{ "index": {} }
+{ "@timestamp": "2025-06-02T17:00:00", "message": "Response sent endpoint=/cart url=/view status=503",  "context": { "AppId": "app02", "AppName": "CartService" } }
+{ "index": {} }
+{ "@timestamp": "2025-06-02T18:00:00", "message": "Response sent endpoint=/cart url=/view status=503",  "context": { "AppId": "app02", "AppName": "CartService" } }
+{ "index": {} }
+{ "@timestamp": "2025-06-02T19:00:00", "message": "Response sent endpoint=/cart url=/view status=503",  "context": { "AppId": "app02", "AppName": "CartService" } }
+{ "index": {} }
+{ "@timestamp": "2025-06-02T20:00:00", "message": "Response sent endpoint=/cart url=/view status=503",  "context": { "AppId": "app02", "AppName": "CartService" } }
+{ "index": {} }
+{ "@timestamp": "2025-06-02T21:00:00", "message": "Response sent endpoint=/cart url=/view status=503",  "context": { "AppId": "app02", "AppName": "CartService" } }
+{ "index": {} }
+{ "@timestamp": "2025-06-02T22:00:00", "message": "Response sent endpoint=/cart url=/view status=503",  "context": { "AppId": "app02", "AppName": "CartService" } }
+{ "index": {} }
+{ "@timestamp": "2025-06-02T23:00:00", "message": "Response sent endpoint=/cart url=/view status=503",  "context": { "AppId": "app02", "AppName": "CartService" } }
+{ "index": {} }
+{ "@timestamp": "2025-06-03T01:00:00", "message": "Response sent endpoint=/cart url=/view status=503",  "context": { "AppId": "app02", "AppName": "CartService" } }
+
+
+
+###
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+    "query": "source=test001 | eval json=json_extract(context, 'AppId')"
+}
+
+
+
+###
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+    "query": "source=`*` multi_match(['*'], 'Response received')"
+}
+
+###
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+    "query": "source=test001 like(message, '%Response received%') | parse message '.+endpoint=(?<endpoint>[^\\s]+) url=(?<url>[^\\s]+) status=(?<status>[^\\s]+)' | where status != '200' | stats count() as count by context.AppId, context.AppName, status | sort -count | where count > 1"
+}
+
+###
+POST {{baseUrl}}/_plugins/_ppl
+Content-Type: application/x-ndjson
+
+{
+    "query": "source=test001 | where match_phrase(message, 'Response received')"
+}
+
+
+###
+DELETE {{baseUrl}}/test002
+
+###
+PUT {{baseUrl}}/test002
+Content-Type: application/x-ndjson
+
+{
+  "mappings": {
+    "properties": {
+      "body": {"type": "text"},
+      "message": { "type": "text" },
+      "v": {"type": "integer"}
+    }
+  }
+}
+
+###
+POST {{baseUrl}}/test002/_bulk
+Content-Type: application/x-ndjson
+
+{ "index": {} }
+{ "body": "Response send", "message": "My Response received endpoint=/purchase url=/buy status=500", "v": 1 }
+{ "index": {} }
+{ "body": "Response received", "message": "My Response sent endpoint=/purchase url=/buy status=500", "v": 2}
+
+###
+POST {{baseUrl}}/_plugins/_ppl
+Content-Type: application/x-ndjson
+
+{
+    "query": "source=test002 | where multi_match(['*'], 'Response re') | eval "
+}
+
+###
+POST {{baseUrl}}/_plugins/_ppl
+Content-Type: application/x-ndjson
+
+{
+    "query": "source=test002 | where multi_match(['*'], 'Response send', type='phrase')"
+}
+
+
+
+
+
+###
+DELETE {{baseUrl}}/t0001
+
+###
+PUT {{baseUrl}}/t0001
+Content-Type: application/x-ndjson
+
+{
+  "mappings": {
+    "properties": {
+      "@timestamp": { "type": "date" }
+    }
+  }
+}
+
+###
+POST {{baseUrl}}/t0001/_bulk
+Content-Type: application/x-ndjson
+
+{"index": {}}
+{"@timestamp": "2025-06-02T14:00:00", "host": "h1"}
+{"index": {}}
+{"@timestamp": "2025-06-02T15:00:00", "host": "h1"}
+{"index": {}}
+{"@timestamp": "2025-06-02T16:00:00", "host": "h1"}
+
+###
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+    "query": "source=t0001 | where @timestamp >= date_sub(now(), INTERVAL 1 DAY) and @timestamp <= now()"
+}
+
+###
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+    "query": "source=t0001 | where @timestamp >= date_sub(now(), INTERVAL 1 DAY) | stats count() by span(@timestamp, 1h), host"
+}
+
+
+###
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+    "query": "source=t0001 | eval hour = date_format(@timestamp, 'HH')"
+}
+
+###
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+    "query": "source=t0001 | stats count() by span(@timestamp, 1h)"
+}
+
+
+###
+POST {{baseUrl}}/t0001/_search
+Content-Type: application/x-ndjson
+
+{
+  "query": {
+      "range" : {
+          "@timestamp" : {
+              "gte" : "now-1d",
+              "lte" : "now"
+          }
+      }
+  }
+}
+
+###
+POST {{baseUrl}}/t0002/_doc
+Content-Type: application/x-ndjson
+
+{"v": 30}
+
+
+###
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+    "query": "source=`*` | eval result = if(v > 20, 'High', 'Low')"
+}
+
+
+
+###
+PUT {{baseUrl}}/test001
+Content-Type: application/x-ndjson
+
+{
+  "mappings": {
+    "properties": {
+      "message": { "type": "text" },
+      "body": { "type": "text" },
+      "status": { "type": "integer" }
+    }
+  }
+}
+
+###
+POST {{baseUrl}}/test001/_bulk
+Content-Type: application/x-ndjson
+
+{ "index": {} }
+{  "message": "success", "body": "success" , "status": 200}
+{ "index": {} }
+{  "message": "error", "body": "failed" , "status": 500}
+{ "index": {} }
+{  "message": "error failed", "body": "failed error" , "status": 500}
+
+###
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+    "query": "source= `*` multi_match(['*'], 'error failed') status=500"
+}
+
+
+###
+DELETE {{baseUrl}}/test001
+
+###
+PUT {{baseUrl}}/test001
+Content-Type: application/x-ndjson
+
+{
+  "mappings": {
+    "properties": {
+      "@timestamp": { "type": "date" },
+      "message": { "type": "text" },
+      "context": {
+        "type": "text"
+      }
+    }
+  }
+}
+
+###
+POST {{baseUrl}}/test001/_bulk
+Content-Type: application/x-ndjson
+
+{ "index": {} }
+{ "@timestamp": "2025-06-02T11:00:00", "message": "Response received endpoint=/purchase url=/buy status=500", "context": "{\"AppId\":\"app01\",\"AppName\":\"CheckoutService\"}"}
+{ "index": {} }
+{ "@timestamp": "2025-06-02T12:00:00", "message": "Response received endpoint=/purchase url=/buy status=500",  "context": "{\"AppId\":\"app01\",\"AppName\":\"CheckoutService\"}"}
+{ "index": {} }
+{ "@timestamp": "2025-06-02T13:00:00", "message": "Response received endpoint=/purchase url=/buy status=200", "context": "{\"AppId\":\"app01\",\"AppName\":\"CheckoutService\"}"}
+
+
+###
+POST {{baseUrl}}/_plugins/_ppl
+Content-Type: application/x-ndjson
+
+{
+    "query": "source= test001 multi_match(['*'], 'CheckoutService') | eval appName=json_extract(context, 'AppName')"
+}
+
+
+###
+POST {{baseUrl}}/_plugins/_ppl
+Content-Type: application/x-ndjson
+
+{
+    "query": "source= test001 multi_match(['*'], 'CheckoutService')"
+}
+
+###
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+    "query": "source= test001 | eval appName=json_extract(context, 'AppName') | fields appName"
+}
+
+
+###
+DELETE {{baseUrl}}/test001
+
+
+###
+PUT {{baseUrl}}/test001
+Content-Type: application/x-ndjson
+
+{
+  "mappings": {
+    "properties": {
+      "@timestamp": { "type": "date" },
+      "message": { "type": "text" },
+      "context": {
+          "properties": {
+            "ram": { "type": "integer" }
+          }
+      }
+    }
+  }
+}
+
+###
+POST {{baseUrl}}/test001/_bulk
+Content-Type: application/x-ndjson
+
+{ "index": {} }
+{ "@timestamp": "2025-06-02T11:00:00", "message": "Response received endpoint=/purchase url=/buy status=500","context":{"ram":1}}
+{ "index": {} }
+{ "@timestamp": "2025-06-02T12:00:00", "message": "Response received endpoint=/purchase url=/buy status=500","context":{"ram":2}}
+{ "index": {} }
+{ "@timestamp": "2025-06-02T13:00:00", "message": "Response received endpoint=/purchase url=/buy status=200","context":{"ram":3}}
+
+
+###
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+    "query": "source= test001 | rename context.ram as ram" 
+}

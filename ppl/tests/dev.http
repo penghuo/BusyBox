@@ -14,6 +14,14 @@ Content-Type: application/x-ndjson
 }
 
 ###
+PUT {{baseUrl}}/testindex/_settings
+Content-Type: application/x-ndjson
+
+{
+  "index.requests.cache.enable": false
+}
+
+###
 PUT {{baseUrl}}/_plugins/_query/settings
 Content-Type: application/x-ndjson
 
@@ -23,7 +31,89 @@ Content-Type: application/x-ndjson
   }
 }
 
+###
+PUT {{baseUrl}}/_cluster/settings
+Content-Type: application/x-ndjson
 
+{
+  "transient" : {
+    "logger.org.apache.calcite.plan.RelOptPlanner" : "trace"
+  }
+}
+
+###
+PUT {{baseUrl}}/_plugins/_query/settings
+Content-Type: application/x-ndjson
+
+{
+  "transient" : {
+    "plugins.query.size_limit" : 0
+  }
+}
+
+###
+DELETE {{baseUrl}}/testindex
+
+###
+PUT {{baseUrl}}/testindex
+Content-Type: application/x-ndjson
+
+{
+  "mappings": {
+    "properties": {
+      "timestamp" : {
+        "type" : "date",
+        "format" : "yyyy-MM-dd HH:mm:ss" 
+      },
+      "v":{
+        "type": "integer"
+      }
+    }
+  }
+}
+
+###
+POST {{baseUrl}}/testindex/_doc
+Content-Type: application/x-ndjson
+
+{
+  "timestamp" : "2025-05-01 05:49:00",
+  "v": 1
+}
+
+###
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+    "query": "source=testindex | where v=1"
+}
+
+
+###
+POST {{baseUrl}}/_plugins/_sql/_explain
+Content-Type: application/x-ndjson
+
+{
+    "query": "select v from testindex where query('v:1') LIMIT 1000000"
+}
+
+###
+POST {{baseUrl}}/_plugins/_ppl/_explain
+Content-Type: application/x-ndjson
+
+{
+    "query": "source=testindex | where timestamp < now()"
+}
+
+###
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+    "query": "source=testindex | where v=1"
+}
+| 
 ###
 PUT {{baseUrl}}/test00001
 
@@ -162,6 +252,16 @@ Content-Type: application/x-ndjson
     }
   }
 }
+
+###
+POST {{baseUrl}}/_plugins/_ppl/_explain
+Content-Type: application/x-ndjson
+
+{
+    "query": "source = test0001 | where isNotNull(log)"
+}
+
+
 
 ###
 POST {{baseUrl}}/_plugins/_ppl/
@@ -348,3 +448,20 @@ Content-Type: application/x-ndjson
 {
     "query": "describe test*"
 }
+
+###
+DELETE {{baseUrl}}/log001
+
+###
+POST {{baseUrl}}/log001/_bulk
+Content-Type: application/x-ndjson
+
+{"index": {}}
+{"regionId": 1, "log": "http://www.demo//requestId=123 status=200"}
+{"index": {}}
+{"regionId": 2, "log": "http://www.demo//requestId=123 status=400"}
+{"index": {}}
+{"regionId": 2, "log": "http://www.demo//requestId=456 status=200"}
+{"index": {}}
+{"regionId": 3, "log": "http://www.demo//requestId=456 status=400"}
+
