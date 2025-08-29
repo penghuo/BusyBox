@@ -1,0 +1,63 @@
+@baseUrl = http://localhost:9200
+
+### Get all indices
+GET {{baseUrl}}/_cat/indices
+
+### Delete index if exists (optional)
+DELETE {{baseUrl}}/log_analysis
+
+### Create index with custom log analyzer
+PUT {{baseUrl}}/log_analysis
+Content-Type: application/x-ndjson
+
+{
+  "settings": {
+    "analysis": {
+      "tokenizer": {
+        "special_chars_tokenizer": {
+          "type": "pattern",
+          "pattern": "(?<=\\p{L})(?=\\p{Punct})|(?<=\\p{Punct})(?=\\p{L})|(?<=\\p{L})(?=\\s)|(?<=\\s)(?=\\p{L})|(?<=\\p{Punct})(?=\\s)|(?<=\\s)(?=\\p{Punct})"
+        }
+      },
+      "analyzer": {
+        "log_analyzer": {
+          "type": "custom",
+          "tokenizer": "special_chars_tokenizer"
+        }
+      }
+    }
+  },
+  "mappings": {
+    "properties": {
+      "message": {
+        "type": "text",
+        "analyzer": "log_analyzer"
+      }
+    }
+  }
+}
+
+### Test analyzer with the sample log text
+GET {{baseUrl}}/log_analysis/_analyze
+Content-Type: application/x-ndjson
+
+{
+  "analyzer": "log_analyzer",
+  "text": "logtype!=ws:access   error http 100"
+}
+
+### Insert sample document
+POST {{baseUrl}}/log_analysis/_doc
+{
+  "message": "logtype=ws:access error"
+}
+
+### Search for documents with specific tokens
+GET {{baseUrl}}/log_analysis/_search
+{
+  "query": {
+    "match": {
+      "message": "logtype"
+    }
+  }
+}
