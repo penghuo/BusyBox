@@ -1,0 +1,89 @@
+@baseUrl = http://localhost:9200
+
+###
+GET {{baseUrl}}/_cat/indices
+
+###
+PUT {{baseUrl}}/_plugins/_query/settings
+Content-Type: application/x-ndjson
+
+{
+  "transient" : {
+    "plugins.calcite.enabled" : true,
+    "plugins.calcite.pushdown.enabled": true
+  }
+}
+
+
+###
+DELETE {{baseUrl}}/log00001
+
+###
+PUT {{baseUrl}}/log00001
+Content-Type: application/x-ndjson
+
+{
+  "mappings": {
+    "properties": {
+      "@timestamp": {
+        "type": "date"
+      },
+      "age": {
+        "type": "integer"
+      },
+      "v": {
+        "type": "keyword"
+      }
+    }
+  }
+}
+
+###
+POST {{baseUrl}}/log00001/_bulk
+Content-Type: application/x-ndjson
+
+{ "index": { "_id": 1 } }
+{"@timestamp":"2025-08-19T04:53:24Z", "age":10}
+{ "index": { "_id": 2 } }
+{"@timestamp":"2025-08-20T04:53:24Z", "v1": "v-1"}
+
+
+###
+GET {{baseUrl}}/log00001/_search
+Content-Type: application/x-ndjson
+
+{
+  "size": 0,
+  "aggs": {
+    "by_time": {
+      "date_histogram": {
+        "field": "@timestamp",
+        "calendar_interval": "1d"
+      },
+      "aggs": {
+        "by_v1": {
+          "terms": {
+            "field": "v1.keyword",
+            "missing": "null"
+          },
+          "aggs": {
+            "total_age": {
+              "sum": {
+                "field": "age"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+
+###
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+  "query": "source=log00001 | timechart span=1d count() by v1"
+}
