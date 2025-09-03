@@ -1,0 +1,40 @@
+@baseUrl = http://localhost:9200
+
+###
+GET {{baseUrl}}/_cat/indices
+
+PUT my_index
+{
+  "settings": {
+    "analysis": {
+      "tokenizer": {
+        "char_tokenizer": {
+          "type": "edge_ngram",
+          "min_gram": 1,
+          "max_gram": 1,
+          "token_chars": [
+            "letter",
+            "digit",
+            "punctuation",
+            "symbol",
+            "whitespace"
+          ]
+        }
+      },
+      "analyzer": {
+        "char_level": {
+          "type": "custom",
+          "tokenizer": "char_tokenizer"
+        }
+      }
+    }
+  },
+  "mappings": {
+    "properties": {
+      "body": {
+        "type": "text",
+        "analyzer": "char_level"
+      }
+    }
+  }
+}
