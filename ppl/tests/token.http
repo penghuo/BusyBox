@@ -3,37 +3,218 @@
 ###
 GET {{baseUrl}}/_cat/indices
 
-PUT my_index
+###
+DELETE {{baseUrl}}/log00001
+
+###
+PUT {{baseUrl}}/log00001
+Content-Type: application/x-ndjson
+
 {
   "settings": {
     "analysis": {
-      "tokenizer": {
-        "char_tokenizer": {
-          "type": "edge_ngram",
-          "min_gram": 1,
-          "max_gram": 1,
-          "token_chars": [
-            "letter",
-            "digit",
-            "punctuation",
-            "symbol",
-            "whitespace"
-          ]
+      "analyzer": {
+        "bicla": {
+          "type": "custom",
+          "tokenizer": "my_tokenizer"
         }
       },
-      "analyzer": {
-        "char_level": {
-          "type": "custom",
-          "tokenizer": "char_tokenizer"
+      "tokenizer": {
+        "my_tokenizer": {
+          "type": "pattern",
+          "pattern": "(\\w+)|(\\p{Punct})|(\\s)",
+          "group": 0
         }
       }
     }
   },
   "mappings": {
     "properties": {
-      "body": {
+      "message": {
         "type": "text",
-        "analyzer": "char_level"
+        "analyzer": "bicla"
+      }
+    }
+  }
+}
+
+###
+GET {{baseUrl}}/log00001
+
+###
+POST {{baseUrl}}/log00001/_bulk
+Content-Type: application/x-ndjson
+
+{ "index": { "_id": 1 } }
+{"message": "[2025-08-26] logtype=ws:access error"}
+{ "index": { "_id": 2 } }
+{"message": "[2025-08-26] logtype!=ws:access this is unexpected"}
+{ "index": { "_id": 3 } }
+{"message": "[2025-08-26] ws:access logtype this is unexpected"}
+{ "index": { "_id": 4 } }
+{"message": "[2025-08-26] logtype=ws:access   error"}
+{ "index": { "_id": 5 } }
+{"message": "[2025-08-26] logtype?=ws:access error"}
+{ "index": { "_id": 6 } }
+{"message": "[2025-08-26] java.regex.WebAppException: error xxxxxxxxxxxxxxxxxx"}
+
+
+### 
+POST {{baseUrl}}/log00001/_search
+Content-Type: application/x-ndjson
+
+{
+  "query": {
+     "wildcard": { 
+        "message": {
+            "value": "*webappexception" 
+        }
+     }
+  }
+}
+
+
+### 
+POST {{baseUrl}}/log00001/_search
+Content-Type: application/x-ndjson
+
+{
+  "query": {
+     "wildcard": { 
+        "message.keyword": {
+            "value": "*WebAppException*" 
+        }
+     }
+  }
+}
+
+
+### Test with complex punctuation
+GET {{baseUrl}}/log00001/_analyze
+Content-Type: application/json
+
+{
+  "text": "[2025-08-26] java.regex.WebAppException: error xxxxxxxxxxxxxxxxxx"
+}
+
+### Return Doc1 and Doc4
+POST {{baseUrl}}/log00001/_search
+Content-Type: application/json
+
+{
+  "query": {
+    "match_phrase": {
+      "message": {
+        "query": "WebAppException"
+      }
+    }
+  }
+}
+
+### Return Doc1 and Doc4
+POST {{baseUrl}}/log00001/_search
+Content-Type: application/json
+
+{
+  "query": {
+    "query_string": {
+        "default_field": "message",
+        "query": "\"logtype=ws:access\""
+    }
+  }
+}
+
+### Return Doc1
+POST {{baseUrl}}/log00001/_search
+Content-Type: application/json
+
+{
+  "query": {
+    "match_phrase": {
+      "message": {
+        "query": "logtype=ws:access error"
+      }
+    }
+  }
+}
+
+### Return Doc1
+POST {{baseUrl}}/log00001/_search
+Content-Type: application/json
+
+{
+  "query": {
+    "query_string": {
+        "default_field": "message",
+        "query": "\"logtype=ws:access error\""
+    }
+  }
+}
+
+###
+POST {{baseUrl}}/log00001/_search
+Content-Type: application/json
+
+{
+  "query": {
+    "match_phrase": {
+      "message": {
+        "query": "logtype=ws:access   error"
+      }
+    }
+  }
+}
+
+### Return Doc2
+POST {{baseUrl}}/log00001/_search
+Content-Type: application/json
+
+{
+  "query": {
+    "match_phrase": {
+      "message": {
+        "query": "logtype!=ws:access"
+      }
+    }
+  }
+}
+
+###
+POST {{baseUrl}}/log00001/_search
+Content-Type: application/json
+
+{
+  "query": {
+    "query_string": {
+        "default_field": "message",
+        "query": "\"logtype=ws:access error\""
+    }
+  }
+}}
+
+### Return Doc4
+POST {{baseUrl}}/log00001/_search
+Content-Type: application/json
+
+{
+  "query": {
+    "match_phrase": {
+      "message": {
+        "query": "logtype=ws:access   error"
+      }
+    }
+  }
+}
+
+###
+POST {{baseUrl}}/log00001/_search
+Content-Type: application/json
+
+{
+  "query": {
+    "match_phrase": {
+      "message": {
+        "query": "logtype=ws:access   error"
       }
     }
   }
