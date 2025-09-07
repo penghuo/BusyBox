@@ -1,0 +1,64 @@
+@baseUrl = http://localhost:9200
+
+###
+GET {{baseUrl}}/_cat/indices
+
+###
+PUT {{baseUrl}}/_plugins/_query/settings
+Content-Type: application/x-ndjson
+
+{
+  "transient" : {
+    "plugins.calcite.enabled" : true,
+    "plugins.calcite.pushdown.enabled": true
+  }
+}
+
+
+###
+DELETE {{baseUrl}}/log00001
+
+###
+PUT {{baseUrl}}/log00001
+Content-Type: application/x-ndjson
+
+{
+  "mappings": {
+    "properties": {
+      "v": {
+        "type": "text"
+      }
+    }
+  }
+}
+
+###
+POST {{baseUrl}}/log00001/_bulk
+Content-Type: application/x-ndjson
+
+{"index": { "_id": 1 }}
+{"v": "foo alice@example.com"}
+{"index": { "_id": 2 }}
+{"v": "1foo alice@example.com"}
+{"index": { "_id": 3 }}
+{"v": "foo alice@example.com1"}
+{"index": { "_id": 4 }}
+{"v": "foo@alice@example"}
+{"index": { "_id": 5 }}
+{"v": ""}
+
+###
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+  "query": "source=log00001 | rex field=v max_match=0 \"(?<digits>\\d*)\""
+}
+
+###
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+  "query": "source=log00001 | rex field=v max_match=0 \"(?<name1>.+)@(?<name2>.+)\""
+}
