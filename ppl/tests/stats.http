@@ -1,0 +1,184 @@
+@baseUrl = http://localhost:9200
+
+###
+GET {{baseUrl}}/_cat/indices
+
+###
+PUT {{baseUrl}}/_plugins/_query/settings
+Content-Type: application/x-ndjson
+
+{
+  "transient" : {
+    "plugins.calcite.enabled" : true,
+    "plugins.calcite.pushdown.enabled": true
+  }
+}
+
+
+###
+DELETE {{baseUrl}}/log00001
+
+###
+PUT {{baseUrl}}/log00001
+Content-Type: application/x-ndjson
+
+{
+  "mappings": {
+    "properties": {
+      "vtext": {
+        "type": "text"
+      },
+      "vkeyword": {
+        "type": "keyword"
+      }
+    }
+  }
+}
+
+###
+POST {{baseUrl}}/log00001/_bulk
+Content-Type: application/x-ndjson
+
+{ "index": { "_id": 1 } }
+{"vtext": "91.205.189.15 - - [22/Jul/2025:18:22:16] \"GET /oldlink?itemId=EST-14&JSESSIONID=SD6SL7FF7ADFF53113 HTTP 1.1\" 200 1665 \"http://www.buttercupgames.com/oldlink?itemId=EST-14\" \"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/536.5 (KHTML, like Gecko) Chrome/19.0.1084.46 Safari/536.5\" 159", "vkeyword": "91.205.189.15 - - [22/Jul/2025:18:22:16] \"GET /oldlink?itemId=EST-14&JSESSIONID=SD6SL7FF7ADFF53113 HTTP 1.1\" 200 1665 \"http://www.buttercupgames.com/oldlink?itemId=EST-14\" \"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/536.5 (KHTML, like Gecko) Chrome/19.0.1084.46 Safari/536.5\" 159"}
+
+
+### case-1
+POST {{baseUrl}}/log00001/_search
+Content-Type: application/x-ndjson
+
+{
+  "query": {
+    "bool": {
+      "must": [
+        { "match": { "vtext": "SD6SL7FF7ADFF53113" } }, // token match
+        { "match_phrase": { "vtext": "EST-14" } }       // hyphen tokenizes to "EST" "14"
+      ]
+    }
+  }
+}
+
+
+### case-1
+POST {{baseUrl}}/log00001/_search
+Content-Type: application/x-ndjson
+
+{
+  "query": {
+    "bool": {
+      "must": [
+        { "match": { "vtext": "JSESSIONID*" } }
+      ]
+    }
+  }
+}
+
+### case-3
+POST {{baseUrl}}/log00001/_search
+Content-Type: application/x-ndjson
+
+{
+  "query": {
+    "bool": {
+      "must": [
+        { "match_phrase_prefix": { "vtext": "JSESSIONID=SD6SL7FF7ADFF53113 HTTP 1.1\" 2*" } }
+      ]
+    }
+  }
+}
+
+### case-3
+POST {{baseUrl}}/log00001/_search
+Content-Type: application/x-ndjson
+
+{
+  "query": {
+     "wildcard": { 
+        "vkeyword": {
+            "value": "*JSESSIONID=SD6SL7FF7ADFF53113 HTTP 1.1\" 2*" 
+        }
+     }
+  }
+}
+
+###
+GET {{baseUrl}}/log00001/_search
+Content-Type: application/x-ndjson
+
+{
+  "query": {
+    "query_string" : {
+      "fields" : ["vtext"],
+      "default_operator": "AND",
+      "query": "\"JSESSIONID SD6SL7FF7ADFF53113\" AND \"HTTP 1.1\\\"\" AND 2*"
+    }
+  }
+}
+
+
+
+###
+POST {{baseUrl}}/log00001/_analyze
+Content-Type: application/json
+
+{
+  "field": "vtext",
+  "text": "91.205.189.15 - - [22/Jul/2025:18:22:16] \"GET /oldlink?itemId=EST-14&JSESSIONID=SD6SL7FF7ADFF53113 HTTP 1.1\" 200 1665 \"http://www.buttercupgames.com/oldlink?itemId=EST-14\" \"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/536.5 (KHTML, like Gecko) Chrome/19.0.1084.46 Safari/536.5\" 159"
+}
+
+###
+DELETE {{baseUrl}}/log00001[]
+
+
+###
+PUT {{baseUrl}}/log00001
+Content-Type: application/x-ndjson
+
+{
+  "mappings": {
+    "properties": {
+      "vi": {
+        "type": "integer"
+      },
+      "vs": {
+        "type": "keyword"
+      }
+    }
+  }
+}
+
+###
+POST {{baseUrl}}/log00001/_bulk
+Content-Type: application/x-ndjson
+
+{ "index": { "_id": 1 } }
+{"vi": 1, "age": 10}
+{ "index": { "_id": 2 } }
+{"vi": 2, "age": 11}
+{ "index": { "_id": 3 } }
+{"vi": 3, "age": 13}
+
+###
+POST {{baseUrl}}/_plugins/_ppl/_explain
+Content-Type: application/x-ndjson
+
+{
+  "query": "source=log00001 | stats bucket_nullable=false sum(age) as a by vi | sort a"
+}
+
+###
+GET {{baseUrl}}/log00001/_search
+Content-Type: application/x-ndjson
+
+{
+    "size": 0,
+  "aggs": {
+    "tags": {
+      "terms": {
+        "field": "vs",
+        "missing": "null"
+      }
+    }
+  }
+}
+
