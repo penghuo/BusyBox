@@ -1,0 +1,48 @@
+@baseUrl = http://localhost:9200
+
+###
+GET {{baseUrl}}/_cat/indices
+
+###
+PUT {{baseUrl}}/_plugins/_query/settings
+Content-Type: application/x-ndjson
+
+{
+  "transient" : {
+    "plugins.calcite.enabled" : true,
+    "plugins.calcite.pushdown.enabled": true
+  }
+}
+
+
+###
+DELETE {{baseUrl}}/log00001
+
+###
+PUT {{baseUrl}}/log00001
+Content-Type: application/x-ndjson
+
+{
+  "mappings": {
+    "properties": {
+      "message": {
+        "type": "text"
+      }
+    }
+  }
+}
+
+###
+POST {{baseUrl}}/log00001/_bulk
+Content-Type: application/x-ndjson
+
+{"index": { "_id": 1 }}
+{"message": "message: 192.168.1.10 - john [10/Jul/2025:14:30:45 -0700] GET index.html HTTP 1.1 200 1043"}
+
+###
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+  "query": "source = log00001 | parse message 'HTTP 1.1 (?<statuscode>\\d{3})'"
+}
