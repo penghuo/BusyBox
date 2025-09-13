@@ -1,122 +1,245 @@
-# OpenSearch 3.2.0 Setup and ClickBench Scripts
+# ClickBench Manager - Consolidated OpenSearch ClickBench Tool
 
-This directory contains shell scripts to automatically download, configure, and set up OpenSearch 3.2.0 with specific plugin and memory configurations, plus prepare ClickBench benchmark data.
-
-## Overview
-
-The `setup_opensearch_3.2.sh` script performs the following operations:
-
-1. **Downloads OpenSearch 3.2.0** from the official OpenSearch artifacts repository
-2. **Extracts the archive** to a local directory
-3. **Manages plugins** by removing all plugins except:
-   - `opensearch-sql`
-   - `opensearch-job-scheduler`
-4. **Updates JVM memory settings** from 1GB to 16GB (both Xms and Xmx)
-5. **Sets appropriate permissions** for executable files
-
-
-
-## Configuration Details
-
-### JVM Memory Settings
-
-The script configures OpenSearch to use:
-- **Initial heap size (Xms)**: 16GB
-- **Maximum heap size (Xmx)**: 16GB
-
-**Note**: Ensure your system has sufficient RAM. The recommended system RAM is at least 32GB when using 16GB heap size.
-
-### Plugins Retained
-
-Only these plugins are kept after setup:
-- **opensearch-sql**: Enables SQL query support
-- **opensearch-job-scheduler**: Provides job scheduling capabilities
-
-All other default plugins are removed to minimize the installation footprint.
-
-
-# ClickBench Hits Index Preparation Script
-
-The `prepare_hits.sh` script automates the setup of ClickBench benchmark data for OpenSearch performance testing.
+This directory contains a consolidated Python script that replaces all the individual shell scripts and Python scripts for managing OpenSearch ClickBench operations.
 
 ## Overview
 
-The `prepare_hits.sh` script performs the following operations:
+The `clickbench_manager.py` script consolidates all ClickBench benchmark operations into a single tool:
 
-1. **Clones ClickBench Repository** from https://github.com/ClickHouse/ClickBench
-2. **Validates mapping file** from the repository
-3. **Checks OpenSearch connectivity** and cluster status
-4. **Creates the hits index** with proper mapping and settings
-5. **Verifies index creation** and displays configuration details
+- **OpenSearch Setup**: Download, configure, and set up OpenSearch 3.2.0
+- **Index Management**: Prepare ClickBench hits index with proper mapping
+- **Data Loading**: Load ClickBench data into OpenSearch with bulk operations
+- **Snapshot Management**: Create, restore, and manage snapshots
+- **Monitoring**: Monitor snapshot progress and system status
 
-## Prerequisites for ClickBench Script
+## Prerequisites
 
-Before running the ClickBench preparation script, ensure you have:
+### System Requirements
 
-- **OpenSearch running** (use `setup_opensearch_3.2.sh` first)
-- **git** for cloning repositories
-- **curl** for HTTP requests
-- **jq** for JSON processing
+- **Python 3.6+** with the following packages:
+  - `requests` - for HTTP operations
+  - `argparse` - for command-line parsing (built-in)
+  - Standard library modules: `json`, `gzip`, `os`, `sys`, `time`, `subprocess`, `shutil`, `tarfile`, `pathlib`
 
-### Installing jq
+- **System Tools**:
+  - `curl` - for HTTP requests
+  - `git` - for cloning repositories
+  - `tar` - for extracting archives
+  - `java` - Java 11 or higher (for OpenSearch)
+
+### Installing Python Dependencies
+
+```bash
+pip install requests
+```
+
+### Installing System Tools
 
 **macOS (with Homebrew):**
 ```bash
-brew install jq
+brew install curl git openjdk@11
 ```
 
 **Ubuntu/Debian:**
 ```bash
-sudo apt-get install jq
+sudo apt-get update
+sudo apt-get install curl git openjdk-11-jdk
 ```
 
 **CentOS/RHEL:**
 ```bash
-sudo yum install jq
+sudo yum install curl git java-11-openjdk-devel
 ```
 
-## ClickBench Script Usage
+## Quick Start
 
-### Basic Usage
+### 1. Setup OpenSearch
+
+Download and configure OpenSearch 3.2.0:
 
 ```bash
-cd opensearch
-./prepare_hits.sh
+./clickbench_manager.py setup-opensearch
 ```
 
-### Advanced Usage
+This will:
+- Download OpenSearch 3.2.0
+- Extract and configure it
+- Remove unnecessary plugins (keep only `opensearch-sql` and `opensearch-job-scheduler`)
+- Update JVM memory settings to 16GB
+- Set appropriate permissions
+
+### 2. Start OpenSearch
 
 ```bash
-# Force recreate index if it exists
-./prepare_hits.sh --force
-
-# Use different OpenSearch URL
-./prepare_hits.sh --url http://localhost:9201
-
-# Use custom index name
-./prepare_hits.sh --index my_hits_index
-
-# Show help
-./prepare_hits.sh --help
+cd opensearch-3.2.0
+./bin/opensearch
 ```
 
-### Command Line Options
+OpenSearch will be available at `http://localhost:9200` with default credentials `admin/admin`.
 
-- `-f, --force`: Force recreation of index (delete existing if present)
-- `-u, --url URL`: OpenSearch URL (default: http://localhost:9200)
-- `-i, --index NAME`: Index name (default: hits)
-- `-h, --help`: Show help message
+### 3. Prepare ClickBench Index
 
-## What the ClickBench Script Does
+Create the hits index with proper mapping:
 
-1. **System Requirements Check**: Verifies git, curl, and jq are available
-2. **OpenSearch Connectivity**: Tests connection to OpenSearch cluster
-3. **Repository Management**: Clones or updates ClickBench repository
-4. **Mapping Validation**: Validates the Elasticsearch mapping.json file
-5. **Index Management**: Creates or verifies the hits index with proper mapping
-6. **Verification**: Confirms index structure and displays configuration
+```bash
+./clickbench_manager.py prepare-index
+```
 
-## ClickBench Index Details
+This will:
+- Clone the ClickBench repository
+- Validate the mapping file
+- Create the hits index with proper settings
+
+### 4. Load Data (Optional)
+
+If you have the ClickBench data file (`hits.json.gz`):
+
+```bash
+./clickbench_manager.py load-data --data-file hits.json.gz
+```
+
+**Note**: You can download the data from: https://datasets.clickhouse.com/hits/tsv/hits.tsv.gz
+
+## Command Reference
+
+### Global Options
+
+All commands support these global options:
+
+- `--url URL`: OpenSearch URL (default: `http://localhost:9200`)
+- `--index NAME`: Index name (default: `hits`)
+- `--repo NAME`: Snapshot repository name (default: `hits_backup`)
+
+### Available Commands
+
+#### Setup and Configuration
+
+**Setup OpenSearch**
+```bash
+./clickbench_manager.py setup-opensearch
+```
+
+**Prepare Index**
+```bash
+./clickbench_manager.py prepare-index [--force]
+```
+- `--force`: Force recreation of index if it exists
+
+**Check Status**
+```bash
+./clickbench_manager.py status
+```
+
+#### Data Operations
+
+**Load Data**
+```bash
+./clickbench_manager.py load-data [--data-file FILE] [--bulk-size SIZE]
+```
+- `--data-file FILE`: Data file to load (default: `hits.json.gz`)
+- `--bulk-size SIZE`: Bulk request size (default: `10000`)
+
+#### Snapshot Management
+
+**Create Snapshot**
+```bash
+./clickbench_manager.py create-snapshot --snapshot-name NAME [--backup-dir DIR] [--monitor]
+```
+- `--snapshot-name NAME`: Name for the snapshot (required)
+- `--backup-dir DIR`: Backup directory (default: `./snapshots`)
+- `--monitor`: Monitor snapshot progress
+
+**Note**: Use the global `--index` option to specify which index to snapshot (default: `hits`)
+
+**List Snapshots**
+```bash
+./clickbench_manager.py list-snapshots
+```
+
+**Restore Snapshot**
+```bash
+./clickbench_manager.py restore-snapshot --snapshot-name NAME [--target-index INDEX] [--force] [--async]
+```
+- `--snapshot-name NAME`: Name of snapshot to restore (required)
+- `--target-index INDEX`: Target index name (default: same as source)
+- `--force`: Force restore (delete existing index)
+- `--async`: Restore asynchronously
+
+**Monitor Snapshot**
+```bash
+./clickbench_manager.py monitor-snapshot --snapshot-name NAME
+```
+
+**Register Repository**
+```bash
+./clickbench_manager.py register-repo --backup-dir DIR [--force]
+```
+- `--backup-dir DIR`: Backup directory path (required)
+- `--force`: Force re-registration
+
+## Usage Examples
+
+### Complete Setup Workflow
+
+```bash
+# 1. Setup OpenSearch
+./clickbench_manager.py setup-opensearch
+
+# 2. Start OpenSearch (in another terminal)
+cd opensearch-3.2.0 && ./bin/opensearch
+
+# 3. Prepare the index
+./clickbench_manager.py prepare-index
+
+# 4. Check status
+./clickbench_manager.py status
+
+# 5. Load data (if available)
+./clickbench_manager.py load-data --data-file hits.json.gz
+```
+
+### Snapshot Operations
+
+```bash
+# Create a snapshot
+./clickbench_manager.py create-snapshot --snapshot-name backup_$(date +%Y%m%d) --monitor
+
+# List all snapshots
+./clickbench_manager.py list-snapshots
+
+# Restore a snapshot to a different index
+./clickbench_manager.py restore-snapshot --snapshot-name backup_20250912 --target-index hits_restored
+
+# Monitor snapshot progress
+./clickbench_manager.py monitor-snapshot --snapshot-name backup_20250912
+```
+
+### Different OpenSearch Configuration
+
+```bash
+# Use different OpenSearch URL and index name
+./clickbench_manager.py --url http://localhost:9201 --index my_hits prepare-index
+
+# Create snapshot of a specific index
+./clickbench_manager.py --index my_custom_index create-snapshot --snapshot-name my_index_backup
+
+# Create snapshot with custom repository
+./clickbench_manager.py --repo my_backup create-snapshot --snapshot-name test_snapshot
+```
+
+## Configuration Details
+
+### OpenSearch Configuration
+
+The setup process configures OpenSearch with:
+
+- **JVM Memory**: 16GB heap size (Xms16g, Xmx16g)
+- **Plugins**: Only `opensearch-sql` and `opensearch-job-scheduler`
+- **Version**: OpenSearch 3.2.0
+
+**System Requirements**: Ensure your system has at least 32GB RAM when using 16GB heap size.
+
+### ClickBench Index Configuration
 
 The hits index is created with:
 
@@ -125,38 +248,81 @@ The hits index is created with:
 - **Field types** including integers, longs, shorts, keywords, and dates
 - **Date formats** supporting multiple timestamp formats
 
-### Key Fields in the Hits Index
+### Snapshot Configuration
 
-- **CounterID**: Website/application identifier
-- **EventDate/EventTime**: Timestamp fields for events
-- **UserID/WatchID**: User and session identifiers
-- **URL/Referer**: Web page and referrer information
-- **UserAgent**: Browser and device information
-- **Geographic data**: RegionID, CountryID fields
-- **Performance metrics**: Various timing measurements
+Snapshots are configured with:
 
-## After ClickBench Setup
+- **Repository type**: Filesystem (`fs`)
+- **Compression**: Enabled
+- **Chunk size**: 1GB
+- **Transfer rates**: 40MB/s for both snapshot and restore operations
 
-Once the script completes successfully, you can:
+## Troubleshooting
 
-### Check Index Status
+### OpenSearch Path Repository Error
+
+If you encounter a `path.repo` error when creating snapshots:
+
+1. Stop OpenSearch
+2. Edit `opensearch-3.2.0/config/opensearch.yml`
+3. Add the following line:
+   ```yaml
+   path.repo: ["/path/to/your/snapshots/directory"]
+   ```
+4. Restart OpenSearch
+
+### Java Version Issues
+
+Ensure Java 11 or higher is installed:
+
 ```bash
-curl -u admin:admin 'http://localhost:9200/hits/_stats?pretty'
+java -version
 ```
 
-### View Index Mapping
+If you need to install Java:
+- **macOS**: `brew install openjdk@11`
+- **Ubuntu**: `sudo apt-get install openjdk-11-jdk`
+- **CentOS**: `sudo yum install java-11-openjdk-devel`
+
+### Memory Issues
+
+If OpenSearch fails to start due to memory issues:
+
+1. Edit `opensearch-3.2.0/config/jvm.options`
+2. Reduce heap size (e.g., change `-Xms16g` and `-Xmx16g` to `-Xms8g` and `-Xmx8g`)
+3. Restart OpenSearch
+
+### Connection Issues
+
+If you can't connect to OpenSearch:
+
+1. Check if OpenSearch is running: `curl http://localhost:9200`
+2. Check the logs: `tail -f opensearch-3.2.0/logs/opensearch.log`
+3. Verify the URL and port in your commands
+
+## Migration from Individual Scripts
+
+This consolidated script replaces the following individual scripts:
+
+- `setup_opensearch_3.2.sh` → `clickbench_manager.py setup-opensearch`
+- `prepare_hits.sh` → `clickbench_manager.py prepare-index`
+- `load_fixed.py` → `clickbench_manager.py load-data`
+- `snapshot_hits.sh` → `clickbench_manager.py create-snapshot`
+- `restore_snapshot.sh` → `clickbench_manager.py restore-snapshot`
+- `register_snapshot_repo.sh` → `clickbench_manager.py register-repo`
+- `monitor_snapshot.sh` → `clickbench_manager.py monitor-snapshot`
+
+The consolidated script provides the same functionality with improved error handling, better logging, and a consistent interface.
+
+## Getting Help
+
+For help with any command:
+
 ```bash
-curl -u admin:admin 'http://localhost:9200/hits/_mapping?pretty'
+./clickbench_manager.py --help
+./clickbench_manager.py COMMAND --help
 ```
 
-### Load ClickBench Data
-
-Follow the ClickBench documentation to load the actual benchmark dataset:
-
-1. Navigate to the cloned repository: `cd ClickBench`
-2. Follow instructions in the `elasticsearch/` directory
-3. Use the provided data loading scripts
-
-
-
-
+For example:
+```bash
+./clickbench_manager.py create-snapshot --help
