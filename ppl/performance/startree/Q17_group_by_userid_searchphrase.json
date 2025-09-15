@@ -1,0 +1,21 @@
+{
+  "description": "Q17: SELECT UserID, SearchPhrase, COUNT(*) FROM hits GROUP BY UserID, SearchPhrase LIMIT 10",
+  "query": {
+    "size": 0,
+    "aggs": {
+      "user_search_groups": {
+        "multi_terms": {
+          "terms": [
+            {
+              "field": "UserID"
+            },
+            {
+              "field": "SearchPhrase"
+            }
+          ],
+          "size": 10
+        }
+      }
+    }
+  }
+}

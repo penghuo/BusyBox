@@ -1,0 +1,24 @@
+{
+  "description": "Q16: SELECT UserID, SearchPhrase, COUNT(*) FROM hits GROUP BY UserID, SearchPhrase ORDER BY COUNT(*) DESC LIMIT 10",
+  "query": {
+    "size": 0,
+    "aggs": {
+      "user_search_groups": {
+        "multi_terms": {
+          "terms": [
+            {
+              "field": "UserID"
+            },
+            {
+              "field": "SearchPhrase"
+            }
+          ],
+          "size": 10,
+          "order": {
+            "_count": "desc"
+          }
+        }
+      }
+    }
+  }
+}

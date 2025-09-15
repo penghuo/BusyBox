@@ -1,0 +1,17 @@
+{
+  "description": "Q15: SELECT UserID, COUNT(*) FROM hits GROUP BY UserID ORDER BY COUNT(*) DESC LIMIT 10",
+  "query": {
+    "size": 0,
+    "aggs": {
+      "user_groups": {
+        "terms": {
+          "field": "UserID",
+          "size": 10,
+          "order": {
+            "_count": "desc"
+          }
+        }
+      }
+    }
+  }
+}
