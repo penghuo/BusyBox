@@ -1,0 +1,99 @@
+@baseUrl = http://localhost:9200
+
+###
+GET {{baseUrl}}/_cat/indices
+
+###
+PUT {{baseUrl}}/_plugins/_query/settings
+Content-Type: application/x-ndjson
+
+{
+  "transient" : {
+    "plugins.calcite.enabled" : true
+  }
+}
+
+###
+POST {{baseUrl}}/_index_template/log-apache-ppl-template
+Content-Type: application/x-ndjson
+
+{
+  "index_patterns": [
+    "log-apache-ppl"
+  ],
+  "priority": 10001,
+  "template": {
+    "settings": {
+      "number_of_shards": 1,
+      "number_of_replicas": 1
+    },
+    "mappings": {
+      "properties": {
+        "timestamp": {
+          "type": "date",
+          "format": "strict_date_optional_time||epoch_millis"
+        },
+        "message": {
+            "type": "text"
+        }
+      }
+    }
+  }
+}
+
+###
+PUT {{baseUrl}}/log-apache-ppl
+
+###
+POST {{baseUrl}}/log-apache-ppl/_doc
+Content-Type: application/x-ndjson
+
+{
+  "timestamp": "2025-09-03T21:52:11.120Z",
+  "message": "190.14.18.46 - - [03/Mar/2056:20:07:47 -0400] \"GET /wp-content HTTP/1.0\" 301 4932 \"http://www.house.com/mainhomepage.html\" \"Mozilla/5.0 (Macintosh; U; PPC Mac OS X 10_5_2; rv:1.9.4.20) Gecko/3388-12-23 20:43:06.000046 Firefox/3.8\""
+}
+
+###
+POST {{baseUrl}}/log-apache-ppl/_doc
+Content-Type: application/x-ndjson
+
+{
+  "timestamp": "2025-09-03T21:52:11.120Z",
+  "message": "22.36.98.78 - - [03/Mar/2056:20:12:25 -0400] \"DELETE /app/main/posts HTTP/1.0\" 200 5060 \"https://www.reyes.com/blog/categoryprivacy.html\" \"Mozilla/5.0 (iPad; CPU iPad OS 10_3_3 like Mac OS X) AppleWebKit/532.0 (KHTML, like Gecko) FxiOS/12.6e0160.0 Mobile/13U952 Safari/532.0\""
+}
+
+###
+POST {{baseUrl}}/log-apache-ppl/_doc
+Content-Type: application/x-ndjson
+
+{
+  "timestamp": "2025-09-03T21:53:11.120Z",
+  "message": "16.30.100.23 - - [03/Mar/2056:20:14:58 -0400] \"GET /wp-content HTTP/1.0\" 200 4990 \"http://www.cook.com/tag/explorefaq.htm\" \"Opera/9.68.(X11; Linux i686; gl-ES) Presto/2.9.178 Version/12.00\""
+}
+
+###
+GET {{baseUrl}}/log-apache-ppl/_search
+
+###
+POST {{baseUrl}}/_plugins/_ppl/_explain
+Content-Type: application/x-ndjson
+
+{
+  "query": "source=log-apache-ppl | grok message '%{IPORHOST:client_ip} %{USER:ident} %{USER:auth} [%{HTTPDATE:timestamp}] \"%{WORD:method} %{URIPATH:request_uri}(?:%{URIPARAM:query_string})? HTTP/%{NUMBER:http_version}\" %{INT:status_code} %{INT:response_size} \"%{DATA:referer}\" \"%{DATA:user_agent}\"'"
+}
+
+###
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+  "query": "source=log-apache-ppl | grok message '%{IPORHOST:client_ip} %{USER:ident} %{USER:auth} \\[%{HTTPDATE:timestamp}\\] \"%{WORD:method} %{URIPATH:request_uri}(?:%{URIPARAM:query_string})? HTTP/%{NUMBER:http_version}\" %{INT:status_code} %{INT:response_size} \"%{DATA:referer}\" \"%{DATA:user_agent}\"' | fields method "
+}
+
+###
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+  "query": "source=log-apache-ppl | grok message '%{IPORHOST:client_ip} %{USER:ident} %{USER:auth} \\[%{HTTPDATE:timestamp}\\] \"%{WORD:method} %{URIPATH:request_uri}(?:%{URIPARAM:query_string})? HTTP/%{NUMBER:http_version}\" %{INT:status_code} %{INT:response_size} \"%{DATA:referer}\" \"%{DATA:user_agent}\"' | where method='GET' | fields client_ip, method "
+}
