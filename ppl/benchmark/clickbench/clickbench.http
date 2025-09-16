@@ -1,0 +1,76 @@
+@baseUrl = http://localhost:9200
+
+### Get all indices
+GET {{baseUrl}}/_cat/indices
+
+###
+GET {{baseUrl}}/_cat/shards
+
+
+### Clear cache in between.
+POST {{baseUrl}}/hits/_cache/clear
+
+### Q17 - Term
+GET {{baseUrl}}/hits/_search
+Content-Type: application/x-ndjson
+
+{
+    "profile": true,
+  "size": 0,
+  "_source" : false,
+  "track_total_hits" : -1,
+  "aggs": {
+    "user_groups": {
+      "terms": {
+        "field": "UserID",
+        "size": 10
+      },
+      "aggs": {
+        "search_phrase_groups": {
+          "terms": {
+            "field": "SearchPhrase",
+            "size": 10
+          }
+        }
+      }
+    }
+  }
+}
+
+### Q17 - Composite
+GET {{baseUrl}}/hits/_search
+Content-Type: application/x-ndjson
+
+{
+    "profile": true,
+  "size" : 0,
+  "_source" : false,
+  "track_total_hits" : -1,
+  "aggregations" : {
+    "groupby" : {
+      "composite" : {
+        "size" : 10,
+        "sources" : [
+          {
+            "UserIDTerm" : {
+              "terms" : {
+                "field" : "UserID",
+                "missing_bucket" : true,
+                "order" : "asc"
+              }
+            }
+          },
+          {
+            "SearchPhraseTerm" : {
+              "terms" : {
+                "field" : "SearchPhrase",
+                "missing_bucket" : true,
+                "order" : "asc"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

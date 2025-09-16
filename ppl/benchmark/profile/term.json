@@ -1,0 +1,1499 @@
+{
+  "took": 3431,
+  "timed_out": false,
+  "terminated_early": true,
+  "_shards": {
+    "total": 4,
+    "successful": 4,
+    "skipped": 0,
+    "failed": 0
+  },
+  "hits": {
+    "max_score": null,
+    "hits": []
+  },
+  "aggregations": {
+    "user_groups": {
+      "doc_count_error_upper_bound": 6222,
+      "sum_other_doc_count": 99895392,
+      "buckets": [
+        {
+          "key": 1313338681122956954,
+          "doc_count": 28874,
+          "search_phrase_groups": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 0,
+            "buckets": [
+              {
+                "key": "",
+                "doc_count": 28874
+              }
+            ]
+          }
+        },
+        {
+          "key": 1907779576417363396,
+          "doc_count": 24895,
+          "search_phrase_groups": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 0,
+            "buckets": [
+              {
+                "key": "",
+                "doc_count": 24895
+              }
+            ]
+          }
+        },
+        {
+          "key": 2305303682471783379,
+          "doc_count": 10597,
+          "search_phrase_groups": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 0,
+            "buckets": [
+              {
+                "key": "",
+                "doc_count": 10597
+              }
+            ]
+          }
+        },
+        {
+          "key": 7982623143712728547,
+          "doc_count": 6367,
+          "search_phrase_groups": {
+            "doc_count_error_upper_bound": 11,
+            "sum_other_doc_count": 554,
+            "buckets": [
+              {
+                "key": "",
+                "doc_count": 5739
+              },
+              {
+                "key": "албатрутдин",
+                "doc_count": 26
+              },
+              {
+                "key": "отели и автор запечение хурганект",
+                "doc_count": 19
+              },
+              {
+                "key": "general b pfrhsnjq ytljhjufnyst vfvjxrb hfplf 3 antwoorkgrounder",
+                "doc_count": 6
+              },
+              {
+                "key": "мангу в зарабей грама",
+                "doc_count": 6
+              },
+              {
+                "key": "гадкий доктор сапогенера фаби",
+                "doc_count": 4
+              },
+              {
+                "key": "санатор цена",
+                "doc_count": 4
+              },
+              {
+                "key": "kawasaki - please foglio down tools littlefield 3 хэтчбек",
+                "doc_count": 3
+              },
+              {
+                "key": "дружке помещение",
+                "doc_count": 3
+              },
+              {
+                "key": "запчастливостов-санкт-петербурге для на марфинске",
+                "doc_count": 3
+              }
+            ]
+          }
+        },
+        {
+          "key": 1090981537032625727,
+          "doc_count": 6197,
+          "search_phrase_groups": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 0,
+            "buckets": [
+              {
+                "key": "",
+                "doc_count": 6196
+              },
+              {
+                "key": "kooldplayerse",
+                "doc_count": 1
+              }
+            ]
+          }
+        },
+        {
+          "key": 5730251990344211405,
+          "doc_count": 6019,
+          "search_phrase_groups": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 0,
+            "buckets": [
+              {
+                "key": "",
+                "doc_count": 6019
+              }
+            ]
+          }
+        },
+        {
+          "key": 7280399273658728997,
+          "doc_count": 6015,
+          "search_phrase_groups": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 0,
+            "buckets": [
+              {
+                "key": "",
+                "doc_count": 6015
+              }
+            ]
+          }
+        },
+        {
+          "key": 835157184735512989,
+          "doc_count": 4989,
+          "search_phrase_groups": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 0,
+            "buckets": [
+              {
+                "key": "",
+                "doc_count": 4988
+              },
+              {
+                "key": "как",
+                "doc_count": 1
+              }
+            ]
+          }
+        },
+        {
+          "key": 6018350421959114808,
+          "doc_count": 4128,
+          "search_phrase_groups": {
+            "doc_count_error_upper_bound": 6,
+            "sum_other_doc_count": 214,
+            "buckets": [
+              {
+                "key": "",
+                "doc_count": 3853
+              },
+              {
+                "key": "албатрутдин",
+                "doc_count": 39
+              },
+              {
+                "key": "авито москва крючком козы",
+                "doc_count": 4
+              },
+              {
+                "key": "форсаж",
+                "doc_count": 4
+              },
+              {
+                "key": "авито нужном на",
+                "doc_count": 3
+              },
+              {
+                "key": "одеждать онлайн бесплатно вовскому 1 серии",
+                "doc_count": 3
+              },
+              {
+                "key": "албасой",
+                "doc_count": 2
+              },
+              {
+                "key": "вспомню для девочка вкусно",
+                "doc_count": 2
+              },
+              {
+                "key": "вспомню нюша посредние",
+                "doc_count": 2
+              },
+              {
+                "key": "димир в птс 4 призрачный виктор",
+                "doc_count": 2
+              }
+            ]
+          }
+        },
+        {
+          "key": 309154003034353510,
+          "doc_count": 4024,
+          "search_phrase_groups": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 0,
+            "buckets": [
+              {
+                "key": "",
+                "doc_count": 4024
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "profile": {
+    "shards": [
+      {
+        "id": "[0vc9m0mhSjGttmdS58NDfw][hits][0]",
+        "inbound_network_time_in_millis": 0,
+        "outbound_network_time_in_millis": 0,
+        "searches": [
+          {
+            "query": [
+              {
+                "type": "ConstantScoreQuery",
+                "description": "ConstantScore(*:*)",
+                "time_in_nanos": 2502013795,
+                "max_slice_time_in_nanos": 2501482493,
+                "min_slice_time_in_nanos": 548860068,
+                "avg_slice_time_in_nanos": 1811795727,
+                "breakdown": {
+                  "advance": 0,
+                  "advance_count": 0,
+                  "avg_advance": 0,
+                  "avg_advance_count": 0,
+                  "avg_build_scorer": 1665501867,
+                  "avg_build_scorer_count": 12,
+                  "avg_compute_max_score": 0,
+                  "avg_compute_max_score_count": 0,
+                  "avg_match": 0,
+                  "avg_match_count": 0,
+                  "avg_next_doc": 1811788571,
+                  "avg_next_doc_count": 6249400,
+                  "avg_score": 0,
+                  "avg_score_count": 0,
+                  "avg_set_min_competitive_score": 0,
+                  "avg_set_min_competitive_score_count": 0,
+                  "avg_shallow_advance": 0,
+                  "avg_shallow_advance_count": 0,
+                  "build_scorer": 2488765805,
+                  "build_scorer_count": 48,
+                  "compute_max_score": 0,
+                  "compute_max_score_count": 0,
+                  "create_weight": 10991,
+                  "create_weight_count": 1,
+                  "match": 0,
+                  "match_count": 0,
+                  "max_advance": 0,
+                  "max_advance_count": 0,
+                  "max_build_scorer": 2488743635,
+                  "max_build_scorer_count": 20,
+                  "max_compute_max_score": 0,
+                  "max_compute_max_score_count": 0,
+                  "max_match": 0,
+                  "max_match_count": 0,
+                  "max_next_doc": 2501474672,
+                  "max_next_doc_count": 6436976,
+                  "max_score": 0,
+                  "max_score_count": 0,
+                  "max_set_min_competitive_score": 0,
+                  "max_set_min_competitive_score_count": 0,
+                  "max_shallow_advance": 0,
+                  "max_shallow_advance_count": 0,
+                  "min_advance": 0,
+                  "min_advance_count": 0,
+                  "min_build_scorer": 4450,
+                  "min_build_scorer_count": 2,
+                  "min_compute_max_score": 0,
+                  "min_compute_max_score_count": 0,
+                  "min_match": 0,
+                  "min_match_count": 0,
+                  "min_next_doc": 548853828,
+                  "min_next_doc_count": 6183605,
+                  "min_score": 0,
+                  "min_score_count": 0,
+                  "min_set_min_competitive_score": 0,
+                  "min_set_min_competitive_score_count": 0,
+                  "min_shallow_advance": 0,
+                  "min_shallow_advance_count": 0,
+                  "next_doc": 2501498423,
+                  "next_doc_count": 24997600,
+                  "score": 0,
+                  "score_count": 0,
+                  "set_min_competitive_score": 0,
+                  "set_min_competitive_score_count": 0,
+                  "shallow_advance": 0,
+                  "shallow_advance_count": 0
+                },
+                "children": [
+                  {
+                    "type": "MatchAllDocsQuery",
+                    "description": "*:*",
+                    "time_in_nanos": 2493457049,
+                    "max_slice_time_in_nanos": 2492932667,
+                    "min_slice_time_in_nanos": 181206943,
+                    "avg_slice_time_in_nanos": 1713699508,
+                    "breakdown": {
+                      "advance": 0,
+                      "advance_count": 0,
+                      "avg_advance": 0,
+                      "avg_advance_count": 0,
+                      "avg_build_scorer": 1665498884,
+                      "avg_build_scorer_count": 12,
+                      "avg_compute_max_score": 0,
+                      "avg_compute_max_score_count": 0,
+                      "avg_match": 0,
+                      "avg_match_count": 0,
+                      "avg_next_doc": 1713694123,
+                      "avg_next_doc_count": 6249400,
+                      "avg_score": 0,
+                      "avg_score_count": 0,
+                      "avg_set_min_competitive_score": 0,
+                      "avg_set_min_competitive_score_count": 0,
+                      "avg_shallow_advance": 0,
+                      "avg_shallow_advance_count": 0,
+                      "build_scorer": 2488763175,
+                      "build_scorer_count": 48,
+                      "compute_max_score": 0,
+                      "compute_max_score_count": 0,
+                      "create_weight": 360,
+                      "create_weight_count": 1,
+                      "match": 0,
+                      "match_count": 0,
+                      "max_advance": 0,
+                      "max_advance_count": 0,
+                      "max_build_scorer": 2488740665,
+                      "max_build_scorer_count": 20,
+                      "max_compute_max_score": 0,
+                      "max_compute_max_score_count": 0,
+                      "max_match": 0,
+                      "max_match_count": 0,
+                      "max_next_doc": 2492926597,
+                      "max_next_doc_count": 6436976,
+                      "max_score": 0,
+                      "max_score_count": 0,
+                      "max_set_min_competitive_score": 0,
+                      "max_set_min_competitive_score_count": 0,
+                      "max_shallow_advance": 0,
+                      "max_shallow_advance_count": 0,
+                      "min_advance": 0,
+                      "min_advance_count": 0,
+                      "min_build_scorer": 1820,
+                      "min_build_scorer_count": 2,
+                      "min_compute_max_score": 0,
+                      "min_compute_max_score_count": 0,
+                      "min_match": 0,
+                      "min_match_count": 0,
+                      "min_next_doc": 181202133,
+                      "min_next_doc_count": 6183605,
+                      "min_score": 0,
+                      "min_score_count": 0,
+                      "min_set_min_competitive_score": 0,
+                      "min_set_min_competitive_score_count": 0,
+                      "min_shallow_advance": 0,
+                      "min_shallow_advance_count": 0,
+                      "next_doc": 2492950367,
+                      "next_doc_count": 24997600,
+                      "score": 0,
+                      "score_count": 0,
+                      "set_min_competitive_score": 0,
+                      "set_min_competitive_score_count": 0,
+                      "shallow_advance": 0,
+                      "shallow_advance_count": 0
+                    }
+                  }
+                ]
+              }
+            ],
+            "rewrite_time": 4600,
+            "collector": [
+              {
+                "name": "QueryCollectorManager",
+                "reason": "search_multi",
+                "time_in_nanos": 2322328849,
+                "reduce_time_in_nanos": 338058,
+                "max_slice_time_in_nanos": 2321973081,
+                "min_slice_time_in_nanos": 1877767188,
+                "avg_slice_time_in_nanos": 2034428978,
+                "slice_count": 4,
+                "children": [
+                  {
+                    "name": "EarlyTerminatingCollectorManager",
+                    "reason": "search_count",
+                    "time_in_nanos": 505831,
+                    "reduce_time_in_nanos": 6820,
+                    "max_slice_time_in_nanos": 48920,
+                    "min_slice_time_in_nanos": 3000,
+                    "avg_slice_time_in_nanos": 24586,
+                    "slice_count": 4
+                  },
+                  {
+                    "name": "NonGlobalAggCollectorManager: [user_groups]",
+                    "reason": "aggregation",
+                    "time_in_nanos": 1976286503,
+                    "reduce_time_in_nanos": 314277,
+                    "max_slice_time_in_nanos": 1975930035,
+                    "min_slice_time_in_nanos": 1527317483,
+                    "avg_slice_time_in_nanos": 1682627876,
+                    "slice_count": 4
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "aggregations": [
+          {
+            "type": "NumericTermsAggregator",
+            "description": "user_groups",
+            "time_in_nanos": 1566146713,
+            "max_slice_time_in_nanos": 1565892837,
+            "min_slice_time_in_nanos": 1413365842,
+            "avg_slice_time_in_nanos": 1485108786,
+            "breakdown": {
+              "min_build_leaf_collector": 3520,
+              "build_aggregation_count": 4,
+              "post_collection": 444878004,
+              "max_collect_count": 6436975,
+              "initialize_count": 4,
+              "reduce_count": 0,
+              "avg_collect": 1287199606,
+              "max_build_aggregation": 226889273,
+              "avg_collect_count": 6249394,
+              "max_build_leaf_collector": 1150787,
+              "min_build_leaf_collector_count": 1,
+              "build_aggregation": 583164646,
+              "min_initialize": 2700,
+              "max_reduce": 0,
+              "build_leaf_collector_count": 24,
+              "avg_reduce": 0,
+              "min_collect_count": 6183595,
+              "avg_build_leaf_collector_count": 6,
+              "avg_build_leaf_collector": 755777,
+              "max_collect": 1343940637,
+              "reduce": 0,
+              "avg_build_aggregation": 196883875,
+              "min_post_collection": 19231,
+              "max_initialize": 6940,
+              "max_post_collection": 1000832,
+              "collect_count": 24997576,
+              "avg_post_collection": 265368,
+              "avg_initialize": 4159,
+              "post_collection_count": 4,
+              "build_leaf_collector": 1163867,
+              "min_collect": 1215528309,
+              "min_build_aggregation": 138307492,
+              "initialize": 529652,
+              "max_build_leaf_collector_count": 10,
+              "min_reduce": 0,
+              "collect": 1343961527
+            },
+            "debug": {
+              "deferred_aggregators": [
+                "search_phrase_groups"
+              ],
+              "total_buckets": 2169493,
+              "result_selection_strategy": "priority_queue",
+              "result_strategy": "long_terms"
+            },
+            "children": [
+              {
+                "type": "GlobalOrdinalsStringTermsAggregator",
+                "description": "search_phrase_groups",
+                "time_in_nanos": 3142485,
+                "max_slice_time_in_nanos": 2619243,
+                "min_slice_time_in_nanos": 1791061,
+                "avg_slice_time_in_nanos": 2361829,
+                "breakdown": {
+                  "min_build_leaf_collector": 71442,
+                  "build_aggregation_count": 4,
+                  "post_collection": 382076266,
+                  "max_collect_count": 26180,
+                  "initialize_count": 4,
+                  "reduce_count": 0,
+                  "avg_collect": 1351713,
+                  "max_build_aggregation": 872450,
+                  "avg_collect_count": 17817,
+                  "max_build_leaf_collector": 637145,
+                  "min_build_leaf_collector_count": 1,
+                  "build_aggregation": 382481535,
+                  "min_initialize": 170,
+                  "max_reduce": 0,
+                  "build_leaf_collector_count": 24,
+                  "avg_reduce": 0,
+                  "min_collect_count": 12968,
+                  "avg_build_leaf_collector_count": 6,
+                  "avg_build_leaf_collector": 429597,
+                  "max_collect": 1992910,
+                  "reduce": 0,
+                  "avg_build_aggregation": 579293,
+                  "min_post_collection": 610,
+                  "max_initialize": 600,
+                  "max_post_collection": 1380,
+                  "collect_count": 71269,
+                  "avg_post_collection": 915,
+                  "avg_initialize": 310,
+                  "post_collection_count": 4,
+                  "build_leaf_collector": 421019955,
+                  "min_collect": 745786,
+                  "min_build_aggregation": 407029,
+                  "initialize": 523412,
+                  "max_build_leaf_collector_count": 10,
+                  "min_reduce": 0,
+                  "collect": 421858752
+                },
+                "debug": {
+                  "segments_with_multi_valued_ords": 5,
+                  "collection_strategy": "remap",
+                  "segments_with_single_valued_ords": 0,
+                  "total_buckets": 99,
+                  "result_strategy": "terms",
+                  "has_filter": false
+                }
+              }
+            ]
+          }
+        ],
+        "fetch": []
+      },
+      {
+        "id": "[0vc9m0mhSjGttmdS58NDfw][hits][1]",
+        "inbound_network_time_in_millis": 0,
+        "outbound_network_time_in_millis": 0,
+        "searches": [
+          {
+            "query": [
+              {
+                "type": "ConstantScoreQuery",
+                "description": "ConstantScore(*:*)",
+                "time_in_nanos": 2162707176,
+                "max_slice_time_in_nanos": 2161984799,
+                "min_slice_time_in_nanos": 550446604,
+                "avg_slice_time_in_nanos": 1741024742,
+                "breakdown": {
+                  "advance": 0,
+                  "advance_count": 0,
+                  "avg_advance": 0,
+                  "avg_advance_count": 0,
+                  "avg_build_scorer": 1597804098,
+                  "avg_build_scorer_count": 12,
+                  "avg_compute_max_score": 0,
+                  "avg_compute_max_score_count": 0,
+                  "avg_match": 0,
+                  "avg_match_count": 0,
+                  "avg_next_doc": 1741017394,
+                  "avg_next_doc_count": 6249364,
+                  "avg_score": 0,
+                  "avg_score_count": 0,
+                  "avg_set_min_competitive_score": 0,
+                  "avg_set_min_competitive_score_count": 0,
+                  "avg_shallow_advance": 0,
+                  "avg_shallow_advance_count": 0,
+                  "build_scorer": 2147124492,
+                  "build_scorer_count": 50,
+                  "compute_max_score": 0,
+                  "compute_max_score_count": 0,
+                  "create_weight": 15911,
+                  "create_weight_count": 1,
+                  "match": 0,
+                  "match_count": 0,
+                  "max_advance": 0,
+                  "max_advance_count": 0,
+                  "max_build_scorer": 2147108051,
+                  "max_build_scorer_count": 20,
+                  "max_compute_max_score": 0,
+                  "max_compute_max_score_count": 0,
+                  "max_match": 0,
+                  "max_match_count": 0,
+                  "max_next_doc": 2161977909,
+                  "max_next_doc_count": 6540084,
+                  "max_score": 0,
+                  "max_score_count": 0,
+                  "max_set_min_competitive_score": 0,
+                  "max_set_min_competitive_score_count": 0,
+                  "max_shallow_advance": 0,
+                  "max_shallow_advance_count": 0,
+                  "min_advance": 0,
+                  "min_advance_count": 0,
+                  "min_build_scorer": 7590,
+                  "min_build_scorer_count": 2,
+                  "min_compute_max_score": 0,
+                  "min_compute_max_score_count": 0,
+                  "min_match": 0,
+                  "min_match_count": 0,
+                  "min_next_doc": 550435993,
+                  "min_next_doc_count": 6146969,
+                  "min_score": 0,
+                  "min_score_count": 0,
+                  "min_set_min_competitive_score": 0,
+                  "min_set_min_competitive_score_count": 0,
+                  "min_shallow_advance": 0,
+                  "min_shallow_advance_count": 0,
+                  "next_doc": 2161990629,
+                  "next_doc_count": 24997457,
+                  "score": 0,
+                  "score_count": 0,
+                  "set_min_competitive_score": 0,
+                  "set_min_competitive_score_count": 0,
+                  "shallow_advance": 0,
+                  "shallow_advance_count": 0
+                },
+                "children": [
+                  {
+                    "type": "MatchAllDocsQuery",
+                    "description": "*:*",
+                    "time_in_nanos": 2152765421,
+                    "max_slice_time_in_nanos": 2152053825,
+                    "min_slice_time_in_nanos": 182468831,
+                    "avg_slice_time_in_nanos": 1645267024,
+                    "breakdown": {
+                      "advance": 0,
+                      "advance_count": 0,
+                      "avg_advance": 0,
+                      "avg_advance_count": 0,
+                      "avg_build_scorer": 1597800776,
+                      "avg_build_scorer_count": 12,
+                      "avg_compute_max_score": 0,
+                      "avg_compute_max_score_count": 0,
+                      "avg_match": 0,
+                      "avg_match_count": 0,
+                      "avg_next_doc": 1645261554,
+                      "avg_next_doc_count": 6249364,
+                      "avg_score": 0,
+                      "avg_score_count": 0,
+                      "avg_set_min_competitive_score": 0,
+                      "avg_set_min_competitive_score_count": 0,
+                      "avg_shallow_advance": 0,
+                      "avg_shallow_advance_count": 0,
+                      "build_scorer": 2147120132,
+                      "build_scorer_count": 50,
+                      "compute_max_score": 0,
+                      "compute_max_score_count": 0,
+                      "create_weight": 230,
+                      "create_weight_count": 1,
+                      "match": 0,
+                      "match_count": 0,
+                      "max_advance": 0,
+                      "max_advance_count": 0,
+                      "max_build_scorer": 2147103831,
+                      "max_build_scorer_count": 20,
+                      "max_compute_max_score": 0,
+                      "max_compute_max_score_count": 0,
+                      "max_match": 0,
+                      "max_match_count": 0,
+                      "max_next_doc": 2152048935,
+                      "max_next_doc_count": 6540084,
+                      "max_score": 0,
+                      "max_score_count": 0,
+                      "max_set_min_competitive_score": 0,
+                      "max_set_min_competitive_score_count": 0,
+                      "max_shallow_advance": 0,
+                      "max_shallow_advance_count": 0,
+                      "min_advance": 0,
+                      "min_advance_count": 0,
+                      "min_build_scorer": 3690,
+                      "min_build_scorer_count": 2,
+                      "min_compute_max_score": 0,
+                      "min_compute_max_score_count": 0,
+                      "min_match": 0,
+                      "min_match_count": 0,
+                      "min_next_doc": 182460350,
+                      "min_next_doc_count": 6146969,
+                      "min_score": 0,
+                      "min_score_count": 0,
+                      "min_set_min_competitive_score": 0,
+                      "min_set_min_competitive_score_count": 0,
+                      "min_shallow_advance": 0,
+                      "min_shallow_advance_count": 0,
+                      "next_doc": 2152061645,
+                      "next_doc_count": 24997457,
+                      "score": 0,
+                      "score_count": 0,
+                      "set_min_competitive_score": 0,
+                      "set_min_competitive_score_count": 0,
+                      "shallow_advance": 0,
+                      "shallow_advance_count": 0
+                    }
+                  }
+                ]
+              }
+            ],
+            "rewrite_time": 5261,
+            "collector": [
+              {
+                "name": "QueryCollectorManager",
+                "reason": "search_multi",
+                "time_in_nanos": 2318204263,
+                "reduce_time_in_nanos": 280417,
+                "max_slice_time_in_nanos": 2318204263,
+                "min_slice_time_in_nanos": 1926153651,
+                "avg_slice_time_in_nanos": 2037727230,
+                "slice_count": 4,
+                "children": [
+                  {
+                    "name": "EarlyTerminatingCollectorManager",
+                    "reason": "search_count",
+                    "time_in_nanos": 747595,
+                    "reduce_time_in_nanos": 6970,
+                    "max_slice_time_in_nanos": 47201,
+                    "min_slice_time_in_nanos": 4910,
+                    "avg_slice_time_in_nanos": 26761,
+                    "slice_count": 4
+                  },
+                  {
+                    "name": "NonGlobalAggCollectorManager: [user_groups]",
+                    "reason": "aggregation",
+                    "time_in_nanos": 1953847620,
+                    "reduce_time_in_nanos": 248296,
+                    "max_slice_time_in_nanos": 1953847620,
+                    "min_slice_time_in_nanos": 1580117512,
+                    "avg_slice_time_in_nanos": 1684717468,
+                    "slice_count": 4
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "aggregations": [
+          {
+            "type": "NumericTermsAggregator",
+            "description": "user_groups",
+            "time_in_nanos": 1498954030,
+            "max_slice_time_in_nanos": 1498538081,
+            "min_slice_time_in_nanos": 1336364374,
+            "avg_slice_time_in_nanos": 1420077109,
+            "breakdown": {
+              "min_build_leaf_collector": 4800,
+              "build_aggregation_count": 4,
+              "post_collection": 402290212,
+              "max_collect_count": 6540083,
+              "initialize_count": 4,
+              "reduce_count": 0,
+              "avg_collect": 1260619937,
+              "max_build_aggregation": 186728956,
+              "avg_collect_count": 6249358,
+              "max_build_leaf_collector": 995080,
+              "min_build_leaf_collector_count": 1,
+              "build_aggregation": 537265789,
+              "min_initialize": 4250,
+              "max_reduce": 0,
+              "build_leaf_collector_count": 25,
+              "avg_reduce": 0,
+              "min_collect_count": 6146959,
+              "avg_build_leaf_collector_count": 6,
+              "avg_build_leaf_collector": 665744,
+              "max_collect": 1320625433,
+              "reduce": 0,
+              "avg_build_aggregation": 158608053,
+              "min_post_collection": 5270,
+              "max_initialize": 13910,
+              "max_post_collection": 660446,
+              "collect_count": 24997432,
+              "avg_post_collection": 175919,
+              "avg_initialize": 7455,
+              "post_collection_count": 4,
+              "build_leaf_collector": 1007991,
+              "min_collect": 1205430932,
+              "min_build_aggregation": 130042625,
+              "initialize": 800788,
+              "max_build_leaf_collector_count": 10,
+              "min_reduce": 0,
+              "collect": 1320625433
+            },
+            "debug": {
+              "deferred_aggregators": [
+                "search_phrase_groups"
+              ],
+              "total_buckets": 2333825,
+              "result_selection_strategy": "priority_queue",
+              "result_strategy": "long_terms"
+            },
+            "children": [
+              {
+                "type": "GlobalOrdinalsStringTermsAggregator",
+                "description": "search_phrase_groups",
+                "time_in_nanos": 3339141,
+                "max_slice_time_in_nanos": 2739477,
+                "min_slice_time_in_nanos": 1946525,
+                "avg_slice_time_in_nanos": 2241201,
+                "breakdown": {
+                  "min_build_leaf_collector": 103683,
+                  "build_aggregation_count": 4,
+                  "post_collection": 407236494,
+                  "max_collect_count": 24787,
+                  "initialize_count": 4,
+                  "reduce_count": 0,
+                  "avg_collect": 1118498,
+                  "max_build_aggregation": 798057,
+                  "avg_collect_count": 17704,
+                  "max_build_leaf_collector": 763138,
+                  "min_build_leaf_collector_count": 1,
+                  "build_aggregation": 407935070,
+                  "min_initialize": 280,
+                  "max_reduce": 0,
+                  "build_leaf_collector_count": 25,
+                  "avg_reduce": 0,
+                  "min_collect_count": 14675,
+                  "avg_build_leaf_collector_count": 6,
+                  "avg_build_leaf_collector": 454497,
+                  "max_collect": 1330760,
+                  "reduce": 0,
+                  "avg_build_aggregation": 666755,
+                  "min_post_collection": 680,
+                  "max_initialize": 940,
+                  "max_post_collection": 1450,
+                  "collect_count": 70817,
+                  "avg_post_collection": 942,
+                  "avg_initialize": 507,
+                  "post_collection_count": 4,
+                  "build_leaf_collector": 404875740,
+                  "min_collect": 896862,
+                  "min_build_aggregation": 466831,
+                  "initialize": 788198,
+                  "max_build_leaf_collector_count": 10,
+                  "min_reduce": 0,
+                  "collect": 406005365
+                },
+                "debug": {
+                  "segments_with_multi_valued_ords": 5,
+                  "collection_strategy": "remap",
+                  "segments_with_single_valued_ords": 0,
+                  "total_buckets": 142,
+                  "result_strategy": "terms",
+                  "has_filter": false
+                }
+              }
+            ]
+          }
+        ],
+        "fetch": []
+      },
+      {
+        "id": "[0vc9m0mhSjGttmdS58NDfw][hits][2]",
+        "inbound_network_time_in_millis": 0,
+        "outbound_network_time_in_millis": 0,
+        "searches": [
+          {
+            "query": [
+              {
+                "type": "ConstantScoreQuery",
+                "description": "ConstantScore(*:*)",
+                "time_in_nanos": 2605141314,
+                "max_slice_time_in_nanos": 2604611002,
+                "min_slice_time_in_nanos": 550958483,
+                "avg_slice_time_in_nanos": 1929108091,
+                "breakdown": {
+                  "advance": 0,
+                  "advance_count": 0,
+                  "avg_advance": 0,
+                  "avg_advance_count": 0,
+                  "avg_build_scorer": 1789460305,
+                  "avg_build_scorer_count": 10,
+                  "avg_compute_max_score": 0,
+                  "avg_compute_max_score_count": 0,
+                  "avg_match": 0,
+                  "avg_match_count": 0,
+                  "avg_next_doc": 1929099696,
+                  "avg_next_doc_count": 6249751,
+                  "avg_score": 0,
+                  "avg_score_count": 0,
+                  "avg_set_min_competitive_score": 0,
+                  "avg_set_min_competitive_score_count": 0,
+                  "avg_shallow_advance": 0,
+                  "avg_shallow_advance_count": 0,
+                  "build_scorer": 2601315906,
+                  "build_scorer_count": 40,
+                  "compute_max_score": 0,
+                  "compute_max_score_count": 0,
+                  "create_weight": 12450,
+                  "create_weight_count": 1,
+                  "match": 0,
+                  "match_count": 0,
+                  "max_advance": 0,
+                  "max_advance_count": 0,
+                  "max_build_scorer": 2601292545,
+                  "max_build_scorer_count": 16,
+                  "max_compute_max_score": 0,
+                  "max_compute_max_score_count": 0,
+                  "max_match": 0,
+                  "max_match_count": 0,
+                  "max_next_doc": 2604602472,
+                  "max_next_doc_count": 6410726,
+                  "max_score": 0,
+                  "max_score_count": 0,
+                  "max_set_min_competitive_score": 0,
+                  "max_set_min_competitive_score_count": 0,
+                  "max_shallow_advance": 0,
+                  "max_shallow_advance_count": 0,
+                  "min_advance": 0,
+                  "min_advance_count": 0,
+                  "min_build_scorer": 5310,
+                  "min_build_scorer_count": 2,
+                  "min_compute_max_score": 0,
+                  "min_compute_max_score_count": 0,
+                  "min_match": 0,
+                  "min_match_count": 0,
+                  "min_next_doc": 550949663,
+                  "min_next_doc_count": 6195133,
+                  "min_score": 0,
+                  "min_score_count": 0,
+                  "min_set_min_competitive_score": 0,
+                  "min_set_min_competitive_score_count": 0,
+                  "min_shallow_advance": 0,
+                  "min_shallow_advance_count": 0,
+                  "next_doc": 2604625543,
+                  "next_doc_count": 24999005,
+                  "score": 0,
+                  "score_count": 0,
+                  "set_min_competitive_score": 0,
+                  "set_min_competitive_score_count": 0,
+                  "shallow_advance": 0,
+                  "shallow_advance_count": 0
+                },
+                "children": [
+                  {
+                    "type": "MatchAllDocsQuery",
+                    "description": "*:*",
+                    "time_in_nanos": 2602849958,
+                    "max_slice_time_in_nanos": 2602327546,
+                    "min_slice_time_in_nanos": 179518924,
+                    "avg_slice_time_in_nanos": 1834951355,
+                    "breakdown": {
+                      "advance": 0,
+                      "advance_count": 0,
+                      "avg_advance": 0,
+                      "avg_advance_count": 0,
+                      "avg_build_scorer": 1789457602,
+                      "avg_build_scorer_count": 10,
+                      "avg_compute_max_score": 0,
+                      "avg_compute_max_score_count": 0,
+                      "avg_match": 0,
+                      "avg_match_count": 0,
+                      "avg_next_doc": 1834944642,
+                      "avg_next_doc_count": 6249751,
+                      "avg_score": 0,
+                      "avg_score_count": 0,
+                      "avg_set_min_competitive_score": 0,
+                      "avg_set_min_competitive_score_count": 0,
+                      "avg_shallow_advance": 0,
+                      "avg_shallow_advance_count": 0,
+                      "build_scorer": 2601313726,
+                      "build_scorer_count": 40,
+                      "compute_max_score": 0,
+                      "compute_max_score_count": 0,
+                      "create_weight": 390,
+                      "create_weight_count": 1,
+                      "match": 0,
+                      "match_count": 0,
+                      "max_advance": 0,
+                      "max_advance_count": 0,
+                      "max_build_scorer": 2601289665,
+                      "max_build_scorer_count": 16,
+                      "max_compute_max_score": 0,
+                      "max_compute_max_score_count": 0,
+                      "max_match": 0,
+                      "max_match_count": 0,
+                      "max_next_doc": 2602320856,
+                      "max_next_doc_count": 6410726,
+                      "max_score": 0,
+                      "max_score_count": 0,
+                      "max_set_min_competitive_score": 0,
+                      "max_set_min_competitive_score_count": 0,
+                      "max_shallow_advance": 0,
+                      "max_shallow_advance_count": 0,
+                      "min_advance": 0,
+                      "min_advance_count": 0,
+                      "min_build_scorer": 2680,
+                      "min_build_scorer_count": 2,
+                      "min_compute_max_score": 0,
+                      "min_compute_max_score_count": 0,
+                      "min_match": 0,
+                      "min_match_count": 0,
+                      "min_next_doc": 179511264,
+                      "min_next_doc_count": 6195133,
+                      "min_score": 0,
+                      "min_score_count": 0,
+                      "min_set_min_competitive_score": 0,
+                      "min_set_min_competitive_score_count": 0,
+                      "min_shallow_advance": 0,
+                      "min_shallow_advance_count": 0,
+                      "next_doc": 2602343947,
+                      "next_doc_count": 24999005,
+                      "score": 0,
+                      "score_count": 0,
+                      "set_min_competitive_score": 0,
+                      "set_min_competitive_score_count": 0,
+                      "shallow_advance": 0,
+                      "shallow_advance_count": 0
+                    }
+                  }
+                ]
+              }
+            ],
+            "rewrite_time": 6411,
+            "collector": [
+              {
+                "name": "QueryCollectorManager",
+                "reason": "search_multi",
+                "time_in_nanos": 2402773634,
+                "reduce_time_in_nanos": 331138,
+                "max_slice_time_in_nanos": 2402542259,
+                "min_slice_time_in_nanos": 1783545702,
+                "avg_slice_time_in_nanos": 2125595027,
+                "slice_count": 4,
+                "children": [
+                  {
+                    "name": "EarlyTerminatingCollectorManager",
+                    "reason": "search_count",
+                    "time_in_nanos": 546863,
+                    "reduce_time_in_nanos": 6110,
+                    "max_slice_time_in_nanos": 41442,
+                    "min_slice_time_in_nanos": 4980,
+                    "avg_slice_time_in_nanos": 26966,
+                    "slice_count": 4
+                  },
+                  {
+                    "name": "NonGlobalAggCollectorManager: [user_groups]",
+                    "reason": "aggregation",
+                    "time_in_nanos": 2052838394,
+                    "reduce_time_in_nanos": 288836,
+                    "max_slice_time_in_nanos": 2052604438,
+                    "min_slice_time_in_nanos": 1439689493,
+                    "avg_slice_time_in_nanos": 1775539309,
+                    "slice_count": 4
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "aggregations": [
+          {
+            "type": "NumericTermsAggregator",
+            "description": "user_groups",
+            "time_in_nanos": 1581652829,
+            "max_slice_time_in_nanos": 1581172769,
+            "min_slice_time_in_nanos": 1266660528,
+            "avg_slice_time_in_nanos": 1462343586,
+            "breakdown": {
+              "min_build_leaf_collector": 5960,
+              "build_aggregation_count": 4,
+              "post_collection": 623802172,
+              "max_collect_count": 6410725,
+              "initialize_count": 4,
+              "reduce_count": 0,
+              "avg_collect": 1290421917,
+              "max_build_aggregation": 221996291,
+              "avg_collect_count": 6249746,
+              "max_build_leaf_collector": 1286248,
+              "min_build_leaf_collector_count": 1,
+              "build_aggregation": 765893500,
+              "min_initialize": 2500,
+              "max_reduce": 0,
+              "build_leaf_collector_count": 20,
+              "avg_reduce": 0,
+              "min_collect_count": 6195125,
+              "avg_build_leaf_collector_count": 5,
+              "avg_build_leaf_collector": 806349,
+              "max_collect": 1444870589,
+              "reduce": 0,
+              "avg_build_aggregation": 170866237,
+              "min_post_collection": 3890,
+              "max_initialize": 16690,
+              "max_post_collection": 950391,
+              "collect_count": 24998985,
+              "avg_post_collection": 242327,
+              "avg_initialize": 6755,
+              "post_collection_count": 4,
+              "build_leaf_collector": 1307559,
+              "min_collect": 1081643049,
+              "min_build_aggregation": 135318175,
+              "initialize": 597473,
+              "max_build_leaf_collector_count": 8,
+              "min_reduce": 0,
+              "collect": 1444897830
+            },
+            "debug": {
+              "deferred_aggregators": [
+                "search_phrase_groups"
+              ],
+              "total_buckets": 1846189,
+              "result_selection_strategy": "priority_queue",
+              "result_strategy": "long_terms"
+            },
+            "children": [
+              {
+                "type": "GlobalOrdinalsStringTermsAggregator",
+                "description": "search_phrase_groups",
+                "time_in_nanos": 3447406,
+                "max_slice_time_in_nanos": 2864983,
+                "min_slice_time_in_nanos": 1693273,
+                "avg_slice_time_in_nanos": 2280521,
+                "breakdown": {
+                  "min_build_leaf_collector": 108863,
+                  "build_aggregation_count": 4,
+                  "post_collection": 582155052,
+                  "max_collect_count": 25986,
+                  "initialize_count": 4,
+                  "reduce_count": 0,
+                  "avg_collect": 1311996,
+                  "max_build_aggregation": 931921,
+                  "avg_collect_count": 18204,
+                  "max_build_leaf_collector": 484703,
+                  "min_build_leaf_collector_count": 1,
+                  "build_aggregation": 582788046,
+                  "min_initialize": 200,
+                  "max_reduce": 0,
+                  "build_leaf_collector_count": 20,
+                  "avg_reduce": 0,
+                  "min_collect_count": 14020,
+                  "avg_build_leaf_collector_count": 5,
+                  "avg_build_leaf_collector": 310673,
+                  "max_collect": 2082128,
+                  "reduce": 0,
+                  "avg_build_aggregation": 656302,
+                  "min_post_collection": 610,
+                  "max_initialize": 1070,
+                  "max_post_collection": 1391,
+                  "collect_count": 72819,
+                  "avg_post_collection": 1060,
+                  "avg_initialize": 490,
+                  "post_collection_count": 4,
+                  "build_leaf_collector": 613519941,
+                  "min_collect": 842176,
+                  "min_build_aggregation": 397349,
+                  "initialize": 582623,
+                  "max_build_leaf_collector_count": 8,
+                  "min_reduce": 0,
+                  "collect": 614440017
+                },
+                "debug": {
+                  "segments_with_multi_valued_ords": 6,
+                  "collection_strategy": "remap",
+                  "segments_with_single_valued_ords": 0,
+                  "total_buckets": 108,
+                  "result_strategy": "terms",
+                  "has_filter": false
+                }
+              }
+            ]
+          }
+        ],
+        "fetch": []
+      },
+      {
+        "id": "[0vc9m0mhSjGttmdS58NDfw][hits][3]",
+        "inbound_network_time_in_millis": 0,
+        "outbound_network_time_in_millis": 0,
+        "searches": [
+          {
+            "query": [
+              {
+                "type": "ConstantScoreQuery",
+                "description": "ConstantScore(*:*)",
+                "time_in_nanos": 2155227801,
+                "max_slice_time_in_nanos": 2154566087,
+                "min_slice_time_in_nanos": 546580896,
+                "avg_slice_time_in_nanos": 1735002183,
+                "breakdown": {
+                  "advance": 0,
+                  "advance_count": 0,
+                  "avg_advance": 0,
+                  "avg_advance_count": 0,
+                  "avg_build_scorer": 1594306055,
+                  "avg_build_scorer_count": 13,
+                  "avg_compute_max_score": 0,
+                  "avg_compute_max_score_count": 0,
+                  "avg_match": 0,
+                  "avg_match_count": 0,
+                  "avg_next_doc": 1734994860,
+                  "avg_next_doc_count": 6250882,
+                  "avg_score": 0,
+                  "avg_score_count": 0,
+                  "avg_set_min_competitive_score": 0,
+                  "avg_set_min_competitive_score_count": 0,
+                  "avg_shallow_advance": 0,
+                  "avg_shallow_advance_count": 0,
+                  "build_scorer": 2152478374,
+                  "build_scorer_count": 54,
+                  "compute_max_score": 0,
+                  "compute_max_score_count": 0,
+                  "create_weight": 13550,
+                  "create_weight_count": 1,
+                  "match": 0,
+                  "match_count": 0,
+                  "max_advance": 0,
+                  "max_advance_count": 0,
+                  "max_build_scorer": 2152461824,
+                  "max_build_scorer_count": 26,
+                  "max_compute_max_score": 0,
+                  "max_compute_max_score_count": 0,
+                  "max_match": 0,
+                  "max_match_count": 0,
+                  "max_next_doc": 2154559676,
+                  "max_next_doc_count": 6425286,
+                  "max_score": 0,
+                  "max_score_count": 0,
+                  "max_set_min_competitive_score": 0,
+                  "max_set_min_competitive_score_count": 0,
+                  "max_shallow_advance": 0,
+                  "max_shallow_advance_count": 0,
+                  "min_advance": 0,
+                  "min_advance_count": 0,
+                  "min_build_scorer": 5460,
+                  "min_build_scorer_count": 2,
+                  "min_compute_max_score": 0,
+                  "min_compute_max_score_count": 0,
+                  "min_match": 0,
+                  "min_match_count": 0,
+                  "min_next_doc": 546572406,
+                  "min_next_doc_count": 6188512,
+                  "min_score": 0,
+                  "min_score_count": 0,
+                  "min_set_min_competitive_score": 0,
+                  "min_set_min_competitive_score_count": 0,
+                  "min_shallow_advance": 0,
+                  "min_shallow_advance_count": 0,
+                  "next_doc": 2154574147,
+                  "next_doc_count": 25003531,
+                  "score": 0,
+                  "score_count": 0,
+                  "set_min_competitive_score": 0,
+                  "set_min_competitive_score_count": 0,
+                  "shallow_advance": 0,
+                  "shallow_advance_count": 0
+                },
+                "children": [
+                  {
+                    "type": "MatchAllDocsQuery",
+                    "description": "*:*",
+                    "time_in_nanos": 2153807138,
+                    "max_slice_time_in_nanos": 2153154514,
+                    "min_slice_time_in_nanos": 180800010,
+                    "avg_slice_time_in_nanos": 1640710137,
+                    "breakdown": {
+                      "advance": 0,
+                      "advance_count": 0,
+                      "avg_advance": 0,
+                      "avg_advance_count": 0,
+                      "avg_build_scorer": 1594303202,
+                      "avg_build_scorer_count": 13,
+                      "avg_compute_max_score": 0,
+                      "avg_compute_max_score_count": 0,
+                      "avg_match": 0,
+                      "avg_match_count": 0,
+                      "avg_next_doc": 1640704486,
+                      "avg_next_doc_count": 6250882,
+                      "avg_score": 0,
+                      "avg_score_count": 0,
+                      "avg_set_min_competitive_score": 0,
+                      "avg_set_min_competitive_score_count": 0,
+                      "avg_shallow_advance": 0,
+                      "avg_shallow_advance_count": 0,
+                      "build_scorer": 2152475693,
+                      "build_scorer_count": 54,
+                      "compute_max_score": 0,
+                      "compute_max_score_count": 0,
+                      "create_weight": 740,
+                      "create_weight_count": 1,
+                      "match": 0,
+                      "match_count": 0,
+                      "max_advance": 0,
+                      "max_advance_count": 0,
+                      "max_build_scorer": 2152458913,
+                      "max_build_scorer_count": 26,
+                      "max_compute_max_score": 0,
+                      "max_compute_max_score_count": 0,
+                      "max_match": 0,
+                      "max_match_count": 0,
+                      "max_next_doc": 2153149773,
+                      "max_next_doc_count": 6425286,
+                      "max_score": 0,
+                      "max_score_count": 0,
+                      "max_set_min_competitive_score": 0,
+                      "max_set_min_competitive_score_count": 0,
+                      "max_shallow_advance": 0,
+                      "max_shallow_advance_count": 0,
+                      "min_advance": 0,
+                      "min_advance_count": 0,
+                      "min_build_scorer": 2620,
+                      "min_build_scorer_count": 2,
+                      "min_compute_max_score": 0,
+                      "min_compute_max_score_count": 0,
+                      "min_match": 0,
+                      "min_match_count": 0,
+                      "min_next_doc": 180792860,
+                      "min_next_doc_count": 6188512,
+                      "min_score": 0,
+                      "min_score_count": 0,
+                      "min_set_min_competitive_score": 0,
+                      "min_set_min_competitive_score_count": 0,
+                      "min_shallow_advance": 0,
+                      "min_shallow_advance_count": 0,
+                      "next_doc": 2153164144,
+                      "next_doc_count": 25003531,
+                      "score": 0,
+                      "score_count": 0,
+                      "set_min_competitive_score": 0,
+                      "set_min_competitive_score_count": 0,
+                      "shallow_advance": 0,
+                      "shallow_advance_count": 0
+                    }
+                  }
+                ]
+              }
+            ],
+            "rewrite_time": 4250,
+            "collector": [
+              {
+                "name": "QueryCollectorManager",
+                "reason": "search_multi",
+                "time_in_nanos": 2356141843,
+                "reduce_time_in_nanos": 263926,
+                "max_slice_time_in_nanos": 2356141843,
+                "min_slice_time_in_nanos": 1926080452,
+                "avg_slice_time_in_nanos": 2042262206,
+                "slice_count": 4,
+                "children": [
+                  {
+                    "name": "EarlyTerminatingCollectorManager",
+                    "reason": "search_count",
+                    "time_in_nanos": 669944,
+                    "reduce_time_in_nanos": 3100,
+                    "max_slice_time_in_nanos": 59140,
+                    "min_slice_time_in_nanos": 6480,
+                    "avg_slice_time_in_nanos": 31470,
+                    "slice_count": 4
+                  },
+                  {
+                    "name": "NonGlobalAggCollectorManager: [user_groups]",
+                    "reason": "aggregation",
+                    "time_in_nanos": 1995952818,
+                    "reduce_time_in_nanos": 257126,
+                    "max_slice_time_in_nanos": 1995952818,
+                    "min_slice_time_in_nanos": 1577172928,
+                    "avg_slice_time_in_nanos": 1690010079,
+                    "slice_count": 4
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "aggregations": [
+          {
+            "type": "NumericTermsAggregator",
+            "description": "user_groups",
+            "time_in_nanos": 1499903180,
+            "max_slice_time_in_nanos": 1499200984,
+            "min_slice_time_in_nanos": 1385261071,
+            "avg_slice_time_in_nanos": 1451394924,
+            "breakdown": {
+              "min_build_leaf_collector": 5370,
+              "build_aggregation_count": 4,
+              "post_collection": 420015012,
+              "max_collect_count": 6425285,
+              "initialize_count": 4,
+              "reduce_count": 0,
+              "avg_collect": 1270219240,
+              "max_build_aggregation": 223884334,
+              "avg_collect_count": 6250876,
+              "max_build_leaf_collector": 1009191,
+              "min_build_leaf_collector_count": 1,
+              "build_aggregation": 560550263,
+              "min_initialize": 3240,
+              "max_reduce": 0,
+              "build_leaf_collector_count": 27,
+              "avg_reduce": 0,
+              "min_collect_count": 6188503,
+              "avg_build_leaf_collector_count": 6,
+              "avg_build_leaf_collector": 732886,
+              "max_collect": 1351955079,
+              "reduce": 0,
+              "avg_build_aggregation": 180261696,
+              "min_post_collection": 8720,
+              "max_initialize": 10070,
+              "max_post_collection": 658775,
+              "collect_count": 25003504,
+              "avg_post_collection": 175264,
+              "avg_initialize": 5837,
+              "post_collection_count": 4,
+              "build_leaf_collector": 1019561,
+              "min_collect": 1203071481,
+              "min_build_aggregation": 140544502,
+              "initialize": 705436,
+              "max_build_leaf_collector_count": 13,
+              "min_reduce": 0,
+              "collect": 1351955079
+            },
+            "debug": {
+              "deferred_aggregators": [
+                "search_phrase_groups"
+              ],
+              "total_buckets": 2366234,
+              "result_selection_strategy": "priority_queue",
+              "result_strategy": "long_terms"
+            },
+            "children": [
+              {
+                "type": "GlobalOrdinalsStringTermsAggregator",
+                "description": "search_phrase_groups",
+                "time_in_nanos": 3344198,
+                "max_slice_time_in_nanos": 2647982,
+                "min_slice_time_in_nanos": 1989310,
+                "avg_slice_time_in_nanos": 2226571,
+                "breakdown": {
+                  "min_build_leaf_collector": 110302,
+                  "build_aggregation_count": 4,
+                  "post_collection": 379379724,
+                  "max_collect_count": 25995,
+                  "initialize_count": 4,
+                  "reduce_count": 0,
+                  "avg_collect": 1165596,
+                  "max_build_aggregation": 906470,
+                  "avg_collect_count": 18305,
+                  "max_build_leaf_collector": 790910,
+                  "min_build_leaf_collector_count": 1,
+                  "build_aggregation": 379827394,
+                  "min_initialize": 290,
+                  "max_reduce": 0,
+                  "build_leaf_collector_count": 27,
+                  "avg_reduce": 0,
+                  "min_collect_count": 14667,
+                  "avg_build_leaf_collector_count": 6,
+                  "avg_build_leaf_collector": 439763,
+                  "max_collect": 1428086,
+                  "reduce": 0,
+                  "avg_build_aggregation": 619661,
+                  "min_post_collection": 731,
+                  "max_initialize": 770,
+                  "max_post_collection": 1460,
+                  "collect_count": 73221,
+                  "avg_post_collection": 1080,
+                  "avg_initialize": 470,
+                  "post_collection_count": 4,
+                  "build_leaf_collector": 385863172,
+                  "min_collect": 858780,
+                  "min_build_aggregation": 430150,
+                  "initialize": 696506,
+                  "max_build_leaf_collector_count": 13,
+                  "min_reduce": 0,
+                  "collect": 387121204
+                },
+                "debug": {
+                  "segments_with_multi_valued_ords": 4,
+                  "collection_strategy": "remap",
+                  "segments_with_single_valued_ords": 0,
+                  "total_buckets": 95,
+                  "result_strategy": "terms",
+                  "has_filter": false
+                }
+              }
+            ]
+          }
+        ],
+        "fetch": []
+      }
+    ]
+  }
+}
