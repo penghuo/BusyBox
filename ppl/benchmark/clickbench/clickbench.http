@@ -74,3 +74,58 @@ Content-Type: application/x-ndjson
     }
   }
 }
+
+###
+GET {{baseUrl}}/hits/_stats/request_cache?human
+
+### Clear cache in between.
+POST {{baseUrl}}/hits/_cache/clear
+
+### Data Histogram - Term
+GET {{baseUrl}}/hits/_search
+Content-Type: application/x-ndjson
+
+{
+    "profile": true,
+  "size": 0,
+  "_source" : false,
+  "track_total_hits" : -1,
+  "aggs": {
+    "user_groups": {
+      "date_histogram": {
+        "field": "EventTime",
+        "interval": "hour"
+      }
+    }
+  }
+}
+
+### Data Histogram - Composite
+GET {{baseUrl}}/hits/_search
+Content-Type: application/x-ndjson
+
+{
+    "profile": true,
+  "size" : 0,
+  "_source" : false,
+  "track_total_hits" : -1,
+  "aggregations" : {
+    "groupby" : {
+      "composite" : {
+        "size" : 1000,
+        "sources": [
+          {
+            "span(@timestamp,1h)": {
+              "date_histogram": {
+                "field": "EventTime",
+                "missing_bucket": true,
+                "missing_order": "first",
+                "fixed_interval": "1h"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}
