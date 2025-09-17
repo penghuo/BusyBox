@@ -1,0 +1,200 @@
+@baseUrl = http://localhost:9200
+
+
+
+###
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+  "query": "search source=log* us-east-1 Error | eval x=flags/1 | fields x"
+}
+
+###
+POST {{baseUrl}}/_plugins/_ppl/_explain
+Content-Type: application/x-ndjson
+
+{
+  "query": "search source=log* us-east-1 Error resource.attributes.productid=\"pr123456\" | spath input=body path=caller | spath input=body path=level | fields caller, level"
+}
+
+###
+POST {{baseUrl}}/_plugins/_ppl/_explain
+Content-Type: application/x-ndjson
+
+{
+  "query": "explain extended search source=log* us-east-1 Error resource.attributes.productid=\"pr123456\" | spath input=body path=caller | spath input=body path=level | stats count by caller"
+}
+
+###
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+  "query": "search source=log* us-east-1 Error resource.attributes.log_type=EKS* | spath input=body path=caller | spath input=body path=level | fields caller, level"
+}
+
+###
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+  "query": "search source=log* us-east-1 Error resource.attributes.log_type=EKS* | spath input=body path=caller | spath input=body path=level | sort -level | fields level"
+}
+
+###
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+  "query": "search source=log* us-east-1 Error resource.attributes.log_type=EKS* | spath input=body path=caller | spath input=body path=level | stats dc(level)"
+}
+
+###
+POST {{baseUrl}}/_plugins/_ppl
+Content-Type: application/x-ndjson
+
+{
+  "query": "search source=log* | bin @timestamp span=5m | fields @timestamp"
+}
+
+
+###
+POST {{baseUrl}}/_plugins/_ppl
+Content-Type: application/x-ndjson
+
+{
+  "query": "search source=log* | eval x=strftime(now(), \"%Y-%m-%d\") | fields x"
+}
+
+
+###
+PUT {{baseUrl}}/_plugins/_query/settings
+Content-Type: application/x-ndjson
+
+{
+  "transient" : {
+    "plugins.calcite.enabled" : true,
+    "plugins.calcite.pushdown.enabled": true
+  }
+}
+
+###
+GET {{baseUrl}}/_cat/indices
+
+
+###
+PUT {{baseUrl}}/log-00001
+
+###
+POST {{baseUrl}}/log-00001/_doc
+Content-Type: application/x-ndjson
+
+{
+    "traceId": "",
+    "instrumentationScope": {
+        "droppedAttributesCount": 0
+    },
+    "resource": {
+        "droppedAttributesCount": 0,
+        "attributes": {
+            "log_type": "EKS_node",
+            "k8s_label.productid": "pr123456",
+            "k8s_label.sourcetype": "unknown",
+            "productid": "pr123456",
+            "k8s.platform": "EKS",
+            "k8s_label.criticality_code": "99",
+            "k8s.cluster.business.unit": "bu",
+            "criticality_code": "5",
+            "sourcetype": "unknown",
+            "log_tier": "standard",
+            "applicationid": "ap123456",
+            "obs_namespace": "defaultv1"
+        },
+        "schemaUrl": ""
+    },
+    "flags": 0,
+    "severityNumber": 0,
+    "schemaUrl": "",
+    "spanId": "",
+    "severityText": "",
+    "attributes": {
+        "cluster.name": "xyz-cluster1-ci-prod-us-east-1",
+        "cluster.region": "us-east-1",
+        "log.file.path": "/var/log/xyz/abc.log",
+        "cluster.env": "prod",
+        "obs_body_length": 146
+    },
+    "time": "2025-09-04T16:17:36.046227585Z",
+    "droppedAttributesCount": 0,
+    "observedTimestamp": "2025-09-04T16:17:36.046227585Z",
+    "@timestamp": "2025-09-04T16:17:39.133Z",
+    "body": "{\"msg\":\"Error finding unassigned IPs for ENI xyz\",\"caller\":\"xyz/abc.go:702\",\"level\":\"error\",\"ts\":\"2025-09-04T16:17:35.976Z\"}"
+}
+
+###
+POST {{baseUrl}}/_index_template/log-template
+Content-Type: application/x-ndjson
+
+{
+  "index_patterns": ["logs-*"],
+  "priority": 100,
+  "template": {
+    "settings": {
+      "number_of_shards": 1,
+      "number_of_replicas": 1
+    },
+    "mappings": {
+      "dynamic_templates": [
+        {
+          "resource_attributes": {
+            "path_match": "resource.attributes.*",
+            "mapping": { "type": "keyword" },
+            "match_mapping_type": "string"
+          }
+        },
+        {
+          "attributes": {
+            "path_match": "attributes.*",
+            "mapping": { "type": "keyword" },
+            "match_mapping_type": "string"
+          }
+        }
+      ],
+      "properties": {
+        "traceId": { "type": "keyword" },
+        "flags": { "type": "byte" },
+        "severityNumber": { "type": "integer" },
+        "body": {
+          "norms": false, "type": "text"
+},
+        "serviceName": { "type": "keyword" },
+        "schemaUrl": { "type": "keyword" },
+        "spanId": { "type": "keyword" },
+        "@timestamp": { "type": "date" },
+        "severityText": { "type": "keyword" },
+        "@version": { "type": "keyword" },
+        "attributes": {
+          "type": "object",
+          "properties": {
+            "time": { "enabled": false, "type": "object" }
+          }
+        },
+        "time": { "type": "date" },
+        "observedTimestamp": { "type": "date" }
+      }
+    }
+  }
+}
+
+
+
+###
+GET {{baseUrl}}/log-00001
+
+###
+DELETE {{baseUrl}}/log-00001
+
+
+###
+DELETE {{baseUrl}}/_index_template/log-template
