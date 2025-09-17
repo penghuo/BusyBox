@@ -1,0 +1,4880 @@
+{
+  "took": 1764,
+  "timed_out": false,
+  "terminated_early": true,
+  "_shards": {
+    "total": 4,
+    "successful": 4,
+    "skipped": 0,
+    "failed": 0
+  },
+  "hits": {
+    "max_score": null,
+    "hits": []
+  },
+  "aggregations": {
+    "groupby": {
+      "after_key": {
+        "span(@timestamp,1h)": 1375297200000
+      },
+      "buckets": [
+        {
+          "key": {
+            "span(@timestamp,1h)": 1372708800000
+          },
+          "doc_count": 155847,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1372712400000
+          },
+          "doc_count": 156327,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1372716000000
+          },
+          "doc_count": 153772,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1372719600000
+          },
+          "doc_count": 153571,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1372723200000
+          },
+          "doc_count": 152477,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1372726800000
+          },
+          "doc_count": 153709,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1372730400000
+          },
+          "doc_count": 156425,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1372734000000
+          },
+          "doc_count": 152443,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1372737600000
+          },
+          "doc_count": 157146,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1372741200000
+          },
+          "doc_count": 158282,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1372744800000
+          },
+          "doc_count": 156476,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1372748400000
+          },
+          "doc_count": 153552,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1372752000000
+          },
+          "doc_count": 157352,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1372755600000
+          },
+          "doc_count": 153889,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1372759200000
+          },
+          "doc_count": 154751,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1372762800000
+          },
+          "doc_count": 153483,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1372766400000
+          },
+          "doc_count": 154750,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1372770000000
+          },
+          "doc_count": 151396,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1372773600000
+          },
+          "doc_count": 153649,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1372777200000
+          },
+          "doc_count": 155570,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1372780800000
+          },
+          "doc_count": 150506,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1372784400000
+          },
+          "doc_count": 154634,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1372788000000
+          },
+          "doc_count": 152483,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1372791600000
+          },
+          "doc_count": 152343,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1372795200000
+          },
+          "doc_count": 423460,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1372798800000
+          },
+          "doc_count": 410471,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1372802400000
+          },
+          "doc_count": 408686,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1372806000000
+          },
+          "doc_count": 412423,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1372809600000
+          },
+          "doc_count": 408402,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1372813200000
+          },
+          "doc_count": 409529,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1372816800000
+          },
+          "doc_count": 408158,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1372820400000
+          },
+          "doc_count": 412965,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1372824000000
+          },
+          "doc_count": 402816,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1372827600000
+          },
+          "doc_count": 408071,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1372831200000
+          },
+          "doc_count": 404959,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1372834800000
+          },
+          "doc_count": 404017,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1372838400000
+          },
+          "doc_count": 406895,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1372842000000
+          },
+          "doc_count": 409001,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1372845600000
+          },
+          "doc_count": 406439,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1372849200000
+          },
+          "doc_count": 402064,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1372852800000
+          },
+          "doc_count": 404358,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1372856400000
+          },
+          "doc_count": 407781,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1372860000000
+          },
+          "doc_count": 409177,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1372863600000
+          },
+          "doc_count": 411337,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1372867200000
+          },
+          "doc_count": 413830,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1372870800000
+          },
+          "doc_count": 412961,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1372874400000
+          },
+          "doc_count": 412403,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1372878000000
+          },
+          "doc_count": 418973,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1372968000000
+          },
+          "doc_count": 187974,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1372971600000
+          },
+          "doc_count": 187176,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1372975200000
+          },
+          "doc_count": 186312,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1372978800000
+          },
+          "doc_count": 191200,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1372982400000
+          },
+          "doc_count": 187331,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1372986000000
+          },
+          "doc_count": 184554,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1372989600000
+          },
+          "doc_count": 187653,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1372993200000
+          },
+          "doc_count": 186511,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1372996800000
+          },
+          "doc_count": 185894,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373000400000
+          },
+          "doc_count": 188782,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373004000000
+          },
+          "doc_count": 190617,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373007600000
+          },
+          "doc_count": 188947,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373011200000
+          },
+          "doc_count": 192122,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373014800000
+          },
+          "doc_count": 188677,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373018400000
+          },
+          "doc_count": 186501,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373022000000
+          },
+          "doc_count": 187514,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373025600000
+          },
+          "doc_count": 188332,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373029200000
+          },
+          "doc_count": 184789,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373032800000
+          },
+          "doc_count": 186141,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373036400000
+          },
+          "doc_count": 182369,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373040000000
+          },
+          "doc_count": 183335,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373043600000
+          },
+          "doc_count": 184169,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373047200000
+          },
+          "doc_count": 185794,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373050800000
+          },
+          "doc_count": 186837,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373054400000
+          },
+          "doc_count": 284284,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373058000000
+          },
+          "doc_count": 285385,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373061600000
+          },
+          "doc_count": 284356,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373065200000
+          },
+          "doc_count": 285540,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373068800000
+          },
+          "doc_count": 287151,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373072400000
+          },
+          "doc_count": 285640,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373076000000
+          },
+          "doc_count": 282012,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373079600000
+          },
+          "doc_count": 282953,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373083200000
+          },
+          "doc_count": 286564,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373086800000
+          },
+          "doc_count": 283032,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373090400000
+          },
+          "doc_count": 285175,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373094000000
+          },
+          "doc_count": 284925,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373097600000
+          },
+          "doc_count": 284809,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373101200000
+          },
+          "doc_count": 282211,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373104800000
+          },
+          "doc_count": 282129,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373108400000
+          },
+          "doc_count": 286065,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373112000000
+          },
+          "doc_count": 283927,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373115600000
+          },
+          "doc_count": 284626,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373119200000
+          },
+          "doc_count": 280714,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373122800000
+          },
+          "doc_count": 281711,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373126400000
+          },
+          "doc_count": 283178,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373130000000
+          },
+          "doc_count": 283019,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373133600000
+          },
+          "doc_count": 283016,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373137200000
+          },
+          "doc_count": 280698,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373140800000
+          },
+          "doc_count": 48009,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373144400000
+          },
+          "doc_count": 47436,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373148000000
+          },
+          "doc_count": 46303,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373151600000
+          },
+          "doc_count": 45305,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373155200000
+          },
+          "doc_count": 48165,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373158800000
+          },
+          "doc_count": 46462,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373162400000
+          },
+          "doc_count": 47430,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373166000000
+          },
+          "doc_count": 49023,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373169600000
+          },
+          "doc_count": 50707,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373173200000
+          },
+          "doc_count": 52006,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373176800000
+          },
+          "doc_count": 52383,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373180400000
+          },
+          "doc_count": 52144,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373184000000
+          },
+          "doc_count": 48342,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373187600000
+          },
+          "doc_count": 46580,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373191200000
+          },
+          "doc_count": 46448,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373194800000
+          },
+          "doc_count": 44861,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373198400000
+          },
+          "doc_count": 46044,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373202000000
+          },
+          "doc_count": 43453,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373205600000
+          },
+          "doc_count": 42963,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373209200000
+          },
+          "doc_count": 42056,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373212800000
+          },
+          "doc_count": 41210,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373216400000
+          },
+          "doc_count": 44504,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373220000000
+          },
+          "doc_count": 46435,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373223600000
+          },
+          "doc_count": 48598,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373227200000
+          },
+          "doc_count": 105439,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373230800000
+          },
+          "doc_count": 106046,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373234400000
+          },
+          "doc_count": 90981,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373238000000
+          },
+          "doc_count": 90207,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373241600000
+          },
+          "doc_count": 91858,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373245200000
+          },
+          "doc_count": 91843,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373248800000
+          },
+          "doc_count": 96630,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373252400000
+          },
+          "doc_count": 101745,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373256000000
+          },
+          "doc_count": 104409,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373259600000
+          },
+          "doc_count": 100518,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373263200000
+          },
+          "doc_count": 91111,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373266800000
+          },
+          "doc_count": 92429,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373270400000
+          },
+          "doc_count": 96232,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373274000000
+          },
+          "doc_count": 99159,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373277600000
+          },
+          "doc_count": 98997,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373281200000
+          },
+          "doc_count": 103172,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373284800000
+          },
+          "doc_count": 95017,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373288400000
+          },
+          "doc_count": 90913,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373292000000
+          },
+          "doc_count": 87116,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373295600000
+          },
+          "doc_count": 95741,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373299200000
+          },
+          "doc_count": 101526,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373302800000
+          },
+          "doc_count": 104689,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373306400000
+          },
+          "doc_count": 108688,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373310000000
+          },
+          "doc_count": 106111,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373313600000
+          },
+          "doc_count": 561165,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373317200000
+          },
+          "doc_count": 572060,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373320800000
+          },
+          "doc_count": 564743,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373324400000
+          },
+          "doc_count": 561015,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373328000000
+          },
+          "doc_count": 565040,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373331600000
+          },
+          "doc_count": 557142,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373335200000
+          },
+          "doc_count": 557878,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373338800000
+          },
+          "doc_count": 562156,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373342400000
+          },
+          "doc_count": 556732,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373346000000
+          },
+          "doc_count": 556199,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373349600000
+          },
+          "doc_count": 553352,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373353200000
+          },
+          "doc_count": 552646,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373356800000
+          },
+          "doc_count": 551483,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373360400000
+          },
+          "doc_count": 556747,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373364000000
+          },
+          "doc_count": 560214,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373367600000
+          },
+          "doc_count": 561189,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373371200000
+          },
+          "doc_count": 564698,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373374800000
+          },
+          "doc_count": 562161,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373378400000
+          },
+          "doc_count": 559510,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373382000000
+          },
+          "doc_count": 557673,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373385600000
+          },
+          "doc_count": 562215,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373389200000
+          },
+          "doc_count": 573035,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373392800000
+          },
+          "doc_count": 573479,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373396400000
+          },
+          "doc_count": 563168,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373400000000
+          },
+          "doc_count": 243822,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373403600000
+          },
+          "doc_count": 243809,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373407200000
+          },
+          "doc_count": 241581,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373410800000
+          },
+          "doc_count": 244180,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373414400000
+          },
+          "doc_count": 246532,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373418000000
+          },
+          "doc_count": 242769,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373421600000
+          },
+          "doc_count": 242080,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373425200000
+          },
+          "doc_count": 240933,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373428800000
+          },
+          "doc_count": 239692,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373432400000
+          },
+          "doc_count": 239806,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373436000000
+          },
+          "doc_count": 242246,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373439600000
+          },
+          "doc_count": 241772,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373443200000
+          },
+          "doc_count": 244501,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373446800000
+          },
+          "doc_count": 242199,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373450400000
+          },
+          "doc_count": 240504,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373454000000
+          },
+          "doc_count": 240344,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373457600000
+          },
+          "doc_count": 237479,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373461200000
+          },
+          "doc_count": 238243,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373464800000
+          },
+          "doc_count": 236095,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373468400000
+          },
+          "doc_count": 239045,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373472000000
+          },
+          "doc_count": 243916,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373475600000
+          },
+          "doc_count": 245553,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373479200000
+          },
+          "doc_count": 248263,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373482800000
+          },
+          "doc_count": 242843,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373832000000
+          },
+          "doc_count": 527905,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373835600000
+          },
+          "doc_count": 524261,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373839200000
+          },
+          "doc_count": 524275,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373842800000
+          },
+          "doc_count": 523987,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373846400000
+          },
+          "doc_count": 524206,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373850000000
+          },
+          "doc_count": 523860,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373853600000
+          },
+          "doc_count": 528378,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373857200000
+          },
+          "doc_count": 520952,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373860800000
+          },
+          "doc_count": 529895,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373864400000
+          },
+          "doc_count": 523982,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373868000000
+          },
+          "doc_count": 526112,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373871600000
+          },
+          "doc_count": 526855,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373875200000
+          },
+          "doc_count": 524303,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373878800000
+          },
+          "doc_count": 528519,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373882400000
+          },
+          "doc_count": 524928,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373886000000
+          },
+          "doc_count": 523740,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373889600000
+          },
+          "doc_count": 527229,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373893200000
+          },
+          "doc_count": 529140,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373896800000
+          },
+          "doc_count": 524563,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373900400000
+          },
+          "doc_count": 529255,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373904000000
+          },
+          "doc_count": 526651,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373907600000
+          },
+          "doc_count": 526924,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373911200000
+          },
+          "doc_count": 525890,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1373914800000
+          },
+          "doc_count": 526021,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374264000000
+          },
+          "doc_count": 13646,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374267600000
+          },
+          "doc_count": 14328,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374271200000
+          },
+          "doc_count": 17662,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374274800000
+          },
+          "doc_count": 17539,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374278400000
+          },
+          "doc_count": 18750,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374282000000
+          },
+          "doc_count": 15043,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374285600000
+          },
+          "doc_count": 20124,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374289200000
+          },
+          "doc_count": 20822,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374292800000
+          },
+          "doc_count": 17077,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374296400000
+          },
+          "doc_count": 18500,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374300000000
+          },
+          "doc_count": 25721,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374303600000
+          },
+          "doc_count": 20751,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374307200000
+          },
+          "doc_count": 16893,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374310800000
+          },
+          "doc_count": 17398,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374314400000
+          },
+          "doc_count": 14096,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374318000000
+          },
+          "doc_count": 16766,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374321600000
+          },
+          "doc_count": 21529,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374325200000
+          },
+          "doc_count": 20073,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374328800000
+          },
+          "doc_count": 17085,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374332400000
+          },
+          "doc_count": 14431,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374336000000
+          },
+          "doc_count": 18099,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374339600000
+          },
+          "doc_count": 17950,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374343200000
+          },
+          "doc_count": 18027,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374346800000
+          },
+          "doc_count": 16950,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374350400000
+          },
+          "doc_count": 697103,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374354000000
+          },
+          "doc_count": 696781,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374357600000
+          },
+          "doc_count": 698653,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374361200000
+          },
+          "doc_count": 689349,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374364800000
+          },
+          "doc_count": 698815,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374368400000
+          },
+          "doc_count": 689090,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374372000000
+          },
+          "doc_count": 691713,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374375600000
+          },
+          "doc_count": 692689,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374379200000
+          },
+          "doc_count": 693142,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374382800000
+          },
+          "doc_count": 692160,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374386400000
+          },
+          "doc_count": 690457,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374390000000
+          },
+          "doc_count": 693146,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374393600000
+          },
+          "doc_count": 685090,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374397200000
+          },
+          "doc_count": 688810,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374400800000
+          },
+          "doc_count": 689752,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374404400000
+          },
+          "doc_count": 693106,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374408000000
+          },
+          "doc_count": 693485,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374411600000
+          },
+          "doc_count": 692814,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374415200000
+          },
+          "doc_count": 689493,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374418800000
+          },
+          "doc_count": 694468,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374422400000
+          },
+          "doc_count": 696039,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374426000000
+          },
+          "doc_count": 691100,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374429600000
+          },
+          "doc_count": 694037,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374433200000
+          },
+          "doc_count": 696980,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374436800000
+          },
+          "doc_count": 54033,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374440400000
+          },
+          "doc_count": 52936,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374444000000
+          },
+          "doc_count": 54218,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374447600000
+          },
+          "doc_count": 53221,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374451200000
+          },
+          "doc_count": 52358,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374454800000
+          },
+          "doc_count": 53266,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374458400000
+          },
+          "doc_count": 52729,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374462000000
+          },
+          "doc_count": 55198,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374465600000
+          },
+          "doc_count": 55306,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374469200000
+          },
+          "doc_count": 54959,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374472800000
+          },
+          "doc_count": 53475,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374476400000
+          },
+          "doc_count": 53329,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374480000000
+          },
+          "doc_count": 51892,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374483600000
+          },
+          "doc_count": 53979,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374487200000
+          },
+          "doc_count": 55505,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374490800000
+          },
+          "doc_count": 55537,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374494400000
+          },
+          "doc_count": 56119,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374498000000
+          },
+          "doc_count": 55710,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374501600000
+          },
+          "doc_count": 55626,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374505200000
+          },
+          "doc_count": 55883,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374508800000
+          },
+          "doc_count": 57063,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374512400000
+          },
+          "doc_count": 57537,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374516000000
+          },
+          "doc_count": 56684,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374519600000
+          },
+          "doc_count": 54554,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374523200000
+          },
+          "doc_count": 52080,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374526800000
+          },
+          "doc_count": 54275,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374530400000
+          },
+          "doc_count": 52454,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374534000000
+          },
+          "doc_count": 53110,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374537600000
+          },
+          "doc_count": 53401,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374541200000
+          },
+          "doc_count": 54215,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374544800000
+          },
+          "doc_count": 54810,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374548400000
+          },
+          "doc_count": 51621,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374552000000
+          },
+          "doc_count": 52869,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374555600000
+          },
+          "doc_count": 56026,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374559200000
+          },
+          "doc_count": 53647,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374562800000
+          },
+          "doc_count": 54393,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374566400000
+          },
+          "doc_count": 55103,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374570000000
+          },
+          "doc_count": 53347,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374573600000
+          },
+          "doc_count": 49978,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374577200000
+          },
+          "doc_count": 53410,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374580800000
+          },
+          "doc_count": 54153,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374584400000
+          },
+          "doc_count": 53110,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374588000000
+          },
+          "doc_count": 51320,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374591600000
+          },
+          "doc_count": 54494,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374595200000
+          },
+          "doc_count": 53333,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374598800000
+          },
+          "doc_count": 52473,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374602400000
+          },
+          "doc_count": 53470,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374606000000
+          },
+          "doc_count": 52562,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374955200000
+          },
+          "doc_count": 397373,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374958800000
+          },
+          "doc_count": 396000,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374962400000
+          },
+          "doc_count": 396059,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374966000000
+          },
+          "doc_count": 396157,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374969600000
+          },
+          "doc_count": 389803,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374973200000
+          },
+          "doc_count": 398185,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374976800000
+          },
+          "doc_count": 394981,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374980400000
+          },
+          "doc_count": 396960,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374984000000
+          },
+          "doc_count": 399066,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374987600000
+          },
+          "doc_count": 392583,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374991200000
+          },
+          "doc_count": 396736,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374994800000
+          },
+          "doc_count": 400007,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1374998400000
+          },
+          "doc_count": 399056,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375002000000
+          },
+          "doc_count": 399831,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375005600000
+          },
+          "doc_count": 406282,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375009200000
+          },
+          "doc_count": 398296,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375012800000
+          },
+          "doc_count": 397325,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375016400000
+          },
+          "doc_count": 394072,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375020000000
+          },
+          "doc_count": 396127,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375023600000
+          },
+          "doc_count": 397422,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375027200000
+          },
+          "doc_count": 400374,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375030800000
+          },
+          "doc_count": 393060,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375034400000
+          },
+          "doc_count": 394022,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375038000000
+          },
+          "doc_count": 402844,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375041600000
+          },
+          "doc_count": 287343,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375045200000
+          },
+          "doc_count": 284602,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375048800000
+          },
+          "doc_count": 287513,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375052400000
+          },
+          "doc_count": 282943,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375056000000
+          },
+          "doc_count": 286795,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375059600000
+          },
+          "doc_count": 283899,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375063200000
+          },
+          "doc_count": 286310,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375066800000
+          },
+          "doc_count": 287023,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375070400000
+          },
+          "doc_count": 280661,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375074000000
+          },
+          "doc_count": 281903,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375077600000
+          },
+          "doc_count": 286379,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375081200000
+          },
+          "doc_count": 286429,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375084800000
+          },
+          "doc_count": 283406,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375088400000
+          },
+          "doc_count": 285857,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375092000000
+          },
+          "doc_count": 286076,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375095600000
+          },
+          "doc_count": 281591,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375099200000
+          },
+          "doc_count": 285413,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375102800000
+          },
+          "doc_count": 287865,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375106400000
+          },
+          "doc_count": 287988,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375110000000
+          },
+          "doc_count": 285260,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375113600000
+          },
+          "doc_count": 285663,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375117200000
+          },
+          "doc_count": 284191,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375120800000
+          },
+          "doc_count": 283167,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375124400000
+          },
+          "doc_count": 285061,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375128000000
+          },
+          "doc_count": 2268,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375131600000
+          },
+          "doc_count": 2485,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375135200000
+          },
+          "doc_count": 2963,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375138800000
+          },
+          "doc_count": 3101,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375142400000
+          },
+          "doc_count": 3645,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375146000000
+          },
+          "doc_count": 3747,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375149600000
+          },
+          "doc_count": 4319,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375153200000
+          },
+          "doc_count": 3765,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375156800000
+          },
+          "doc_count": 3774,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375160400000
+          },
+          "doc_count": 3699,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375164000000
+          },
+          "doc_count": 3836,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375167600000
+          },
+          "doc_count": 4299,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375171200000
+          },
+          "doc_count": 4175,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375174800000
+          },
+          "doc_count": 3729,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375178400000
+          },
+          "doc_count": 2974,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375182000000
+          },
+          "doc_count": 3117,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375185600000
+          },
+          "doc_count": 3523,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375189200000
+          },
+          "doc_count": 3575,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375192800000
+          },
+          "doc_count": 3211,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375196400000
+          },
+          "doc_count": 2520,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375200000000
+          },
+          "doc_count": 2630,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375203600000
+          },
+          "doc_count": 2692,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375207200000
+          },
+          "doc_count": 2809,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375210800000
+          },
+          "doc_count": 2519,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375214400000
+          },
+          "doc_count": 151498,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375218000000
+          },
+          "doc_count": 152096,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375221600000
+          },
+          "doc_count": 153697,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375225200000
+          },
+          "doc_count": 155387,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375228800000
+          },
+          "doc_count": 155875,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375232400000
+          },
+          "doc_count": 157494,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375236000000
+          },
+          "doc_count": 153159,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375239600000
+          },
+          "doc_count": 155404,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375243200000
+          },
+          "doc_count": 153458,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375246800000
+          },
+          "doc_count": 156386,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375250400000
+          },
+          "doc_count": 154417,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375254000000
+          },
+          "doc_count": 152047,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375257600000
+          },
+          "doc_count": 154502,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375261200000
+          },
+          "doc_count": 149603,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375264800000
+          },
+          "doc_count": 148631,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375268400000
+          },
+          "doc_count": 149848,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375272000000
+          },
+          "doc_count": 154302,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375275600000
+          },
+          "doc_count": 152476,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375279200000
+          },
+          "doc_count": 154675,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375282800000
+          },
+          "doc_count": 155027,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375286400000
+          },
+          "doc_count": 155051,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375290000000
+          },
+          "doc_count": 155329,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375293600000
+          },
+          "doc_count": 152635,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        },
+        {
+          "key": {
+            "span(@timestamp,1h)": 1375297200000
+          },
+          "doc_count": 151021,
+          "avg_connectiontiming": {
+            "value": 0.0
+          }
+        }
+      ]
+    }
+  },
+  "profile": {
+    "shards": [
+      {
+        "id": "[0vc9m0mhSjGttmdS58NDfw][hits][0]",
+        "inbound_network_time_in_millis": 0,
+        "outbound_network_time_in_millis": 0,
+        "searches": [
+          {
+            "query": [
+              {
+                "type": "ConstantScoreQuery",
+                "description": "ConstantScore(*:*)",
+                "time_in_nanos": 1289012902,
+                "max_slice_time_in_nanos": 1288806887,
+                "min_slice_time_in_nanos": 569862542,
+                "avg_slice_time_in_nanos": 1108129377,
+                "breakdown": {
+                  "advance": 0,
+                  "advance_count": 0,
+                  "avg_advance": 0,
+                  "avg_advance_count": 0,
+                  "avg_build_scorer": 956289931,
+                  "avg_build_scorer_count": 12,
+                  "avg_compute_max_score": 0,
+                  "avg_compute_max_score_count": 0,
+                  "avg_match": 0,
+                  "avg_match_count": 0,
+                  "avg_next_doc": 1108118970,
+                  "avg_next_doc_count": 6249400,
+                  "avg_score": 0,
+                  "avg_score_count": 0,
+                  "avg_set_min_competitive_score": 0,
+                  "avg_set_min_competitive_score_count": 0,
+                  "avg_shallow_advance": 0,
+                  "avg_shallow_advance_count": 0,
+                  "build_scorer": 1278505865,
+                  "build_scorer_count": 48,
+                  "compute_max_score": 0,
+                  "compute_max_score_count": 0,
+                  "create_weight": 11990,
+                  "create_weight_count": 1,
+                  "match": 0,
+                  "match_count": 0,
+                  "max_advance": 0,
+                  "max_advance_count": 0,
+                  "max_build_scorer": 1278468734,
+                  "max_build_scorer_count": 20,
+                  "max_compute_max_score": 0,
+                  "max_compute_max_score_count": 0,
+                  "max_match": 0,
+                  "max_match_count": 0,
+                  "max_next_doc": 1288801517,
+                  "max_next_doc_count": 6436976,
+                  "max_score": 0,
+                  "max_score_count": 0,
+                  "max_set_min_competitive_score": 0,
+                  "max_set_min_competitive_score_count": 0,
+                  "max_shallow_advance": 0,
+                  "max_shallow_advance_count": 0,
+                  "min_advance": 0,
+                  "min_advance_count": 0,
+                  "min_build_scorer": 7100,
+                  "min_build_scorer_count": 2,
+                  "min_compute_max_score": 0,
+                  "min_compute_max_score_count": 0,
+                  "min_match": 0,
+                  "min_match_count": 0,
+                  "min_next_doc": 569851261,
+                  "min_next_doc_count": 6183605,
+                  "min_score": 0,
+                  "min_score_count": 0,
+                  "min_set_min_competitive_score": 0,
+                  "min_set_min_competitive_score_count": 0,
+                  "min_shallow_advance": 0,
+                  "min_shallow_advance_count": 0,
+                  "next_doc": 1288832737,
+                  "next_doc_count": 24997600,
+                  "score": 0,
+                  "score_count": 0,
+                  "set_min_competitive_score": 0,
+                  "set_min_competitive_score_count": 0,
+                  "shallow_advance": 0,
+                  "shallow_advance_count": 0
+                },
+                "children": [
+                  {
+                    "type": "MatchAllDocsQuery",
+                    "description": "*:*",
+                    "time_in_nanos": 1282073924,
+                    "max_slice_time_in_nanos": 1281877600,
+                    "min_slice_time_in_nanos": 186940270,
+                    "avg_slice_time_in_nanos": 1006114776,
+                    "breakdown": {
+                      "advance": 0,
+                      "advance_count": 0,
+                      "avg_advance": 0,
+                      "avg_advance_count": 0,
+                      "avg_build_scorer": 956286399,
+                      "avg_build_scorer_count": 12,
+                      "avg_compute_max_score": 0,
+                      "avg_compute_max_score_count": 0,
+                      "avg_match": 0,
+                      "avg_match_count": 0,
+                      "avg_next_doc": 1006106929,
+                      "avg_next_doc_count": 6249400,
+                      "avg_score": 0,
+                      "avg_score_count": 0,
+                      "avg_set_min_competitive_score": 0,
+                      "avg_set_min_competitive_score_count": 0,
+                      "avg_shallow_advance": 0,
+                      "avg_shallow_advance_count": 0,
+                      "build_scorer": 1278502846,
+                      "build_scorer_count": 48,
+                      "compute_max_score": 0,
+                      "compute_max_score_count": 0,
+                      "create_weight": 140,
+                      "create_weight_count": 1,
+                      "match": 0,
+                      "match_count": 0,
+                      "max_advance": 0,
+                      "max_advance_count": 0,
+                      "max_build_scorer": 1278466275,
+                      "max_build_scorer_count": 20,
+                      "max_compute_max_score": 0,
+                      "max_compute_max_score_count": 0,
+                      "max_match": 0,
+                      "max_match_count": 0,
+                      "max_next_doc": 1281873930,
+                      "max_next_doc_count": 6436976,
+                      "max_score": 0,
+                      "max_score_count": 0,
+                      "max_set_min_competitive_score": 0,
+                      "max_set_min_competitive_score_count": 0,
+                      "max_shallow_advance": 0,
+                      "max_shallow_advance_count": 0,
+                      "min_advance": 0,
+                      "min_advance_count": 0,
+                      "min_build_scorer": 3161,
+                      "min_build_scorer_count": 2,
+                      "min_compute_max_score": 0,
+                      "min_compute_max_score_count": 0,
+                      "min_match": 0,
+                      "min_match_count": 0,
+                      "min_next_doc": 186931210,
+                      "min_next_doc_count": 6183605,
+                      "min_score": 0,
+                      "min_score_count": 0,
+                      "min_set_min_competitive_score": 0,
+                      "min_set_min_competitive_score_count": 0,
+                      "min_shallow_advance": 0,
+                      "min_shallow_advance_count": 0,
+                      "next_doc": 1281905111,
+                      "next_doc_count": 24997600,
+                      "score": 0,
+                      "score_count": 0,
+                      "set_min_competitive_score": 0,
+                      "set_min_competitive_score_count": 0,
+                      "shallow_advance": 0,
+                      "shallow_advance_count": 0
+                    }
+                  }
+                ]
+              }
+            ],
+            "rewrite_time": 7500,
+            "collector": [
+              {
+                "name": "QueryCollectorManager",
+                "reason": "search_multi",
+                "time_in_nanos": 1119838725,
+                "reduce_time_in_nanos": 313918,
+                "max_slice_time_in_nanos": 1119838725,
+                "min_slice_time_in_nanos": 1076964004,
+                "avg_slice_time_in_nanos": 1090455819,
+                "slice_count": 4,
+                "children": [
+                  {
+                    "name": "EarlyTerminatingCollectorManager",
+                    "reason": "search_count",
+                    "time_in_nanos": 138543,
+                    "reduce_time_in_nanos": 2520,
+                    "max_slice_time_in_nanos": 18390,
+                    "min_slice_time_in_nanos": 6780,
+                    "avg_slice_time_in_nanos": 11972,
+                    "slice_count": 4
+                  },
+                  {
+                    "name": "NonGlobalAggCollectorManager: [groupby]",
+                    "reason": "aggregation",
+                    "time_in_nanos": 748102531,
+                    "reduce_time_in_nanos": 307807,
+                    "max_slice_time_in_nanos": 748102531,
+                    "min_slice_time_in_nanos": 716889185,
+                    "avg_slice_time_in_nanos": 728246444,
+                    "slice_count": 4
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "aggregations": [
+          {
+            "type": "CompositeAggregator",
+            "description": "groupby",
+            "time_in_nanos": 1074662252,
+            "max_slice_time_in_nanos": 1074662252,
+            "min_slice_time_in_nanos": 1038160508,
+            "avg_slice_time_in_nanos": 1058708625,
+            "breakdown": {
+              "min_build_leaf_collector": 37881,
+              "build_aggregation_count": 4,
+              "post_collection": 57858510,
+              "max_collect_count": 6436975,
+              "initialize_count": 4,
+              "reduce_count": 0,
+              "avg_collect": 670493735,
+              "max_build_aggregation": 393592969,
+              "avg_collect_count": 6249394,
+              "max_build_leaf_collector": 99951,
+              "min_build_leaf_collector_count": 1,
+              "build_aggregation": 436715019,
+              "min_initialize": 120,
+              "max_reduce": 0,
+              "build_leaf_collector_count": 24,
+              "avg_reduce": 0,
+              "min_collect_count": 6183595,
+              "avg_build_leaf_collector_count": 6,
+              "avg_build_leaf_collector": 71918,
+              "max_collect": 695754133,
+              "reduce": 0,
+              "avg_build_aggregation": 388138943,
+              "min_post_collection": 900,
+              "max_initialize": 2069,
+              "max_post_collection": 10730,
+              "collect_count": 24997576,
+              "avg_post_collection": 3378,
+              "avg_initialize": 649,
+              "post_collection_count": 4,
+              "build_leaf_collector": 128933,
+              "min_collect": 649458838,
+              "min_build_aggregation": 378857439,
+              "initialize": 179824,
+              "max_build_leaf_collector_count": 10,
+              "min_reduce": 0,
+              "collect": 695754133
+            }
+          },
+          {
+            "type": "SumAggregator",
+            "description": "avg_connectiontiming",
+            "time_in_nanos": 245124441,
+            "max_slice_time_in_nanos": 193421740,
+            "min_slice_time_in_nanos": 182904842,
+            "avg_slice_time_in_nanos": 186838431,
+            "breakdown": {
+              "min_build_leaf_collector": 400,
+              "build_aggregation_count": 4,
+              "post_collection": 44534084,
+              "max_collect_count": 6436975,
+              "initialize_count": 4,
+              "reduce_count": 0,
+              "avg_collect": 186833286,
+              "max_build_aggregation": 2930,
+              "avg_collect_count": 6249394,
+              "max_build_leaf_collector": 3530,
+              "min_build_leaf_collector_count": 1,
+              "build_aggregation": 44533423,
+              "min_initialize": 320,
+              "max_reduce": 0,
+              "build_leaf_collector_count": 24,
+              "avg_reduce": 0,
+              "min_collect_count": 6183595,
+              "avg_build_leaf_collector_count": 6,
+              "avg_build_leaf_collector": 2107,
+              "max_collect": 193416069,
+              "reduce": 0,
+              "avg_build_aggregation": 2122,
+              "min_post_collection": 420,
+              "max_initialize": 460,
+              "max_post_collection": 590,
+              "collect_count": 24997576,
+              "avg_post_collection": 512,
+              "avg_initialize": 402,
+              "post_collection_count": 4,
+              "build_leaf_collector": 57858520,
+              "min_collect": 182897761,
+              "min_build_aggregation": 1440,
+              "initialize": 57858779,
+              "max_build_leaf_collector_count": 10,
+              "min_reduce": 0,
+              "collect": 245122332
+            }
+          }
+        ],
+        "fetch": []
+      },
+      {
+        "id": "[0vc9m0mhSjGttmdS58NDfw][hits][1]",
+        "inbound_network_time_in_millis": 0,
+        "outbound_network_time_in_millis": 0,
+        "searches": [
+          {
+            "query": [
+              {
+                "type": "ConstantScoreQuery",
+                "description": "ConstantScore(*:*)",
+                "time_in_nanos": 1296948746,
+                "max_slice_time_in_nanos": 1296762171,
+                "min_slice_time_in_nanos": 581951017,
+                "avg_slice_time_in_nanos": 1112439722,
+                "breakdown": {
+                  "advance": 0,
+                  "advance_count": 0,
+                  "avg_advance": 0,
+                  "avg_advance_count": 0,
+                  "avg_build_scorer": 961156753,
+                  "avg_build_scorer_count": 12,
+                  "avg_compute_max_score": 0,
+                  "avg_compute_max_score_count": 0,
+                  "avg_match": 0,
+                  "avg_match_count": 0,
+                  "avg_next_doc": 1112426590,
+                  "avg_next_doc_count": 6249364,
+                  "avg_score": 0,
+                  "avg_score_count": 0,
+                  "avg_set_min_competitive_score": 0,
+                  "avg_set_min_competitive_score_count": 0,
+                  "avg_shallow_advance": 0,
+                  "avg_shallow_advance_count": 0,
+                  "build_scorer": 1282032070,
+                  "build_scorer_count": 50,
+                  "compute_max_score": 0,
+                  "compute_max_score_count": 0,
+                  "create_weight": 7600,
+                  "create_weight_count": 1,
+                  "match": 0,
+                  "match_count": 0,
+                  "max_advance": 0,
+                  "max_advance_count": 0,
+                  "max_build_scorer": 1282003059,
+                  "max_build_scorer_count": 20,
+                  "max_compute_max_score": 0,
+                  "max_compute_max_score_count": 0,
+                  "max_match": 0,
+                  "max_match_count": 0,
+                  "max_next_doc": 1296749531,
+                  "max_next_doc_count": 6540084,
+                  "max_score": 0,
+                  "max_score_count": 0,
+                  "max_set_min_competitive_score": 0,
+                  "max_set_min_competitive_score_count": 0,
+                  "max_shallow_advance": 0,
+                  "max_shallow_advance_count": 0,
+                  "min_advance": 0,
+                  "min_advance_count": 0,
+                  "min_build_scorer": 10520,
+                  "min_build_scorer_count": 2,
+                  "min_compute_max_score": 0,
+                  "min_compute_max_score_count": 0,
+                  "min_match": 0,
+                  "min_match_count": 0,
+                  "min_next_doc": 581934296,
+                  "min_next_doc_count": 6146969,
+                  "min_score": 0,
+                  "min_score_count": 0,
+                  "min_set_min_competitive_score": 0,
+                  "min_set_min_competitive_score_count": 0,
+                  "min_shallow_advance": 0,
+                  "min_shallow_advance_count": 0,
+                  "next_doc": 1296767711,
+                  "next_doc_count": 24997457,
+                  "score": 0,
+                  "score_count": 0,
+                  "set_min_competitive_score": 0,
+                  "set_min_competitive_score_count": 0,
+                  "shallow_advance": 0,
+                  "shallow_advance_count": 0
+                },
+                "children": [
+                  {
+                    "type": "MatchAllDocsQuery",
+                    "description": "*:*",
+                    "time_in_nanos": 1286995899,
+                    "max_slice_time_in_nanos": 1286812434,
+                    "min_slice_time_in_nanos": 193960743,
+                    "avg_slice_time_in_nanos": 1011548282,
+                    "breakdown": {
+                      "advance": 0,
+                      "advance_count": 0,
+                      "avg_advance": 0,
+                      "avg_advance_count": 0,
+                      "avg_build_scorer": 961152821,
+                      "avg_build_scorer_count": 12,
+                      "avg_compute_max_score": 0,
+                      "avg_compute_max_score_count": 0,
+                      "avg_match": 0,
+                      "avg_match_count": 0,
+                      "avg_next_doc": 1011537932,
+                      "avg_next_doc_count": 6249364,
+                      "avg_score": 0,
+                      "avg_score_count": 0,
+                      "avg_set_min_competitive_score": 0,
+                      "avg_set_min_competitive_score_count": 0,
+                      "avg_shallow_advance": 0,
+                      "avg_shallow_advance_count": 0,
+                      "build_scorer": 1282028880,
+                      "build_scorer_count": 50,
+                      "compute_max_score": 0,
+                      "compute_max_score_count": 0,
+                      "create_weight": 320,
+                      "create_weight_count": 1,
+                      "match": 0,
+                      "match_count": 0,
+                      "max_advance": 0,
+                      "max_advance_count": 0,
+                      "max_build_scorer": 1281999469,
+                      "max_build_scorer_count": 20,
+                      "max_compute_max_score": 0,
+                      "max_compute_max_score_count": 0,
+                      "max_match": 0,
+                      "max_match_count": 0,
+                      "max_next_doc": 1286802754,
+                      "max_next_doc_count": 6540084,
+                      "max_score": 0,
+                      "max_score_count": 0,
+                      "max_set_min_competitive_score": 0,
+                      "max_set_min_competitive_score_count": 0,
+                      "max_shallow_advance": 0,
+                      "max_shallow_advance_count": 0,
+                      "min_advance": 0,
+                      "min_advance_count": 0,
+                      "min_build_scorer": 5740,
+                      "min_build_scorer_count": 2,
+                      "min_compute_max_score": 0,
+                      "min_compute_max_score_count": 0,
+                      "min_match": 0,
+                      "min_match_count": 0,
+                      "min_next_doc": 193946462,
+                      "min_next_doc_count": 6146969,
+                      "min_score": 0,
+                      "min_score_count": 0,
+                      "min_set_min_competitive_score": 0,
+                      "min_set_min_competitive_score_count": 0,
+                      "min_shallow_advance": 0,
+                      "min_shallow_advance_count": 0,
+                      "next_doc": 1286820864,
+                      "next_doc_count": 24997457,
+                      "score": 0,
+                      "score_count": 0,
+                      "set_min_competitive_score": 0,
+                      "set_min_competitive_score_count": 0,
+                      "shallow_advance": 0,
+                      "shallow_advance_count": 0
+                    }
+                  }
+                ]
+              }
+            ],
+            "rewrite_time": 7430,
+            "collector": [
+              {
+                "name": "QueryCollectorManager",
+                "reason": "search_multi",
+                "time_in_nanos": 1122809119,
+                "reduce_time_in_nanos": 346669,
+                "max_slice_time_in_nanos": 1122809119,
+                "min_slice_time_in_nanos": 1062262542,
+                "avg_slice_time_in_nanos": 1084740478,
+                "slice_count": 4,
+                "children": [
+                  {
+                    "name": "EarlyTerminatingCollectorManager",
+                    "reason": "search_count",
+                    "time_in_nanos": 129812,
+                    "reduce_time_in_nanos": 3970,
+                    "max_slice_time_in_nanos": 18809,
+                    "min_slice_time_in_nanos": 6081,
+                    "avg_slice_time_in_nanos": 13412,
+                    "slice_count": 4
+                  },
+                  {
+                    "name": "NonGlobalAggCollectorManager: [groupby]",
+                    "reason": "aggregation",
+                    "time_in_nanos": 744533317,
+                    "reduce_time_in_nanos": 336748,
+                    "max_slice_time_in_nanos": 744533317,
+                    "min_slice_time_in_nanos": 707172616,
+                    "avg_slice_time_in_nanos": 723493162,
+                    "slice_count": 4
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "aggregations": [
+          {
+            "type": "CompositeAggregator",
+            "description": "groupby",
+            "time_in_nanos": 1083852414,
+            "max_slice_time_in_nanos": 1083852414,
+            "min_slice_time_in_nanos": 1042013641,
+            "avg_slice_time_in_nanos": 1058408642,
+            "breakdown": {
+              "min_build_leaf_collector": 44751,
+              "build_aggregation_count": 4,
+              "post_collection": 66406436,
+              "max_collect_count": 6540083,
+              "initialize_count": 4,
+              "reduce_count": 0,
+              "avg_collect": 669531201,
+              "max_build_aggregation": 399915070,
+              "avg_collect_count": 6249358,
+              "max_build_leaf_collector": 132551,
+              "min_build_leaf_collector_count": 1,
+              "build_aggregation": 451237977,
+              "min_initialize": 110,
+              "max_reduce": 0,
+              "build_leaf_collector_count": 25,
+              "avg_reduce": 0,
+              "min_collect_count": 6146959,
+              "avg_build_leaf_collector_count": 6,
+              "avg_build_leaf_collector": 83334,
+              "max_collect": 698965120,
+              "reduce": 0,
+              "avg_build_aggregation": 388735547,
+              "min_post_collection": 1480,
+              "max_initialize": 1670,
+              "max_post_collection": 221365,
+              "collect_count": 24997432,
+              "avg_post_collection": 58011,
+              "avg_initialize": 547,
+              "post_collection_count": 4,
+              "build_leaf_collector": 176242,
+              "min_collect": 654942921,
+              "min_build_aggregation": 380517025,
+              "initialize": 161834,
+              "max_build_leaf_collector_count": 10,
+              "min_reduce": 0,
+              "collect": 698965120
+            }
+          },
+          {
+            "type": "SumAggregator",
+            "description": "avg_connectiontiming",
+            "time_in_nanos": 257920172,
+            "max_slice_time_in_nanos": 191520537,
+            "min_slice_time_in_nanos": 181559582,
+            "avg_slice_time_in_nanos": 184605947,
+            "breakdown": {
+              "min_build_leaf_collector": 450,
+              "build_aggregation_count": 4,
+              "post_collection": 55333715,
+              "max_collect_count": 6540083,
+              "initialize_count": 4,
+              "reduce_count": 0,
+              "avg_collect": 184599667,
+              "max_build_aggregation": 3020,
+              "avg_collect_count": 6249358,
+              "max_build_leaf_collector": 3759,
+              "min_build_leaf_collector_count": 1,
+              "build_aggregation": 55330775,
+              "min_initialize": 350,
+              "max_reduce": 0,
+              "build_leaf_collector_count": 25,
+              "avg_reduce": 0,
+              "min_collect_count": 6146959,
+              "avg_build_leaf_collector_count": 6,
+              "avg_build_leaf_collector": 2532,
+              "max_collect": 191517257,
+              "reduce": 0,
+              "avg_build_aggregation": 2125,
+              "min_post_collection": 509,
+              "max_initialize": 1520,
+              "max_post_collection": 1590,
+              "collect_count": 24997432,
+              "avg_post_collection": 894,
+              "avg_initialize": 727,
+              "post_collection_count": 4,
+              "build_leaf_collector": 66395865,
+              "min_collect": 181553491,
+              "min_build_aggregation": 1450,
+              "initialize": 66400065,
+              "max_build_leaf_collector_count": 10,
+              "min_reduce": 0,
+              "collect": 257909992
+            }
+          }
+        ],
+        "fetch": []
+      },
+      {
+        "id": "[0vc9m0mhSjGttmdS58NDfw][hits][2]",
+        "inbound_network_time_in_millis": 0,
+        "outbound_network_time_in_millis": 0,
+        "searches": [
+          {
+            "query": [
+              {
+                "type": "ConstantScoreQuery",
+                "description": "ConstantScore(*:*)",
+                "time_in_nanos": 1310174634,
+                "max_slice_time_in_nanos": 1309991529,
+                "min_slice_time_in_nanos": 566758623,
+                "avg_slice_time_in_nanos": 1117360125,
+                "breakdown": {
+                  "advance": 0,
+                  "advance_count": 0,
+                  "avg_advance": 0,
+                  "avg_advance_count": 0,
+                  "avg_build_scorer": 973642840,
+                  "avg_build_scorer_count": 10,
+                  "avg_compute_max_score": 0,
+                  "avg_compute_max_score_count": 0,
+                  "avg_match": 0,
+                  "avg_match_count": 0,
+                  "avg_next_doc": 1117348185,
+                  "avg_next_doc_count": 6249751,
+                  "avg_score": 0,
+                  "avg_score_count": 0,
+                  "avg_set_min_competitive_score": 0,
+                  "avg_set_min_competitive_score_count": 0,
+                  "avg_shallow_advance": 0,
+                  "avg_shallow_advance_count": 0,
+                  "build_scorer": 1306479017,
+                  "build_scorer_count": 40,
+                  "compute_max_score": 0,
+                  "compute_max_score_count": 0,
+                  "create_weight": 13801,
+                  "create_weight_count": 1,
+                  "match": 0,
+                  "match_count": 0,
+                  "max_advance": 0,
+                  "max_advance_count": 0,
+                  "max_build_scorer": 1306460526,
+                  "max_build_scorer_count": 16,
+                  "max_compute_max_score": 0,
+                  "max_compute_max_score_count": 0,
+                  "max_match": 0,
+                  "max_match_count": 0,
+                  "max_next_doc": 1309978849,
+                  "max_next_doc_count": 6410726,
+                  "max_score": 0,
+                  "max_score_count": 0,
+                  "max_set_min_competitive_score": 0,
+                  "max_set_min_competitive_score_count": 0,
+                  "max_shallow_advance": 0,
+                  "max_shallow_advance_count": 0,
+                  "min_advance": 0,
+                  "min_advance_count": 0,
+                  "min_build_scorer": 9750,
+                  "min_build_scorer_count": 2,
+                  "min_compute_max_score": 0,
+                  "min_compute_max_score_count": 0,
+                  "min_match": 0,
+                  "min_match_count": 0,
+                  "min_next_doc": 566743152,
+                  "min_next_doc_count": 6195133,
+                  "min_score": 0,
+                  "min_score_count": 0,
+                  "min_set_min_competitive_score": 0,
+                  "min_set_min_competitive_score_count": 0,
+                  "min_shallow_advance": 0,
+                  "min_shallow_advance_count": 0,
+                  "next_doc": 1309994549,
+                  "next_doc_count": 24999005,
+                  "score": 0,
+                  "score_count": 0,
+                  "set_min_competitive_score": 0,
+                  "set_min_competitive_score_count": 0,
+                  "shallow_advance": 0,
+                  "shallow_advance_count": 0
+                },
+                "children": [
+                  {
+                    "type": "MatchAllDocsQuery",
+                    "description": "*:*",
+                    "time_in_nanos": 1307790085,
+                    "max_slice_time_in_nanos": 1307617350,
+                    "min_slice_time_in_nanos": 186573254,
+                    "avg_slice_time_in_nanos": 1020947094,
+                    "breakdown": {
+                      "advance": 0,
+                      "advance_count": 0,
+                      "avg_advance": 0,
+                      "avg_advance_count": 0,
+                      "avg_build_scorer": 973638775,
+                      "avg_build_scorer_count": 10,
+                      "avg_compute_max_score": 0,
+                      "avg_compute_max_score_count": 0,
+                      "avg_match": 0,
+                      "avg_match_count": 0,
+                      "avg_next_doc": 1020937984,
+                      "avg_next_doc_count": 6249751,
+                      "avg_score": 0,
+                      "avg_score_count": 0,
+                      "avg_set_min_competitive_score": 0,
+                      "avg_set_min_competitive_score_count": 0,
+                      "avg_shallow_advance": 0,
+                      "avg_shallow_advance_count": 0,
+                      "build_scorer": 1306475817,
+                      "build_scorer_count": 40,
+                      "compute_max_score": 0,
+                      "compute_max_score_count": 0,
+                      "create_weight": 171,
+                      "create_weight_count": 1,
+                      "match": 0,
+                      "match_count": 0,
+                      "max_advance": 0,
+                      "max_advance_count": 0,
+                      "max_build_scorer": 1306456886,
+                      "max_build_scorer_count": 16,
+                      "max_compute_max_score": 0,
+                      "max_compute_max_score_count": 0,
+                      "max_match": 0,
+                      "max_match_count": 0,
+                      "max_next_doc": 1307607300,
+                      "max_next_doc_count": 6410726,
+                      "max_score": 0,
+                      "max_score_count": 0,
+                      "max_set_min_competitive_score": 0,
+                      "max_set_min_competitive_score_count": 0,
+                      "max_shallow_advance": 0,
+                      "max_shallow_advance_count": 0,
+                      "min_advance": 0,
+                      "min_advance_count": 0,
+                      "min_build_scorer": 5260,
+                      "min_build_scorer_count": 2,
+                      "min_compute_max_score": 0,
+                      "min_compute_max_score_count": 0,
+                      "min_match": 0,
+                      "min_match_count": 0,
+                      "min_next_doc": 186559903,
+                      "min_next_doc_count": 6195133,
+                      "min_score": 0,
+                      "min_score_count": 0,
+                      "min_set_min_competitive_score": 0,
+                      "min_set_min_competitive_score_count": 0,
+                      "min_shallow_advance": 0,
+                      "min_shallow_advance_count": 0,
+                      "next_doc": 1307622930,
+                      "next_doc_count": 24999005,
+                      "score": 0,
+                      "score_count": 0,
+                      "set_min_competitive_score": 0,
+                      "set_min_competitive_score_count": 0,
+                      "shallow_advance": 0,
+                      "shallow_advance_count": 0
+                    }
+                  }
+                ]
+              }
+            ],
+            "rewrite_time": 4660,
+            "collector": [
+              {
+                "name": "QueryCollectorManager",
+                "reason": "search_multi",
+                "time_in_nanos": 1130090134,
+                "reduce_time_in_nanos": 313588,
+                "max_slice_time_in_nanos": 1130090134,
+                "min_slice_time_in_nanos": 1075613870,
+                "avg_slice_time_in_nanos": 1090391091,
+                "slice_count": 4,
+                "children": [
+                  {
+                    "name": "EarlyTerminatingCollectorManager",
+                    "reason": "search_count",
+                    "time_in_nanos": 116113,
+                    "reduce_time_in_nanos": 2300,
+                    "max_slice_time_in_nanos": 12391,
+                    "min_slice_time_in_nanos": 5179,
+                    "avg_slice_time_in_nanos": 9594,
+                    "slice_count": 4
+                  },
+                  {
+                    "name": "NonGlobalAggCollectorManager: [groupby]",
+                    "reason": "aggregation",
+                    "time_in_nanos": 760066965,
+                    "reduce_time_in_nanos": 308127,
+                    "max_slice_time_in_nanos": 760066965,
+                    "min_slice_time_in_nanos": 718422324,
+                    "avg_slice_time_in_nanos": 729942017,
+                    "slice_count": 4
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "aggregations": [
+          {
+            "type": "CompositeAggregator",
+            "description": "groupby",
+            "time_in_nanos": 1091554840,
+            "max_slice_time_in_nanos": 1091554840,
+            "min_slice_time_in_nanos": 1057909912,
+            "avg_slice_time_in_nanos": 1069393022,
+            "breakdown": {
+              "min_build_leaf_collector": 35131,
+              "build_aggregation_count": 4,
+              "post_collection": 60836102,
+              "max_collect_count": 6410725,
+              "initialize_count": 4,
+              "reduce_count": 0,
+              "avg_collect": 676870338,
+              "max_build_aggregation": 400397608,
+              "avg_collect_count": 6249746,
+              "max_build_leaf_collector": 69541,
+              "min_build_leaf_collector_count": 1,
+              "build_aggregation": 461232989,
+              "min_initialize": 140,
+              "max_reduce": 0,
+              "build_leaf_collector_count": 20,
+              "avg_reduce": 0,
+              "min_collect_count": 6195125,
+              "avg_build_leaf_collector_count": 5,
+              "avg_build_leaf_collector": 56326,
+              "max_collect": 691110871,
+              "reduce": 0,
+              "avg_build_aggregation": 392462835,
+              "min_post_collection": 640,
+              "max_initialize": 1730,
+              "max_post_collection": 9500,
+              "collect_count": 24998985,
+              "avg_post_collection": 2935,
+              "avg_initialize": 587,
+              "post_collection_count": 4,
+              "build_leaf_collector": 117573,
+              "min_collect": 668327789,
+              "min_build_aggregation": 386939669,
+              "initialize": 154924,
+              "max_build_leaf_collector_count": 8,
+              "min_reduce": 0,
+              "collect": 691110871
+            }
+          },
+          {
+            "type": "SumAggregator",
+            "description": "avg_connectiontiming",
+            "time_in_nanos": 249432171,
+            "max_slice_time_in_nanos": 197458821,
+            "min_slice_time_in_nanos": 182733055,
+            "avg_slice_time_in_nanos": 188318339,
+            "breakdown": {
+              "min_build_leaf_collector": 470,
+              "build_aggregation_count": 4,
+              "post_collection": 68311889,
+              "max_collect_count": 6410725,
+              "initialize_count": 4,
+              "reduce_count": 0,
+              "avg_collect": 188313619,
+              "max_build_aggregation": 2640,
+              "avg_collect_count": 6249746,
+              "max_build_leaf_collector": 2899,
+              "min_build_leaf_collector_count": 1,
+              "build_aggregation": 68311589,
+              "min_initialize": 330,
+              "max_reduce": 0,
+              "build_leaf_collector_count": 20,
+              "avg_reduce": 0,
+              "min_collect_count": 6195125,
+              "avg_build_leaf_collector_count": 5,
+              "avg_build_leaf_collector": 1784,
+              "max_collect": 197452982,
+              "reduce": 0,
+              "avg_build_aggregation": 2075,
+              "min_post_collection": 250,
+              "max_initialize": 530,
+              "max_post_collection": 470,
+              "collect_count": 24998985,
+              "avg_post_collection": 412,
+              "avg_initialize": 447,
+              "post_collection_count": 4,
+              "build_leaf_collector": 60839941,
+              "min_collect": 182729135,
+              "min_build_aggregation": 1450,
+              "initialize": 60839531,
+              "max_build_leaf_collector_count": 8,
+              "min_reduce": 0,
+              "collect": 249431371
+            }
+          }
+        ],
+        "fetch": []
+      },
+      {
+        "id": "[0vc9m0mhSjGttmdS58NDfw][hits][3]",
+        "inbound_network_time_in_millis": 0,
+        "outbound_network_time_in_millis": 0,
+        "searches": [
+          {
+            "query": [
+              {
+                "type": "ConstantScoreQuery",
+                "description": "ConstantScore(*:*)",
+                "time_in_nanos": 1301179101,
+                "max_slice_time_in_nanos": 1300994406,
+                "min_slice_time_in_nanos": 568333574,
+                "avg_slice_time_in_nanos": 1111920941,
+                "breakdown": {
+                  "advance": 0,
+                  "advance_count": 0,
+                  "avg_advance": 0,
+                  "avg_advance_count": 0,
+                  "avg_build_scorer": 966147883,
+                  "avg_build_scorer_count": 13,
+                  "avg_compute_max_score": 0,
+                  "avg_compute_max_score_count": 0,
+                  "avg_match": 0,
+                  "avg_match_count": 0,
+                  "avg_next_doc": 1111913160,
+                  "avg_next_doc_count": 6250882,
+                  "avg_score": 0,
+                  "avg_score_count": 0,
+                  "avg_set_min_competitive_score": 0,
+                  "avg_set_min_competitive_score_count": 0,
+                  "avg_shallow_advance": 0,
+                  "avg_shallow_advance_count": 0,
+                  "build_scorer": 1298924116,
+                  "build_scorer_count": 54,
+                  "compute_max_score": 0,
+                  "compute_max_score_count": 0,
+                  "create_weight": 13541,
+                  "create_weight_count": 1,
+                  "match": 0,
+                  "match_count": 0,
+                  "max_advance": 0,
+                  "max_advance_count": 0,
+                  "max_build_scorer": 1298912785,
+                  "max_build_scorer_count": 26,
+                  "max_compute_max_score": 0,
+                  "max_compute_max_score_count": 0,
+                  "max_match": 0,
+                  "max_match_count": 0,
+                  "max_next_doc": 1300989376,
+                  "max_next_doc_count": 6425286,
+                  "max_score": 0,
+                  "max_score_count": 0,
+                  "max_set_min_competitive_score": 0,
+                  "max_set_min_competitive_score_count": 0,
+                  "max_shallow_advance": 0,
+                  "max_shallow_advance_count": 0,
+                  "min_advance": 0,
+                  "min_advance_count": 0,
+                  "min_build_scorer": 6861,
+                  "min_build_scorer_count": 2,
+                  "min_compute_max_score": 0,
+                  "min_compute_max_score_count": 0,
+                  "min_match": 0,
+                  "min_match_count": 0,
+                  "min_next_doc": 568323553,
+                  "min_next_doc_count": 6188512,
+                  "min_score": 0,
+                  "min_score_count": 0,
+                  "min_set_min_competitive_score": 0,
+                  "min_set_min_competitive_score_count": 0,
+                  "min_shallow_advance": 0,
+                  "min_shallow_advance_count": 0,
+                  "next_doc": 1300995716,
+                  "next_doc_count": 25003531,
+                  "score": 0,
+                  "score_count": 0,
+                  "set_min_competitive_score": 0,
+                  "set_min_competitive_score_count": 0,
+                  "shallow_advance": 0,
+                  "shallow_advance_count": 0
+                },
+                "children": [
+                  {
+                    "type": "MatchAllDocsQuery",
+                    "description": "*:*",
+                    "time_in_nanos": 1299766764,
+                    "max_slice_time_in_nanos": 1299593099,
+                    "min_slice_time_in_nanos": 187216013,
+                    "avg_slice_time_in_nanos": 1014158254,
+                    "breakdown": {
+                      "advance": 0,
+                      "advance_count": 0,
+                      "avg_advance": 0,
+                      "avg_advance_count": 0,
+                      "avg_build_scorer": 966144688,
+                      "avg_build_scorer_count": 13,
+                      "avg_compute_max_score": 0,
+                      "avg_compute_max_score_count": 0,
+                      "avg_match": 0,
+                      "avg_match_count": 0,
+                      "avg_next_doc": 1014152567,
+                      "avg_next_doc_count": 6250882,
+                      "avg_score": 0,
+                      "avg_score_count": 0,
+                      "avg_set_min_competitive_score": 0,
+                      "avg_set_min_competitive_score_count": 0,
+                      "avg_shallow_advance": 0,
+                      "avg_shallow_advance_count": 0,
+                      "build_scorer": 1298921125,
+                      "build_scorer_count": 54,
+                      "compute_max_score": 0,
+                      "compute_max_score_count": 0,
+                      "create_weight": 151,
+                      "create_weight_count": 1,
+                      "match": 0,
+                      "match_count": 0,
+                      "max_advance": 0,
+                      "max_advance_count": 0,
+                      "max_build_scorer": 1298910295,
+                      "max_build_scorer_count": 26,
+                      "max_compute_max_score": 0,
+                      "max_compute_max_score_count": 0,
+                      "max_match": 0,
+                      "max_match_count": 0,
+                      "max_next_doc": 1299589599,
+                      "max_next_doc_count": 6425286,
+                      "max_score": 0,
+                      "max_score_count": 0,
+                      "max_set_min_competitive_score": 0,
+                      "max_set_min_competitive_score_count": 0,
+                      "max_shallow_advance": 0,
+                      "max_shallow_advance_count": 0,
+                      "min_advance": 0,
+                      "min_advance_count": 0,
+                      "min_build_scorer": 3040,
+                      "min_build_scorer_count": 2,
+                      "min_compute_max_score": 0,
+                      "min_compute_max_score_count": 0,
+                      "min_match": 0,
+                      "min_match_count": 0,
+                      "min_next_doc": 187207983,
+                      "min_next_doc_count": 6188512,
+                      "min_score": 0,
+                      "min_score_count": 0,
+                      "min_set_min_competitive_score": 0,
+                      "min_set_min_competitive_score_count": 0,
+                      "min_shallow_advance": 0,
+                      "min_shallow_advance_count": 0,
+                      "next_doc": 1299595899,
+                      "next_doc_count": 25003531,
+                      "score": 0,
+                      "score_count": 0,
+                      "set_min_competitive_score": 0,
+                      "set_min_competitive_score_count": 0,
+                      "shallow_advance": 0,
+                      "shallow_advance_count": 0
+                    }
+                  }
+                ]
+              }
+            ],
+            "rewrite_time": 6510,
+            "collector": [
+              {
+                "name": "QueryCollectorManager",
+                "reason": "search_multi",
+                "time_in_nanos": 1118476440,
+                "reduce_time_in_nanos": 342898,
+                "max_slice_time_in_nanos": 1118476440,
+                "min_slice_time_in_nanos": 1072625634,
+                "avg_slice_time_in_nanos": 1085227924,
+                "slice_count": 4,
+                "children": [
+                  {
+                    "name": "EarlyTerminatingCollectorManager",
+                    "reason": "search_count",
+                    "time_in_nanos": 147344,
+                    "reduce_time_in_nanos": 3300,
+                    "max_slice_time_in_nanos": 18130,
+                    "min_slice_time_in_nanos": 6830,
+                    "avg_slice_time_in_nanos": 12277,
+                    "slice_count": 4
+                  },
+                  {
+                    "name": "NonGlobalAggCollectorManager: [groupby]",
+                    "reason": "aggregation",
+                    "time_in_nanos": 746573604,
+                    "reduce_time_in_nanos": 335658,
+                    "max_slice_time_in_nanos": 746573604,
+                    "min_slice_time_in_nanos": 714427105,
+                    "avg_slice_time_in_nanos": 723582896,
+                    "slice_count": 4
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "aggregations": [
+          {
+            "type": "CompositeAggregator",
+            "description": "groupby",
+            "time_in_nanos": 1134044815,
+            "max_slice_time_in_nanos": 1133856860,
+            "min_slice_time_in_nanos": 1035081620,
+            "avg_slice_time_in_nanos": 1075008070,
+            "breakdown": {
+              "min_build_leaf_collector": 23590,
+              "build_aggregation_count": 4,
+              "post_collection": 53256179,
+              "max_collect_count": 6425285,
+              "initialize_count": 4,
+              "reduce_count": 0,
+              "avg_collect": 665021299,
+              "max_build_aggregation": 466751032,
+              "avg_collect_count": 6250876,
+              "max_build_leaf_collector": 1673209,
+              "min_build_leaf_collector_count": 1,
+              "build_aggregation": 466751032,
+              "min_initialize": 90,
+              "max_reduce": 0,
+              "build_leaf_collector_count": 27,
+              "avg_reduce": 0,
+              "min_collect_count": 6188503,
+              "avg_build_leaf_collector_count": 6,
+              "avg_build_leaf_collector": 462795,
+              "max_collect": 700481587,
+              "reduce": 0,
+              "avg_build_aggregation": 409519716,
+              "min_post_collection": 660,
+              "max_initialize": 1641,
+              "max_post_collection": 11710,
+              "collect_count": 25003504,
+              "avg_post_collection": 3705,
+              "avg_initialize": 555,
+              "post_collection_count": 4,
+              "build_leaf_collector": 1690899,
+              "min_collect": 645387697,
+              "min_build_aggregation": 384795661,
+              "initialize": 188045,
+              "max_build_leaf_collector_count": 13,
+              "min_reduce": 0,
+              "collect": 700481587
+            }
+          },
+          {
+            "type": "SumAggregator",
+            "description": "avg_connectiontiming",
+            "time_in_nanos": 241589147,
+            "max_slice_time_in_nanos": 217245357,
+            "min_slice_time_in_nanos": 182016754,
+            "avg_slice_time_in_nanos": 192897432,
+            "breakdown": {
+              "min_build_leaf_collector": 400,
+              "build_aggregation_count": 4,
+              "post_collection": 69651981,
+              "max_collect_count": 6425285,
+              "initialize_count": 4,
+              "reduce_count": 0,
+              "avg_collect": 192892160,
+              "max_build_aggregation": 2610,
+              "avg_collect_count": 6250876,
+              "max_build_leaf_collector": 4521,
+              "min_build_leaf_collector_count": 1,
+              "build_aggregation": 69652950,
+              "min_initialize": 350,
+              "max_reduce": 0,
+              "build_leaf_collector_count": 27,
+              "avg_reduce": 0,
+              "min_collect_count": 6188503,
+              "avg_build_leaf_collector_count": 6,
+              "avg_build_leaf_collector": 2562,
+              "max_collect": 217237706,
+              "reduce": 0,
+              "avg_build_aggregation": 1744,
+              "min_post_collection": 380,
+              "max_initialize": 770,
+              "max_post_collection": 590,
+              "collect_count": 25003504,
+              "avg_post_collection": 450,
+              "avg_initialize": 515,
+              "post_collection_count": 4,
+              "build_leaf_collector": 53254259,
+              "min_collect": 182012765,
+              "min_build_aggregation": 1450,
+              "initialize": 53255679,
+              "max_build_leaf_collector_count": 13,
+              "min_reduce": 0,
+              "collect": 241585637
+            }
+          }
+        ],
+        "fetch": []
+      }
+    ]
+  }
+}
