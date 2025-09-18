@@ -1,0 +1,32 @@
+{
+  "resource.attributes.applicationid": [
+    ["appId12", 10],
+    ["appId34", 10],
+    ["appId56", 10],
+    ["appId78", 20],
+    ["appId90", 50]
+  ],
+  "resource.attributes.criticality_code": [
+    ["1", 20],
+    ["3", 30],
+    ["5", 50]
+  ],
+  "resource.attributes.k8s_label.productid": [
+    ["pr12", 10],
+    ["pr34", 10],
+    ["pr56", 10],
+    ["pr78", 20],
+    ["pr90", 50]
+  ],
+  "resource.attributes.productid": [
+    ["pr12", 10],
+    ["pr34", 10],
+    ["pr56", 10],
+    ["pr78", 20],
+    ["pr90", 50]
+  ],
+  "body.msg": [
+    ["Error finding unassigned IPs for ENI xyz", 1],
+    ["success", 99]
+  ]
+}

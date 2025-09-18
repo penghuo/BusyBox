@@ -1,0 +1,41 @@
+{
+    "traceId": "",
+    "instrumentationScope": {
+        "droppedAttributesCount": 0
+    },
+    "resource": {
+        "droppedAttributesCount": 0,
+        "attributes": {
+            "log_type": "EKS_node",
+            "k8s_label.productid": "pr123456",
+            "k8s_label.sourcetype": "unknown",
+            "productid": "pr123456",
+            "k8s.platform": "EKS",
+            "k8s_label.criticality_code": "99",
+            "k8s.cluster.business.unit": "bu",
+            "criticality_code": "5",
+            "sourcetype": "unknown",
+            "log_tier": "standard",
+            "applicationid": "ap123456",
+            "obs_namespace": "defaultv1"
+        },
+        "schemaUrl": ""
+    },
+    "flags": 0,
+    "severityNumber": 0,
+    "schemaUrl": "",
+    "spanId": "",
+    "severityText": "",
+    "attributes": {
+        "cluster.name": "xyz-cluster1-ci-prod-us-east-1",
+        "cluster.region": "us-east-1",
+        "log.file.path": "/var/log/xyz/abc.log",
+        "cluster.env": "prod",
+        "obs_body_length": 146
+    },
+    "time": "2025-09-04T16:17:36.046227585Z",
+    "droppedAttributesCount": 0,
+    "observedTimestamp": "2025-09-04T16:17:36.046227585Z",
+    "@timestamp": "2025-09-04T16:17:39.133Z",
+    "body": "{\"msg\":\"Error finding unassigned IPs for ENI xyz\",\"caller\":\"xyz/abc.go:702\",\"level\":\"error\",\"ts\":\"2025-09-04T16:17:35.976Z\"}"
+}

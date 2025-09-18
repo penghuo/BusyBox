@@ -1,0 +1,132 @@
+@baseUrl = http://localhost:9200
+
+
+###
+PUT {{baseUrl}}/_plugins/_query/settings
+Content-Type: application/x-ndjson
+
+{
+  "transient" : {
+    "plugins.calcite.enabled" : true,
+    "plugins.calcite.pushdown.enabled": true
+  }
+}
+
+###
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+  "query": "search source=log* | stats count by span(@timestamp, 1h)"
+}
+
+###
+POST {{baseUrl}}/_plugins/_ppl
+Content-Type: application/x-ndjson
+
+{
+  "query": "search source=log* | eval hour=strftime(@timestamp, '%H') | stats count by hour"
+}
+
+###
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+  "query": "search source=log* | eval hour=strftime(@timestamp, '%H') | fields hour"
+}
+
+###
+POST {{baseUrl}}/_plugins/_ppl/_explain
+Content-Type: application/x-ndjson
+
+{
+  "query": "extended search source=log* | eval xx=flags * 100 "
+}
+
+###
+POST {{baseUrl}}/_plugins/_ppl
+Content-Type: application/x-ndjson
+
+{
+  "query": "search source=log* | eval xx=flags * 100 "
+}
+
+
+###
+PUT {{baseUrl}}/log-001
+Content-Type: application/x-ndjson
+
+{
+  "settings": {
+    "number_of_shards": 1,
+    "number_of_replicas": 1
+  },
+  "mappings": {
+    "properties": {
+      "traceId": {"type": "text"},
+      "flags": {"type": "integer"},
+      "@timestamp": {"type": "date"}
+    }
+  }
+}
+
+### type matched
+POST {{baseUrl}}/log-001/_doc
+Content-Type: application/x-ndjson
+
+{
+    "traceId": "1",
+    "flags": 1,
+    "@timestamp": "2025-09-04T16:17:39.133Z"
+}
+
+### type matched
+POST {{baseUrl}}/log-001/_doc
+Content-Type: application/x-ndjson
+
+{
+    "traceId": "1",
+    "flags": [1,2,3],
+    "@timestamp": "2025-09-04T16:17:39.133Z"
+}
+
+### type mis-matched
+POST {{baseUrl}}/log-001/_doc
+Content-Type: application/x-ndjson
+
+{
+    "traceId": 1,
+    "flags": "1",
+    "@timestamp": 1758139982000
+}
+
+### type missing
+POST {{baseUrl}}/log-001/_doc
+Content-Type: application/x-ndjson
+
+{
+    "@timestamp": 1758139982000
+}
+
+### type missing
+POST {{baseUrl}}/log-001/_doc
+Content-Type: application/x-ndjson
+
+{
+    "traceId": null,
+    "flags": null,
+    "@timestamp": 1758139982000
+}
+
+
+
+
+###
+GET {{baseUrl}}/_cat/indices
+
+###
+GET {{baseUrl}}/log-001
+
+###
+DELETE {{baseUrl}}/log-001

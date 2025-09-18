@@ -5,10 +5,11 @@
 
 # Display usage information
 usage() {
-  echo "Usage: $0 [-u username] [-p password]"
+  echo "Usage: $0 [-u username] [-p password] [-d url]"
   echo "Options:"
   echo "  -u username    OpenSearch username for authentication"
   echo "  -p password    OpenSearch password for authentication"
+  echo "  -d url         OpenSearch doamin url"
   echo "  -h             Display this help message"
   exit 1
 }
@@ -16,7 +17,8 @@ usage() {
 # Parse command line options
 USERNAME=""
 PASSWORD=""
-while getopts "u:p:h" opt; do
+URL=""
+while getopts "u:p:d:h" opt; do
   case ${opt} in
     u )
       USERNAME=$OPTARG
@@ -24,6 +26,9 @@ while getopts "u:p:h" opt; do
     p )
       PASSWORD=$OPTARG
       ;;
+    d )
+      URL=$OPTARG
+      ;;      
     h )
       usage
       ;;
@@ -68,7 +73,7 @@ if [ -n "$USERNAME" ] && [ -n "$PASSWORD" ]; then
   AUTH_PARAM="-u $USERNAME:$PASSWORD"
 fi
 
-curl -XPUT "https://search-ppl-bugbash-fgac-3-1-xymlna32dqd3uwee2bfcy2nq6m.eu-west-1.es-staging.amazonaws.com/_index_template/$TEMPLATE_NAME" \
+curl -XPUT "$URL/_index_template/$TEMPLATE_NAME" \
   $AUTH_PARAM \
   -H "Content-Type: application/json" \
   -d @"$TEMPLATE_FILE"

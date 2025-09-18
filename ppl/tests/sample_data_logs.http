@@ -1,0 +1,100 @@
+
+@baseUrl = http://localhost:9200
+
+###
+###
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+  "query": "search source=log-001"
+}
+
+###
+PUT {{baseUrl}}/_plugins/_query/settings
+Content-Type: application/x-ndjson
+
+{
+  "transient" : {
+    "plugins.calcite.enabled" : true,
+    "plugins.calcite.pushdown.enabled": true
+  }
+}
+
+###
+DELETE {{baseUrl}}/log-001
+
+###
+POST {{baseUrl}}/log-001/_doc
+Content-Type: application/x-ndjson
+
+{
+    "geo": {
+        "coordinates": {
+            "lat": 36.96015,
+            "lon": -78.18499861
+        }
+    }
+}
+
+###
+POST {{baseUrl}}/log-001/_doc
+Content-Type: application/x-ndjson
+
+{
+    "geo": [{
+        "srcdest": "CO:DE",
+        "src": "CO",
+        "dest": "DE",
+        "coordinates": {
+            "lat": 36.96015,
+            "lon": -78.18499861
+        }
+    }
+    ]
+}
+
+###
+PUT {{baseUrl}}/log-001
+Content-Type: application/x-ndjson
+
+{
+    "mappings": {
+        "properties": {
+        "geo": {
+            "properties": {
+            "coordinates": {
+                "type": "geo_point"
+            },
+            "dest": {
+                "type": "keyword"
+            },
+            "src": {
+                "type": "keyword"
+            },
+            "srcdest": {
+                "type": "keyword"
+            }
+            }
+        }
+        }
+    }
+}
+
+###
+PUT {{baseUrl}}/log-001
+Content-Type: application/x-ndjson
+
+{
+    "mappings": {
+        "properties": {
+        "geo": {
+            "properties": {
+                "coordinates": {
+                    "type": "geo_point"
+                }
+            }
+        }
+        }
+    }
+}
