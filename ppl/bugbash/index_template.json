@@ -1,0 +1,50 @@
+{
+  "index_patterns": ["logs-*"],
+  "priority": 100,
+  "template": {
+    "settings": {
+      "number_of_shards": 1,
+      "number_of_replicas": 1
+    },
+    "mappings": {
+      "dynamic_templates": [
+        {
+          "resource_attributes": {
+            "path_match": "resource.attributes.*",
+            "mapping": { "type": "keyword" },
+            "match_mapping_type": "string"
+          }
+        },
+        {
+          "attributes": {
+            "path_match": "attributes.*",
+            "mapping": { "type": "keyword" },
+            "match_mapping_type": "string"
+          }
+        }
+      ],
+      "properties": {
+        "traceId": { "type": "keyword" },
+        "flags": { "type": "byte" },
+        "severityNumber": { "type": "integer" },
+        "body": {
+          "norms": false, "type": "text"
+},
+        "serviceName": { "type": "keyword" },
+        "schemaUrl": { "type": "keyword" },
+        "spanId": { "type": "keyword" },
+        "@timestamp": { "type": "date" },
+        "severityText": { "type": "keyword" },
+        "@version": { "type": "keyword" },
+        "attributes": {
+          "type": "object",
+          "properties": {
+            "time": { "enabled": false, "type": "object" }
+          }
+        },
+        "time": { "type": "date" },
+        "observedTimestamp": { "type": "date" }
+      }
+    }
+  }
+}
