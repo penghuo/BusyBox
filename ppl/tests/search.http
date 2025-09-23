@@ -69,6 +69,30 @@ Content-Type: application/x-ndjson
 
 
 ###
+POST {{baseUrl}}/_plugins/_ppl/_explain
+Content-Type: application/x-ndjson
+
+{
+  "query": "source=log-00001 | eval t = unix_timestamp(@timestamp) | stats count() by t"
+}
+
+###
+POST {{baseUrl}}/_plugins/_ppl
+Content-Type: application/x-ndjson
+
+{
+  "query": "source=log-00001 | eval t = unix_timestamp(@timestamp) | stats count() by t"
+}
+
+###
+POST {{baseUrl}}/_plugins/_ppl
+Content-Type: application/x-ndjson
+
+{
+  "query": "explain extended source=log-00001 | eval t = unix_timestamp(@timestamp) | stats count() by t"
+}
+
+###
 PUT {{baseUrl}}/_plugins/_query/settings
 Content-Type: application/x-ndjson
 
@@ -76,6 +100,17 @@ Content-Type: application/x-ndjson
   "transient" : {
     "plugins.calcite.enabled" : true,
     "plugins.calcite.pushdown.enabled": true
+  }
+}
+
+###
+PUT {{baseUrl}}/_plugins/_query/settings
+Content-Type: application/x-ndjson
+
+{
+  "transient" : {
+    "plugins.calcite.enabled" : true,
+    "plugins.calcite.pushdown.enabled": false
   }
 }
 
