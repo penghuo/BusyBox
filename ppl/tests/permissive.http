@@ -1,0 +1,57 @@
+@baseUrl = http://localhost:9200
+
+
+###
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+  "query": "search source=test | fields `_MAP['v1']`"
+}
+
+###
+PUT {{baseUrl}}/test
+Content-Type: application/x-ndjson
+
+{
+  "mappings": {
+    "properties": {
+      "@timestamp": {
+        "type": "date"
+      },
+      "age": {
+        "type": "integer"
+      },
+      "v": {
+        "type": "keyword"
+      }
+    }
+  }
+}
+
+###
+POST {{baseUrl}}/test/_bulk
+Content-Type: application/x-ndjson
+
+{ "index": { "_id": 1 } }
+{"@timestamp":"2025-08-19T04:53:24Z", "age":10}
+{ "index": { "_id": 2 } }
+{"@timestamp":"2025-08-20T04:53:24Z", "v1": "v-1"}
+
+
+###
+DELETE {{baseUrl}}/test
+
+###
+GET {{baseUrl}}/_cat/indices
+
+###
+PUT {{baseUrl}}/_plugins/_query/settings
+Content-Type: application/x-ndjson
+
+{
+  "persistent" : {
+    "plugins.calcite.enabled" : true
+  }
+}
+

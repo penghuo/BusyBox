@@ -1,0 +1,1 @@
+CalciteLogicalIndexScan extends AbstractCalciteIndexScan extends TableScan, this is root node of Calcite RelNode
