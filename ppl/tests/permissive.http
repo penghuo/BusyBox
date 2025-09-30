@@ -1,12 +1,43 @@
 @baseUrl = http://localhost:9200
 
-
 ###
+GET {{baseUrl}}/_cat/indices
+
+
+### MAP 
 POST {{baseUrl}}/_plugins/_ppl/
 Content-Type: application/x-ndjson
 
 {
-  "query": "search source=test | fields `_MAP['v1']`"
+    "query": "source=test | fields v"
+}
+
+
+### MAP 
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+    "query": "source=test"
+}
+
+### MAP 
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+    "query": "source=test | fields `_MAP['v']`"
+}
+
+
+###
+PUT {{baseUrl}}/_plugins/_query/settings
+Content-Type: application/x-ndjson
+
+{
+  "transient" : {
+    "plugins.calcite.enabled" : true
+  }
 }
 
 ###
@@ -16,14 +47,12 @@ Content-Type: application/x-ndjson
 {
   "mappings": {
     "properties": {
-      "@timestamp": {
-        "type": "date"
+      "@timestamp" : {
+        "type" : "date",
+        "format" : "yyyy-MM-dd HH:mm:ss" 
       },
-      "age": {
+      "v":{
         "type": "integer"
-      },
-      "v": {
-        "type": "keyword"
       }
     }
   }
@@ -33,25 +62,10 @@ Content-Type: application/x-ndjson
 POST {{baseUrl}}/test/_bulk
 Content-Type: application/x-ndjson
 
-{ "index": { "_id": 1 } }
-{"@timestamp":"2025-08-19T04:53:24Z", "age":10}
-{ "index": { "_id": 2 } }
-{"@timestamp":"2025-08-20T04:53:24Z", "v1": "v-1"}
-
-
-###
-DELETE {{baseUrl}}/test
-
-###
-GET {{baseUrl}}/_cat/indices
-
-###
-PUT {{baseUrl}}/_plugins/_query/settings
-Content-Type: application/x-ndjson
-
-{
-  "persistent" : {
-    "plugins.calcite.enabled" : true
-  }
-}
+{"index": {"_id": 1}}
+{"timestamp" : "2025-05-01 05:49:00","v": 1}
+{"index": {"_id": 2}}
+{"timestamp" : "2025-05-01 06:49:00","v": 2}
+{"index": {"_id": 3}}
+{"timestamp" : "2025-05-01 07:49:00","v": 3}
 
