@@ -105,20 +105,27 @@ The `config.json` file defines store configurations and output settings:
 
 ## Usage
 
-### Basic Usage
+### Multi-Store Mode (Default)
 
 ```bash
-# Check prices for all cards in cards.txt
+# Check prices across all configured stores (default behavior)
 python3 mtg_price_checker.py
 
 # Use a different input file
 python3 mtg_price_checker.py --input my_cards.txt
 
-# Use a different store
-python3 mtg_price_checker.py --store tcgplayer_pro
-
 # Only display results, don't save CSV
 python3 mtg_price_checker.py --print-only
+```
+
+### Single Store Mode (Backward Compatibility)
+
+```bash
+# Check prices at a specific store
+python3 mtg_price_checker.py --store elegantoctopus
+
+# Check prices at Laughing Dragon MTG
+python3 mtg_price_checker.py --store laughingdragonmtg
 ```
 
 ### Command Line Options
