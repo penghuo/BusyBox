@@ -25,16 +25,21 @@ class MTGStore:
         self.config = store_config
         self.name = store_config.get('name', 'Unknown Store')
         self.search_url = store_config['search_url']
-        self.inventory_url = store_config['inventory_url']
+        self.inventory_url = store_config.get('inventory_url')  # Optional for some stores
         self.headers = store_config.get('headers', {})
         self.search_payload_template = store_config['search_payload']
+        self.store_type = store_config.get('type', 'tcgplayer_pro')  # Default to original type
     
     def search_cards(self, card_name: str) -> List[Dict[str, Any]]:
         """Search for cards and return product information"""
         try:
-            # Prepare search payload
+            # Prepare search payload based on store type
             payload = self.search_payload_template.copy()
-            payload['query'] = card_name
+            
+            if self.store_type == 'tcgplayer_pro':
+                payload['query'] = card_name
+            elif self.store_type == 'conductcommerce':
+                payload['name'] = card_name
             
             # Make search request
             response = requests.post(
@@ -46,7 +51,14 @@ class MTGStore:
             response.raise_for_status()
             
             data = response.json()
-            products = data.get('products', {}).get('items', [])
+            
+            # Handle different response formats
+            if self.store_type == 'tcgplayer_pro':
+                products = data.get('products', {}).get('items', [])
+            elif self.store_type == 'conductcommerce':
+                products = data.get('result', {}).get('listings', [])
+            else:
+                products = []
             
             print(f"Found {len(products)} products for '{card_name}'")
             return products
@@ -122,8 +134,8 @@ class MTGPriceChecker:
             print(f"Input file '{input_file}' not found!")
             sys.exit(1)
     
-    def process_card_results(self, card_name: str, products: List[Dict], inventory_data: List[Dict]) -> Dict:
-        """Process search and inventory results for a single card - return one consolidated result"""
+    def process_tcgplayer_results(self, card_name: str, products: List[Dict], inventory_data: List[Dict]) -> Dict:
+        """Process TCGPlayer Pro style search and inventory results"""
         all_skus = []
         
         # Create a mapping of product ID to product info
@@ -171,6 +183,47 @@ class MTGPriceChecker:
                 'quantity': 0
             }
     
+    def process_conductcommerce_results(self, card_name: str, listings: List[Dict]) -> Dict:
+        """Process ConductCommerce style results (Laughing Dragon MTG)"""
+        all_variants = []
+        
+        # Collect all available variants across all listings
+        for listing in listings:
+            variants = listing.get('variants', [])
+            
+            for variant in variants:
+                quantity = variant.get('quantity', 0)
+                price = variant.get('price', 0.0)
+                
+                # Only include variants with quantity > 0
+                if quantity > 0:
+                    all_variants.append({
+                        'price': price,
+                        'quantity': quantity
+                    })
+        
+        # Consolidate results for this card
+        if all_variants:
+            # Sort by price to get lowest price
+            all_variants.sort(key=lambda x: x['price'])
+            lowest_price = all_variants[0]['price']
+            total_quantity = sum(variant['quantity'] for variant in all_variants)
+            
+            return {
+                'card_name': card_name,
+                'availability': 'Available',
+                'price': lowest_price,
+                'quantity': total_quantity
+            }
+        else:
+            # No available inventory found
+            return {
+                'card_name': card_name,
+                'availability': 'n/a',
+                'price': 'n/a',
+                'quantity': 0
+            }
+    
     def check_card_prices(self, card_name: str, store_key: str) -> Dict:
         """Check prices for a single card at a specific store - return one consolidated result"""
         if store_key not in self.stores:
@@ -196,22 +249,29 @@ class MTGPriceChecker:
                 'quantity': 0
             }
         
-        # Step 2: Get inventory for product IDs
-        product_ids = [product['id'] for product in products]
-        inventory_data = store.get_inventory(product_ids)
-        
-        if not inventory_data:
-            print(f"No inventory data found for '{card_name}'")
-            return {
-                'card_name': card_name,
-                'availability': 'n/a',
-                'price': 'n/a',
-                'quantity': 0
-            }
-        
-        # Step 3: Process results
-        result = self.process_card_results(card_name, products, inventory_data)
-        return result
+        # Handle different store types
+        if store.store_type == 'conductcommerce':
+            # For ConductCommerce (Laughing Dragon), all data is in the search response
+            result = self.process_conductcommerce_results(card_name, products)
+            return result
+        else:
+            # For TCGPlayer Pro, need separate inventory call
+            # Step 2: Get inventory for product IDs
+            product_ids = [product['id'] for product in products]
+            inventory_data = store.get_inventory(product_ids)
+            
+            if not inventory_data:
+                print(f"No inventory data found for '{card_name}'")
+                return {
+                    'card_name': card_name,
+                    'availability': 'n/a',
+                    'price': 'n/a',
+                    'quantity': 0
+                }
+            
+            # Step 3: Process results
+            result = self.process_tcgplayer_results(card_name, products, inventory_data)
+            return result
     
     def check_all_cards(self, input_file: str, store_key: str) -> List[Dict]:
         """Check prices for all cards in the input file - one result per card"""

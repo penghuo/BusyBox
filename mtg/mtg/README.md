@@ -5,7 +5,8 @@ This Python script checks MTG card availability and prices from configurable MTG
 ## Features
 
 - ✅ **Configurable Store Support**: Easily add multiple MTG store APIs via JSON configuration
-- ✅ **Two-Step API Process**: Search for cards → Get inventory/pricing (as specified)
+- ✅ **Multiple Store Types**: Supports TCGPlayer Pro and Conduct Commerce (Laughing Dragon MTG) APIs
+- ✅ **Flexible API Patterns**: Handles both two-step (search + inventory) and single-endpoint workflows
 - ✅ **Batch Processing**: Process multiple cards from a text file
 - ✅ **One Row Per Card**: Consolidates all variants into a single result per card
 - ✅ **Lowest Price**: Shows the lowest available price across all variants
@@ -61,19 +62,43 @@ The `config.json` file defines store configurations and output settings:
 
 ### Adding New Stores
 
-To add a new MTG store, add an entry to the `stores` section in `config.json`:
-
+#### TCGPlayer Pro Style (Two-Step Process)
 ```json
-"new_store": {
-  "name": "New Store Name",
-  "search_url": "https://api.newstore.com/search",
-  "inventory_url": "https://api.newstore.com/inventory",
+"elegantoctopus": {
+  "name": "elegantoctopus",
+  "search_url": "https://elegantoctopus.tcgplayerpro.com/api/catalog/search",
+  "inventory_url": "https://elegantoctopus.tcgplayerpro.com/api/inventory/skus",
+  "type": "tcgplayer_pro",
   "headers": {
-    "Accept": "application/json"
+    "Accept": "application/json",
+    "Content-Type": "application/json"
   },
   "search_payload": {
     "query": "{card_name}",
-    "limit": 5
+    "context": null,
+    "filters": {},
+    "from": 0,
+    "size": 5,
+    "sort": [{"field": "in-stock-price-sort", "order": "asc"}]
+  }
+}
+```
+
+#### Conduct Commerce Style (Single Endpoint)
+```json
+"laughingdragonmtg": {
+  "name": "Laughing Dragon MTG",
+  "search_url": "https://api.conductcommerce.com/v1/advancedSearch",
+  "type": "conductcommerce",
+  "headers": {
+    "Accept": "application/json",
+    "Content-Type": "application/json"
+  },
+  "search_payload": {
+    "productTypeID": 1,
+    "name": "{card_name}",
+    "language": ["English"],
+    "host": "laughingdragonmtg.com"
   }
 }
 ```
