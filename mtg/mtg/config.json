@@ -1,0 +1,26 @@
+{
+  "stores": {
+    "elegantoctopus": {
+      "name": "elegantoctopus",
+      "search_url": "https://elegantoctopus.tcgplayerpro.com/api/catalog/search",
+      "inventory_url": "https://elegantoctopus.tcgplayerpro.com/api/inventory/skus",
+      "headers": {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+      },
+      "search_payload": {
+        "query": "{card_name}",
+        "context": null,
+        "filters": {},
+        "from": 0,
+        "size": 5,
+        "sort": [
+          {
+            "field": "in-stock-price-sort",
+            "order": "asc"
+          }
+        ]
+      }
+    }
+  }
+}
