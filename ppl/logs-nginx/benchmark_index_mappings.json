@@ -1,0 +1,3717 @@
+{
+    "apache_http_logs": {
+        "mappings": {
+            "properties": {
+                "API": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "bytes": {
+                    "type": "integer"
+                },
+                "clientIP": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "datetime": {
+                    "type": "date_nanos"
+                },
+                "protocol": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "referrer": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "remote": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "request": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "responsetime": {
+                    "type": "long"
+                },
+                "status": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "userID": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "useragent": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "security-auditlog-2024.05": {
+        "mappings": {
+            "properties": {
+                "@timestamp": {
+                    "type": "date"
+                },
+                "audit_category": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "audit_cluster_name": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "audit_format_version": {
+                    "type": "long"
+                },
+                "audit_node_host_address": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "audit_node_host_name": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "audit_node_id": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "audit_node_name": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "audit_request_body": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "audit_request_effective_user": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "audit_request_effective_user_is_admin": {
+                    "type": "boolean"
+                },
+                "audit_request_layer": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "audit_request_origin": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "audit_request_privilege": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "audit_request_remote_address": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "audit_rest_request_headers": {
+                    "properties": {
+                        "Connection": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "Content-Length": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "Host": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "content-length": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "content-type": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "securitytenant": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "user-agent": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "x-forwarded-for": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "x-forwarded-host": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "x-forwarded-port": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "x-forwarded-proto": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "x-opaque-id": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "x-opensearch-product-origin": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        }
+                    }
+                },
+                "audit_rest_request_method": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "audit_rest_request_params": {
+                    "properties": {
+                        "name": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "pretty": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        }
+                    }
+                },
+                "audit_rest_request_path": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "audit_trace_indices": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "audit_trace_resolved_indices": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "audit_trace_task_id": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "audit_trace_task_parent_id": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "audit_transport_headers": {
+                    "properties": {
+                        "X-Opaque-Id": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "_opendistro_security_fls_fields": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "_opendistro_security_initial_action_class_header": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "_opendistro_security_origin_header": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "_opendistro_security_remote_address_header": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "_opendistro_security_remotecn": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "_opendistro_security_source_field_context": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "_opendistro_security_user_header": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        }
+                    }
+                },
+                "audit_transport_request_type": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "ct_logs": {
+        "mappings": {
+            "properties": {
+                "activity_id": {
+                    "type": "long"
+                },
+                "activity_name": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "actor": {
+                    "properties": {
+                        "idp": {
+                            "type": "object"
+                        },
+                        "invoked_by": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "session": {
+                            "properties": {
+                                "created_time": {
+                                    "type": "long"
+                                },
+                                "issuer": {
+                                    "type": "text",
+                                    "fields": {
+                                        "keyword": {
+                                            "type": "keyword",
+                                            "ignore_above": 256
+                                        }
+                                    }
+                                },
+                                "mfa": {
+                                    "type": "boolean"
+                                }
+                            }
+                        },
+                        "user": {
+                            "properties": {
+                                "account_uid": {
+                                    "type": "text",
+                                    "fields": {
+                                        "keyword": {
+                                            "type": "keyword",
+                                            "ignore_above": 256
+                                        }
+                                    }
+                                },
+                                "credential_uid": {
+                                    "type": "text",
+                                    "fields": {
+                                        "keyword": {
+                                            "type": "keyword",
+                                            "ignore_above": 256
+                                        }
+                                    }
+                                },
+                                "type": {
+                                    "type": "text",
+                                    "fields": {
+                                        "keyword": {
+                                            "type": "keyword",
+                                            "ignore_above": 256
+                                        }
+                                    }
+                                },
+                                "uid": {
+                                    "type": "text",
+                                    "fields": {
+                                        "keyword": {
+                                            "type": "keyword",
+                                            "ignore_above": 256
+                                        }
+                                    }
+                                },
+                                "uuid": {
+                                    "type": "text",
+                                    "fields": {
+                                        "keyword": {
+                                            "type": "keyword",
+                                            "ignore_above": 256
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "api": {
+                    "properties": {
+                        "operation": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "request": {
+                            "properties": {
+                                "uid": {
+                                    "type": "text",
+                                    "fields": {
+                                        "keyword": {
+                                            "type": "keyword",
+                                            "ignore_above": 256
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "response": {
+                            "type": "object"
+                        },
+                        "service": {
+                            "properties": {
+                                "name": {
+                                    "type": "text",
+                                    "fields": {
+                                        "keyword": {
+                                            "type": "keyword",
+                                            "ignore_above": 256
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "category_name": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "category_uid": {
+                    "type": "long"
+                },
+                "class_name": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "class_uid": {
+                    "type": "long"
+                },
+                "cloud": {
+                    "properties": {
+                        "provider": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "region": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        }
+                    }
+                },
+                "http_request": {
+                    "properties": {
+                        "user_agent": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        }
+                    }
+                },
+                "metadata": {
+                    "properties": {
+                        "product": {
+                            "properties": {
+                                "feature": {
+                                    "properties": {
+                                        "name": {
+                                            "type": "text",
+                                            "fields": {
+                                                "keyword": {
+                                                    "type": "keyword",
+                                                    "ignore_above": 256
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "name": {
+                                    "type": "text",
+                                    "fields": {
+                                        "keyword": {
+                                            "type": "keyword",
+                                            "ignore_above": 256
+                                        }
+                                    }
+                                },
+                                "vendor_name": {
+                                    "type": "text",
+                                    "fields": {
+                                        "keyword": {
+                                            "type": "keyword",
+                                            "ignore_above": 256
+                                        }
+                                    }
+                                },
+                                "version": {
+                                    "type": "text",
+                                    "fields": {
+                                        "keyword": {
+                                            "type": "keyword",
+                                            "ignore_above": 256
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "profiles": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "uid": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "version": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        }
+                    }
+                },
+                "resources": {
+                    "properties": {
+                        "account_uid": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "type": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "uid": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        }
+                    }
+                },
+                "severity": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "severity_id": {
+                    "type": "long"
+                },
+                "src_endpoint": {
+                    "properties": {
+                        "domain": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        }
+                    }
+                },
+                "status": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "status_id": {
+                    "type": "long"
+                },
+                "time": {
+                    "type": "date"
+                },
+                "type_name": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "type_uid": {
+                    "type": "long"
+                },
+                "unmapped": {
+                    "properties": {
+                        "eventType": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "userIdentity": {
+                            "properties": {
+                                "sessionContext": {
+                                    "properties": {
+                                        "sessionIssuer": {
+                                            "properties": {
+                                                "principalId": {
+                                                    "type": "text",
+                                                    "fields": {
+                                                        "keyword": {
+                                                            "type": "keyword",
+                                                            "ignore_above": 256
+                                                        }
+                                                    }
+                                                },
+                                                "type": {
+                                                    "type": "text",
+                                                    "fields": {
+                                                        "keyword": {
+                                                            "type": "keyword",
+                                                            "ignore_above": 256
+                                                        }
+                                                    }
+                                                },
+                                                "userName": {
+                                                    "type": "text",
+                                                    "fields": {
+                                                        "keyword": {
+                                                            "type": "keyword",
+                                                            "ignore_above": 256
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "sso_logs-nginx-prod-2024.05.08": {
+        "mappings": {
+            "properties": {
+                "@timestamp": {
+                    "type": "date"
+                },
+                "agent": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "code": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "host": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "log": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "method": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "path": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "referer": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "remote": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "size": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "user": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "otel-metrics-2024.05": {
+        "mappings": {
+            "properties": {
+                "aggregationTemporality": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "attributes": {
+                    "properties": {
+                        "instrumentationScope": {
+                            "properties": {
+                                "name": {
+                                    "type": "text",
+                                    "fields": {
+                                        "keyword": {
+                                            "type": "keyword",
+                                            "ignore_above": 256
+                                        }
+                                    }
+                                },
+                                "version": {
+                                    "type": "text",
+                                    "fields": {
+                                        "keyword": {
+                                            "type": "keyword",
+                                            "ignore_above": 256
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "metric": {
+                            "properties": {
+                                "attributes": {
+                                    "properties": {
+                                        "app@ads@ad_request_type": {
+                                            "type": "text",
+                                            "fields": {
+                                                "keyword": {
+                                                    "type": "keyword",
+                                                    "ignore_above": 256
+                                                }
+                                            }
+                                        },
+                                        "app@ads@ad_response_type": {
+                                            "type": "text",
+                                            "fields": {
+                                                "keyword": {
+                                                    "type": "keyword",
+                                                    "ignore_above": 256
+                                                }
+                                            }
+                                        },
+                                        "app@payment@currency": {
+                                            "type": "text",
+                                            "fields": {
+                                                "keyword": {
+                                                    "type": "keyword",
+                                                    "ignore_above": 256
+                                                }
+                                            }
+                                        },
+                                        "client-id": {
+                                            "type": "text",
+                                            "fields": {
+                                                "keyword": {
+                                                    "type": "keyword",
+                                                    "ignore_above": 256
+                                                }
+                                            }
+                                        },
+                                        "count": {
+                                            "type": "text",
+                                            "fields": {
+                                                "keyword": {
+                                                    "type": "keyword",
+                                                    "ignore_above": 256
+                                                }
+                                            }
+                                        },
+                                        "cpu": {
+                                            "type": "long"
+                                        },
+                                        "daemon": {
+                                            "type": "boolean"
+                                        },
+                                        "device": {
+                                            "type": "text",
+                                            "fields": {
+                                                "keyword": {
+                                                    "type": "keyword",
+                                                    "ignore_above": 256
+                                                }
+                                            }
+                                        },
+                                        "direction": {
+                                            "type": "text",
+                                            "fields": {
+                                                "keyword": {
+                                                    "type": "keyword",
+                                                    "ignore_above": 256
+                                                }
+                                            }
+                                        },
+                                        "dropped": {
+                                            "type": "boolean"
+                                        },
+                                        "family": {
+                                            "type": "long"
+                                        },
+                                        "generation": {
+                                            "type": "text",
+                                            "fields": {
+                                                "keyword": {
+                                                    "type": "keyword",
+                                                    "ignore_above": 256
+                                                }
+                                            }
+                                        },
+                                        "method": {
+                                            "type": "text",
+                                            "fields": {
+                                                "keyword": {
+                                                    "type": "keyword",
+                                                    "ignore_above": 256
+                                                }
+                                            }
+                                        },
+                                        "node-id": {
+                                            "type": "text",
+                                            "fields": {
+                                                "keyword": {
+                                                    "type": "keyword",
+                                                    "ignore_above": 256
+                                                }
+                                            }
+                                        },
+                                        "operation": {
+                                            "type": "text",
+                                            "fields": {
+                                                "keyword": {
+                                                    "type": "keyword",
+                                                    "ignore_above": 256
+                                                }
+                                            }
+                                        },
+                                        "partition": {
+                                            "type": "text",
+                                            "fields": {
+                                                "keyword": {
+                                                    "type": "keyword",
+                                                    "ignore_above": 256
+                                                }
+                                            }
+                                        },
+                                        "pool": {
+                                            "type": "text",
+                                            "fields": {
+                                                "keyword": {
+                                                    "type": "keyword",
+                                                    "ignore_above": 256
+                                                }
+                                            }
+                                        },
+                                        "protocol": {
+                                            "type": "text",
+                                            "fields": {
+                                                "keyword": {
+                                                    "type": "keyword",
+                                                    "ignore_above": 256
+                                                }
+                                            }
+                                        },
+                                        "recommendation@type": {
+                                            "type": "text",
+                                            "fields": {
+                                                "keyword": {
+                                                    "type": "keyword",
+                                                    "ignore_above": 256
+                                                }
+                                            }
+                                        },
+                                        "service@name": {
+                                            "type": "text",
+                                            "fields": {
+                                                "keyword": {
+                                                    "type": "keyword",
+                                                    "ignore_above": 256
+                                                }
+                                            }
+                                        },
+                                        "span@kind": {
+                                            "type": "text",
+                                            "fields": {
+                                                "keyword": {
+                                                    "type": "keyword",
+                                                    "ignore_above": 256
+                                                }
+                                            }
+                                        },
+                                        "span@name": {
+                                            "type": "text",
+                                            "fields": {
+                                                "keyword": {
+                                                    "type": "keyword",
+                                                    "ignore_above": 256
+                                                }
+                                            }
+                                        },
+                                        "spanProcessorType": {
+                                            "type": "text",
+                                            "fields": {
+                                                "keyword": {
+                                                    "type": "keyword",
+                                                    "ignore_above": 256
+                                                }
+                                            }
+                                        },
+                                        "state": {
+                                            "type": "text",
+                                            "fields": {
+                                                "keyword": {
+                                                    "type": "keyword",
+                                                    "ignore_above": 256
+                                                }
+                                            }
+                                        },
+                                        "status": {
+                                            "type": "long"
+                                        },
+                                        "status@code": {
+                                            "type": "text",
+                                            "fields": {
+                                                "keyword": {
+                                                    "type": "keyword",
+                                                    "ignore_above": 256
+                                                }
+                                            }
+                                        },
+                                        "success": {
+                                            "type": "boolean"
+                                        },
+                                        "target": {
+                                            "type": "text",
+                                            "fields": {
+                                                "keyword": {
+                                                    "type": "keyword",
+                                                    "ignore_above": 256
+                                                }
+                                            }
+                                        },
+                                        "topic": {
+                                            "type": "text",
+                                            "fields": {
+                                                "keyword": {
+                                                    "type": "keyword",
+                                                    "ignore_above": 256
+                                                }
+                                            }
+                                        },
+                                        "type": {
+                                            "type": "text",
+                                            "fields": {
+                                                "keyword": {
+                                                    "type": "keyword",
+                                                    "ignore_above": 256
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "resource": {
+                            "properties": {
+                                "attributes": {
+                                    "properties": {
+                                        "cloud@account@id": {
+                                            "type": "text",
+                                            "fields": {
+                                                "keyword": {
+                                                    "type": "keyword",
+                                                    "ignore_above": 256
+                                                }
+                                            }
+                                        },
+                                        "cloud@availability_zone": {
+                                            "type": "text",
+                                            "fields": {
+                                                "keyword": {
+                                                    "type": "keyword",
+                                                    "ignore_above": 256
+                                                }
+                                            }
+                                        },
+                                        "cloud@platform": {
+                                            "type": "text",
+                                            "fields": {
+                                                "keyword": {
+                                                    "type": "keyword",
+                                                    "ignore_above": 256
+                                                }
+                                            }
+                                        },
+                                        "cloud@provider": {
+                                            "type": "text",
+                                            "fields": {
+                                                "keyword": {
+                                                    "type": "keyword",
+                                                    "ignore_above": 256
+                                                }
+                                            }
+                                        },
+                                        "cloud@region": {
+                                            "type": "text",
+                                            "fields": {
+                                                "keyword": {
+                                                    "type": "keyword",
+                                                    "ignore_above": 256
+                                                }
+                                            }
+                                        },
+                                        "container@id": {
+                                            "type": "text",
+                                            "fields": {
+                                                "keyword": {
+                                                    "type": "keyword",
+                                                    "ignore_above": 256
+                                                }
+                                            }
+                                        },
+                                        "host@arch": {
+                                            "type": "text",
+                                            "fields": {
+                                                "keyword": {
+                                                    "type": "keyword",
+                                                    "ignore_above": 256
+                                                }
+                                            }
+                                        },
+                                        "host@id": {
+                                            "type": "text",
+                                            "fields": {
+                                                "keyword": {
+                                                    "type": "keyword",
+                                                    "ignore_above": 256
+                                                }
+                                            }
+                                        },
+                                        "host@name": {
+                                            "type": "text",
+                                            "fields": {
+                                                "keyword": {
+                                                    "type": "keyword",
+                                                    "ignore_above": 256
+                                                }
+                                            }
+                                        },
+                                        "host@type": {
+                                            "type": "text",
+                                            "fields": {
+                                                "keyword": {
+                                                    "type": "keyword",
+                                                    "ignore_above": 256
+                                                }
+                                            }
+                                        },
+                                        "k8s@namespace@name": {
+                                            "type": "text",
+                                            "fields": {
+                                                "keyword": {
+                                                    "type": "keyword",
+                                                    "ignore_above": 256
+                                                }
+                                            }
+                                        },
+                                        "k8s@node@name": {
+                                            "type": "text",
+                                            "fields": {
+                                                "keyword": {
+                                                    "type": "keyword",
+                                                    "ignore_above": 256
+                                                }
+                                            }
+                                        },
+                                        "k8s@pod@name": {
+                                            "type": "text",
+                                            "fields": {
+                                                "keyword": {
+                                                    "type": "keyword",
+                                                    "ignore_above": 256
+                                                }
+                                            }
+                                        },
+                                        "os@description": {
+                                            "type": "text",
+                                            "fields": {
+                                                "keyword": {
+                                                    "type": "keyword",
+                                                    "ignore_above": 256
+                                                }
+                                            }
+                                        },
+                                        "os@name": {
+                                            "type": "text",
+                                            "fields": {
+                                                "keyword": {
+                                                    "type": "keyword",
+                                                    "ignore_above": 256
+                                                }
+                                            }
+                                        },
+                                        "os@type": {
+                                            "type": "text",
+                                            "fields": {
+                                                "keyword": {
+                                                    "type": "keyword",
+                                                    "ignore_above": 256
+                                                }
+                                            }
+                                        },
+                                        "os@version": {
+                                            "type": "text",
+                                            "fields": {
+                                                "keyword": {
+                                                    "type": "keyword",
+                                                    "ignore_above": 256
+                                                }
+                                            }
+                                        },
+                                        "process@command": {
+                                            "type": "text",
+                                            "fields": {
+                                                "keyword": {
+                                                    "type": "keyword",
+                                                    "ignore_above": 256
+                                                }
+                                            }
+                                        },
+                                        "process@command_args": {
+                                            "type": "text",
+                                            "fields": {
+                                                "keyword": {
+                                                    "type": "keyword",
+                                                    "ignore_above": 256
+                                                }
+                                            }
+                                        },
+                                        "process@command_line": {
+                                            "type": "text",
+                                            "fields": {
+                                                "keyword": {
+                                                    "type": "keyword",
+                                                    "ignore_above": 256
+                                                }
+                                            }
+                                        },
+                                        "process@executable@name": {
+                                            "type": "text",
+                                            "fields": {
+                                                "keyword": {
+                                                    "type": "keyword",
+                                                    "ignore_above": 256
+                                                }
+                                            }
+                                        },
+                                        "process@executable@path": {
+                                            "type": "text",
+                                            "fields": {
+                                                "keyword": {
+                                                    "type": "keyword",
+                                                    "ignore_above": 256
+                                                }
+                                            }
+                                        },
+                                        "process@owner": {
+                                            "type": "text",
+                                            "fields": {
+                                                "keyword": {
+                                                    "type": "keyword",
+                                                    "ignore_above": 256
+                                                }
+                                            }
+                                        },
+                                        "process@pid": {
+                                            "type": "long"
+                                        },
+                                        "process@runtime@description": {
+                                            "type": "text",
+                                            "fields": {
+                                                "keyword": {
+                                                    "type": "keyword",
+                                                    "ignore_above": 256
+                                                }
+                                            }
+                                        },
+                                        "process@runtime@name": {
+                                            "type": "text",
+                                            "fields": {
+                                                "keyword": {
+                                                    "type": "keyword",
+                                                    "ignore_above": 256
+                                                }
+                                            }
+                                        },
+                                        "process@runtime@version": {
+                                            "type": "text",
+                                            "fields": {
+                                                "keyword": {
+                                                    "type": "keyword",
+                                                    "ignore_above": 256
+                                                }
+                                            }
+                                        },
+                                        "service@instance@id": {
+                                            "type": "text",
+                                            "fields": {
+                                                "keyword": {
+                                                    "type": "keyword",
+                                                    "ignore_above": 256
+                                                }
+                                            }
+                                        },
+                                        "service@name": {
+                                            "type": "text",
+                                            "fields": {
+                                                "keyword": {
+                                                    "type": "keyword",
+                                                    "ignore_above": 256
+                                                }
+                                            }
+                                        },
+                                        "service@namespace": {
+                                            "type": "text",
+                                            "fields": {
+                                                "keyword": {
+                                                    "type": "keyword",
+                                                    "ignore_above": 256
+                                                }
+                                            }
+                                        },
+                                        "telemetry@auto@version": {
+                                            "type": "text",
+                                            "fields": {
+                                                "keyword": {
+                                                    "type": "keyword",
+                                                    "ignore_above": 256
+                                                }
+                                            }
+                                        },
+                                        "telemetry@sdk@language": {
+                                            "type": "text",
+                                            "fields": {
+                                                "keyword": {
+                                                    "type": "keyword",
+                                                    "ignore_above": 256
+                                                }
+                                            }
+                                        },
+                                        "telemetry@sdk@name": {
+                                            "type": "text",
+                                            "fields": {
+                                                "keyword": {
+                                                    "type": "keyword",
+                                                    "ignore_above": 256
+                                                }
+                                            }
+                                        },
+                                        "telemetry@sdk@version": {
+                                            "type": "text",
+                                            "fields": {
+                                                "keyword": {
+                                                    "type": "keyword",
+                                                    "ignore_above": 256
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "flags": {
+                    "type": "long"
+                },
+                "isMonotonic": {
+                    "type": "boolean"
+                },
+                "kind": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "name": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "schemaUrl": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "serviceName": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "startTime": {
+                    "type": "date"
+                },
+                "time": {
+                    "type": "date"
+                },
+                "unit": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "value": {
+                    "type": "long"
+                }
+            }
+        }
+    },
+    "kube-state-metrics": {
+        "mappings": {
+            "properties": {
+                "monitoring": {
+                    "properties": {
+                        "metrics": {
+                            "properties": {
+                                "beat": {
+                                    "properties": {
+                                        "cpu": {
+                                            "properties": {
+                                                "system": {
+                                                    "properties": {
+                                                        "ticks": {
+                                                            "type": "long"
+                                                        }
+                                                    }
+                                                },
+                                                "total": {
+                                                    "properties": {
+                                                        "ticks": {
+                                                            "type": "long"
+                                                        },
+                                                        "time": {
+                                                            "properties": {
+                                                                "ms": {
+                                                                    "type": "long"
+                                                                }
+                                                            }
+                                                        },
+                                                        "value": {
+                                                            "type": "long"
+                                                        }
+                                                    }
+                                                },
+                                                "user": {
+                                                    "properties": {
+                                                        "ticks": {
+                                                            "type": "long"
+                                                        },
+                                                        "time": {
+                                                            "properties": {
+                                                                "ms": {
+                                                                    "type": "long"
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "handles": {
+                                            "properties": {
+                                                "limit": {
+                                                    "properties": {
+                                                        "hard": {
+                                                            "type": "long"
+                                                        },
+                                                        "soft": {
+                                                            "type": "long"
+                                                        }
+                                                    }
+                                                },
+                                                "open": {
+                                                    "type": "long"
+                                                }
+                                            }
+                                        },
+                                        "info": {
+                                            "properties": {
+                                                "ephemeral_id": {
+                                                    "type": "text",
+                                                    "fields": {
+                                                        "keyword": {
+                                                            "type": "keyword",
+                                                            "ignore_above": 256
+                                                        }
+                                                    }
+                                                },
+                                                "uptime": {
+                                                    "properties": {
+                                                        "ms": {
+                                                            "type": "long"
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "memstats": {
+                                            "properties": {
+                                                "gc_next": {
+                                                    "type": "long"
+                                                },
+                                                "memory_alloc": {
+                                                    "type": "long"
+                                                },
+                                                "memory_total": {
+                                                    "type": "long"
+                                                }
+                                            }
+                                        },
+                                        "runtime": {
+                                            "properties": {
+                                                "goroutines": {
+                                                    "type": "long"
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "libbeat": {
+                                    "properties": {
+                                        "config": {
+                                            "properties": {
+                                                "module": {
+                                                    "properties": {
+                                                        "running": {
+                                                            "type": "long"
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "output": {
+                                            "properties": {
+                                                "read": {
+                                                    "properties": {
+                                                        "bytes": {
+                                                            "type": "long"
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "pipeline": {
+                                            "properties": {
+                                                "clients": {
+                                                    "type": "long"
+                                                },
+                                                "events": {
+                                                    "properties": {
+                                                        "active": {
+                                                            "type": "long"
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "system": {
+                                    "properties": {
+                                        "load": {
+                                            "properties": {
+                                                "1": {
+                                                    "type": "float"
+                                                },
+                                                "15": {
+                                                    "type": "float"
+                                                },
+                                                "5": {
+                                                    "type": "float"
+                                                },
+                                                "norm": {
+                                                    "properties": {
+                                                        "1": {
+                                                            "type": "float"
+                                                        },
+                                                        "15": {
+                                                            "type": "float"
+                                                        },
+                                                        "5": {
+                                                            "type": "float"
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "otel-v1-apm-span-000001": {
+        "mappings": {
+            "dynamic_templates": [
+                {
+                    "resource_attributes_map": {
+                        "path_match": "resource.attributes.*",
+                        "mapping": {
+                            "type": "keyword"
+                        }
+                    }
+                },
+                {
+                    "span_attributes_map": {
+                        "path_match": "span.attributes.*",
+                        "mapping": {
+                            "type": "keyword"
+                        }
+                    }
+                }
+            ],
+            "date_detection": false,
+            "properties": {
+                "droppedAttributesCount": {
+                    "type": "long"
+                },
+                "droppedEventsCount": {
+                    "type": "long"
+                },
+                "droppedLinksCount": {
+                    "type": "long"
+                },
+                "durationInNanos": {
+                    "type": "long"
+                },
+                "endTime": {
+                    "type": "date_nanos"
+                },
+                "events": {
+                    "type": "nested",
+                    "properties": {
+                        "attributes": {
+                            "properties": {
+                                "app@payment@transaction@id": {
+                                    "type": "text",
+                                    "fields": {
+                                        "keyword": {
+                                            "type": "keyword",
+                                            "ignore_above": 256
+                                        }
+                                    }
+                                },
+                                "app@quote@cost@total": {
+                                    "type": "float"
+                                },
+                                "app@shipping@cost@total": {
+                                    "type": "text",
+                                    "fields": {
+                                        "keyword": {
+                                            "type": "keyword",
+                                            "ignore_above": 256
+                                        }
+                                    }
+                                },
+                                "app@shipping@tracking@id": {
+                                    "type": "text",
+                                    "fields": {
+                                        "keyword": {
+                                            "type": "keyword",
+                                            "ignore_above": 256
+                                        }
+                                    }
+                                },
+                                "exception@message": {
+                                    "type": "text",
+                                    "fields": {
+                                        "keyword": {
+                                            "type": "keyword",
+                                            "ignore_above": 256
+                                        }
+                                    }
+                                },
+                                "exception@stacktrace": {
+                                    "type": "text",
+                                    "fields": {
+                                        "keyword": {
+                                            "type": "keyword",
+                                            "ignore_above": 256
+                                        }
+                                    }
+                                },
+                                "exception@type": {
+                                    "type": "text",
+                                    "fields": {
+                                        "keyword": {
+                                            "type": "keyword",
+                                            "ignore_above": 256
+                                        }
+                                    }
+                                },
+                                "message@id": {
+                                    "type": "long"
+                                },
+                                "message@type": {
+                                    "type": "text",
+                                    "fields": {
+                                        "keyword": {
+                                            "type": "keyword",
+                                            "ignore_above": 256
+                                        }
+                                    }
+                                },
+                                "message@uncompressed_size": {
+                                    "type": "long"
+                                }
+                            }
+                        },
+                        "droppedAttributesCount": {
+                            "type": "long"
+                        },
+                        "name": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "time": {
+                            "type": "date_nanos"
+                        }
+                    }
+                },
+                "instrumentationScope": {
+                    "properties": {
+                        "name": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "version": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        }
+                    }
+                },
+                "kind": {
+                    "type": "keyword",
+                    "ignore_above": 128
+                },
+                "links": {
+                    "type": "nested",
+                    "properties": {
+                        "attributes": {
+                            "type": "object"
+                        },
+                        "droppedAttributesCount": {
+                            "type": "long"
+                        },
+                        "spanId": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "traceId": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "traceState": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        }
+                    }
+                },
+                "name": {
+                    "type": "keyword",
+                    "ignore_above": 1024
+                },
+                "parentSpanId": {
+                    "type": "keyword",
+                    "ignore_above": 256
+                },
+                "resource": {
+                    "properties": {
+                        "attributes": {
+                            "properties": {
+                                "cloud@account@id": {
+                                    "type": "keyword"
+                                },
+                                "cloud@availability_zone": {
+                                    "type": "keyword"
+                                },
+                                "cloud@platform": {
+                                    "type": "keyword"
+                                },
+                                "cloud@provider": {
+                                    "type": "keyword"
+                                },
+                                "cloud@region": {
+                                    "type": "keyword"
+                                },
+                                "container@id": {
+                                    "type": "keyword"
+                                },
+                                "host@arch": {
+                                    "type": "keyword"
+                                },
+                                "host@id": {
+                                    "type": "keyword"
+                                },
+                                "host@name": {
+                                    "type": "keyword"
+                                },
+                                "host@type": {
+                                    "type": "keyword"
+                                },
+                                "k8s@namespace@name": {
+                                    "type": "keyword"
+                                },
+                                "k8s@node@name": {
+                                    "type": "keyword"
+                                },
+                                "k8s@pod@name": {
+                                    "type": "keyword"
+                                },
+                                "os@description": {
+                                    "type": "keyword"
+                                },
+                                "os@name": {
+                                    "type": "keyword"
+                                },
+                                "os@type": {
+                                    "type": "keyword"
+                                },
+                                "os@version": {
+                                    "type": "keyword"
+                                },
+                                "process@command": {
+                                    "type": "keyword"
+                                },
+                                "process@command_args": {
+                                    "type": "keyword"
+                                },
+                                "process@command_line": {
+                                    "type": "keyword"
+                                },
+                                "process@executable@name": {
+                                    "type": "keyword"
+                                },
+                                "process@executable@path": {
+                                    "type": "keyword"
+                                },
+                                "process@owner": {
+                                    "type": "keyword"
+                                },
+                                "process@pid": {
+                                    "type": "keyword"
+                                },
+                                "process@runtime@description": {
+                                    "type": "keyword"
+                                },
+                                "process@runtime@name": {
+                                    "type": "keyword"
+                                },
+                                "process@runtime@version": {
+                                    "type": "keyword"
+                                },
+                                "service@instance@id": {
+                                    "type": "keyword"
+                                },
+                                "service@name": {
+                                    "type": "keyword"
+                                },
+                                "service@namespace": {
+                                    "type": "keyword"
+                                },
+                                "telemetry@auto@version": {
+                                    "type": "keyword"
+                                },
+                                "telemetry@sdk@language": {
+                                    "type": "keyword"
+                                },
+                                "telemetry@sdk@name": {
+                                    "type": "keyword"
+                                },
+                                "telemetry@sdk@version": {
+                                    "type": "keyword"
+                                }
+                            }
+                        }
+                    }
+                },
+                "serviceName": {
+                    "type": "keyword"
+                },
+                "span": {
+                    "properties": {
+                        "attributes": {
+                            "properties": {
+                                "app@ads@ad_request_type": {
+                                    "type": "keyword"
+                                },
+                                "app@ads@ad_response_type": {
+                                    "type": "keyword"
+                                },
+                                "app@ads@category": {
+                                    "type": "keyword"
+                                },
+                                "app@ads@contextKeys": {
+                                    "type": "keyword"
+                                },
+                                "app@ads@contextKeys@count": {
+                                    "type": "keyword"
+                                },
+                                "app@ads@count": {
+                                    "type": "keyword"
+                                },
+                                "app@cart@items@count": {
+                                    "type": "keyword"
+                                },
+                                "app@currency@conversion@from": {
+                                    "type": "keyword"
+                                },
+                                "app@currency@conversion@to": {
+                                    "type": "keyword"
+                                },
+                                "app@email@recipient": {
+                                    "type": "keyword"
+                                },
+                                "app@featureflag@enabled": {
+                                    "type": "keyword"
+                                },
+                                "app@featureflag@name": {
+                                    "type": "keyword"
+                                },
+                                "app@filtered_products@count": {
+                                    "type": "keyword"
+                                },
+                                "app@filtered_products@list": {
+                                    "type": "keyword"
+                                },
+                                "app@order@amount": {
+                                    "type": "keyword"
+                                },
+                                "app@order@id": {
+                                    "type": "keyword"
+                                },
+                                "app@order@items@count": {
+                                    "type": "keyword"
+                                },
+                                "app@payment@amount": {
+                                    "type": "keyword"
+                                },
+                                "app@payment@card_type": {
+                                    "type": "keyword"
+                                },
+                                "app@payment@card_valid": {
+                                    "type": "keyword"
+                                },
+                                "app@payment@charged": {
+                                    "type": "keyword"
+                                },
+                                "app@product@id": {
+                                    "type": "keyword"
+                                },
+                                "app@product@name": {
+                                    "type": "keyword"
+                                },
+                                "app@product@quantity": {
+                                    "type": "keyword"
+                                },
+                                "app@products@count": {
+                                    "type": "keyword"
+                                },
+                                "app@products_recommended@count": {
+                                    "type": "keyword"
+                                },
+                                "app@quote@cost@total": {
+                                    "type": "keyword"
+                                },
+                                "app@quote@items@count": {
+                                    "type": "keyword"
+                                },
+                                "app@recommendation@cache_enabled": {
+                                    "type": "keyword"
+                                },
+                                "app@shipping@amount": {
+                                    "type": "keyword"
+                                },
+                                "app@shipping@cost@total": {
+                                    "type": "keyword"
+                                },
+                                "app@shipping@items@count": {
+                                    "type": "keyword"
+                                },
+                                "app@shipping@tracking@id": {
+                                    "type": "keyword"
+                                },
+                                "app@shipping@zip_code": {
+                                    "type": "keyword"
+                                },
+                                "app@synthetic_request": {
+                                    "type": "keyword"
+                                },
+                                "app@user@currency": {
+                                    "type": "keyword"
+                                },
+                                "app@user@id": {
+                                    "type": "keyword"
+                                },
+                                "busy_ns": {
+                                    "type": "keyword"
+                                },
+                                "code@filepath": {
+                                    "type": "keyword"
+                                },
+                                "code@function": {
+                                    "type": "keyword"
+                                },
+                                "code@lineno": {
+                                    "type": "keyword"
+                                },
+                                "code@namespace": {
+                                    "type": "keyword"
+                                },
+                                "db@instance": {
+                                    "type": "keyword"
+                                },
+                                "db@redis@database_index": {
+                                    "type": "keyword"
+                                },
+                                "db@redis@flags": {
+                                    "type": "keyword"
+                                },
+                                "db@statement": {
+                                    "type": "keyword"
+                                },
+                                "db@system": {
+                                    "type": "keyword"
+                                },
+                                "db@type": {
+                                    "type": "keyword"
+                                },
+                                "db@url": {
+                                    "type": "keyword"
+                                },
+                                "decode_time_microseconds": {
+                                    "type": "keyword"
+                                },
+                                "grpc@error_message": {
+                                    "type": "keyword"
+                                },
+                                "grpc@error_name": {
+                                    "type": "keyword"
+                                },
+                                "http@client_ip": {
+                                    "type": "keyword"
+                                },
+                                "http@flavor": {
+                                    "type": "keyword"
+                                },
+                                "http@host": {
+                                    "type": "keyword"
+                                },
+                                "http@method": {
+                                    "type": "keyword"
+                                },
+                                "http@request_content_length": {
+                                    "type": "keyword"
+                                },
+                                "http@request_content_length_uncompressed": {
+                                    "type": "keyword"
+                                },
+                                "http@response_content_length": {
+                                    "type": "keyword"
+                                },
+                                "http@route": {
+                                    "type": "keyword"
+                                },
+                                "http@scheme": {
+                                    "type": "keyword"
+                                },
+                                "http@status_code": {
+                                    "type": "keyword"
+                                },
+                                "http@status_text": {
+                                    "type": "keyword"
+                                },
+                                "http@target": {
+                                    "type": "keyword"
+                                },
+                                "http@url": {
+                                    "type": "keyword"
+                                },
+                                "http@user_agent": {
+                                    "type": "keyword"
+                                },
+                                "idle_ns": {
+                                    "type": "keyword"
+                                },
+                                "idle_time_microseconds": {
+                                    "type": "keyword"
+                                },
+                                "messaging@destination": {
+                                    "type": "keyword"
+                                },
+                                "messaging@destination@kind": {
+                                    "type": "keyword"
+                                },
+                                "messaging@destination@name": {
+                                    "type": "keyword"
+                                },
+                                "messaging@destination_kind": {
+                                    "type": "keyword"
+                                },
+                                "messaging@kafka@message@offset": {
+                                    "type": "keyword"
+                                },
+                                "messaging@kafka@partition": {
+                                    "type": "keyword"
+                                },
+                                "messaging@kafka@source@partition": {
+                                    "type": "keyword"
+                                },
+                                "messaging@message@payload_size_bytes": {
+                                    "type": "keyword"
+                                },
+                                "messaging@message_id": {
+                                    "type": "keyword"
+                                },
+                                "messaging@message_payload_size_bytes": {
+                                    "type": "keyword"
+                                },
+                                "messaging@operation": {
+                                    "type": "keyword"
+                                },
+                                "messaging@system": {
+                                    "type": "keyword"
+                                },
+                                "net@host@ip": {
+                                    "type": "keyword"
+                                },
+                                "net@host@name": {
+                                    "type": "keyword"
+                                },
+                                "net@host@port": {
+                                    "type": "keyword"
+                                },
+                                "net@peer@ip": {
+                                    "type": "keyword"
+                                },
+                                "net@peer@name": {
+                                    "type": "keyword"
+                                },
+                                "net@peer@port": {
+                                    "type": "keyword"
+                                },
+                                "net@sock@peer@addr": {
+                                    "type": "keyword"
+                                },
+                                "net@sock@peer@port": {
+                                    "type": "keyword"
+                                },
+                                "net@transport": {
+                                    "type": "keyword"
+                                },
+                                "peer@ipv4": {
+                                    "type": "keyword"
+                                },
+                                "peer@service": {
+                                    "type": "keyword"
+                                },
+                                "phoenix@action": {
+                                    "type": "keyword"
+                                },
+                                "phoenix@plug": {
+                                    "type": "keyword"
+                                },
+                                "query_time_microseconds": {
+                                    "type": "keyword"
+                                },
+                                "queue_time_microseconds": {
+                                    "type": "keyword"
+                                },
+                                "rpc@grpc@status_code": {
+                                    "type": "keyword"
+                                },
+                                "rpc@method": {
+                                    "type": "keyword"
+                                },
+                                "rpc@service": {
+                                    "type": "keyword"
+                                },
+                                "rpc@system": {
+                                    "type": "keyword"
+                                },
+                                "rpc@user_agent": {
+                                    "type": "keyword"
+                                },
+                                "sinatra@template_name": {
+                                    "type": "keyword"
+                                },
+                                "source": {
+                                    "type": "keyword"
+                                },
+                                "thread@id": {
+                                    "type": "keyword"
+                                },
+                                "thread@name": {
+                                    "type": "keyword"
+                                },
+                                "total_time_microseconds": {
+                                    "type": "keyword"
+                                }
+                            }
+                        }
+                    }
+                },
+                "spanId": {
+                    "type": "keyword",
+                    "ignore_above": 256
+                },
+                "startTime": {
+                    "type": "date_nanos"
+                },
+                "status": {
+                    "properties": {
+                        "code": {
+                            "type": "integer"
+                        },
+                        "message": {
+                            "type": "keyword"
+                        }
+                    }
+                },
+                "traceGroup": {
+                    "type": "keyword",
+                    "ignore_above": 1024
+                },
+                "traceGroupFields": {
+                    "properties": {
+                        "durationInNanos": {
+                            "type": "long"
+                        },
+                        "endTime": {
+                            "type": "date_nanos"
+                        },
+                        "statusCode": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "traceId": {
+                    "type": "keyword",
+                    "ignore_above": 256
+                },
+                "traceState": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "jaeger-span-2024-05-08": {
+        "mappings": {
+            "dynamic_templates": [
+                {
+                    "span_tags_map": {
+                        "path_match": "tag.*",
+                        "mapping": {
+                            "ignore_above": 256,
+                            "type": "keyword"
+                        }
+                    }
+                },
+                {
+                    "process_tags_map": {
+                        "path_match": "process.tag.*",
+                        "mapping": {
+                            "ignore_above": 256,
+                            "type": "keyword"
+                        }
+                    }
+                }
+            ],
+            "properties": {
+                "duration": {
+                    "type": "long"
+                },
+                "flags": {
+                    "type": "integer"
+                },
+                "logs": {
+                    "type": "nested",
+                    "dynamic": "false",
+                    "properties": {
+                        "fields": {
+                            "type": "nested",
+                            "dynamic": "false",
+                            "properties": {
+                                "key": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                },
+                                "tagType": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                },
+                                "value": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "timestamp": {
+                            "type": "long"
+                        }
+                    }
+                },
+                "operationName": {
+                    "type": "keyword",
+                    "ignore_above": 256
+                },
+                "parentSpanID": {
+                    "type": "keyword",
+                    "ignore_above": 256
+                },
+                "process": {
+                    "properties": {
+                        "serviceName": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "tag": {
+                            "properties": {
+                                "cloud@account@id": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                },
+                                "cloud@availability_zone": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                },
+                                "cloud@platform": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                },
+                                "cloud@provider": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                },
+                                "cloud@region": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                },
+                                "container@id": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                },
+                                "host@arch": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                },
+                                "host@id": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                },
+                                "host@name": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                },
+                                "host@type": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                },
+                                "k8s@namespace@name": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                },
+                                "k8s@node@name": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                },
+                                "k8s@pod@name": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                },
+                                "os@description": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                },
+                                "os@name": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                },
+                                "os@type": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                },
+                                "os@version": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                },
+                                "process@command": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                },
+                                "process@command_args": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                },
+                                "process@command_line": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                },
+                                "process@executable@name": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                },
+                                "process@executable@path": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                },
+                                "process@owner": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                },
+                                "process@pid": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                },
+                                "process@runtime@description": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                },
+                                "process@runtime@name": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                },
+                                "process@runtime@version": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                },
+                                "service@instance@id": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                },
+                                "service@namespace": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                },
+                                "telemetry@auto@version": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                },
+                                "telemetry@sdk@language": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                },
+                                "telemetry@sdk@name": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                },
+                                "telemetry@sdk@version": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "tags": {
+                            "type": "nested",
+                            "dynamic": "false",
+                            "properties": {
+                                "key": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                },
+                                "tagType": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                },
+                                "value": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        }
+                    }
+                },
+                "references": {
+                    "type": "nested",
+                    "dynamic": "false",
+                    "properties": {
+                        "refType": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "spanID": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "traceID": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "spanID": {
+                    "type": "keyword",
+                    "ignore_above": 256
+                },
+                "startTime": {
+                    "type": "long"
+                },
+                "startTimeMillis": {
+                    "type": "date",
+                    "format": "epoch_millis"
+                },
+                "tag": {
+                    "properties": {
+                        "app@ads@ad_request_type": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "app@ads@ad_response_type": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "app@ads@category": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "app@ads@contextKeys": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "app@ads@contextKeys@count": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "app@ads@count": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "app@cart@items@count": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "app@currency@conversion@from": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "app@currency@conversion@to": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "app@email@recipient": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "app@featureflag@enabled": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "app@featureflag@name": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "app@filtered_products@count": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "app@filtered_products@list": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "app@order@amount": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "app@order@id": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "app@order@items@count": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "app@payment@amount": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "app@payment@card_type": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "app@payment@card_valid": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "app@payment@charged": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "app@product@id": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "app@product@name": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "app@product@quantity": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "app@products@count": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "app@products_recommended@count": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "app@quote@cost@total": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "app@quote@items@count": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "app@recommendation@cache_enabled": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "app@shipping@amount": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "app@shipping@cost@total": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "app@shipping@items@count": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "app@shipping@tracking@id": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "app@shipping@zip_code": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "app@synthetic_request": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "app@user@currency": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "app@user@id": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "busy_ns": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "code@filepath": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "code@function": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "code@lineno": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "code@namespace": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "db@instance": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "db@redis@database_index": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "db@redis@flags": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "db@statement": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "db@system": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "db@type": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "db@url": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "decode_time_microseconds": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "error": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "http@client_ip": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "http@flavor": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "http@host": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "http@method": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "http@request_content_length": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "http@request_content_length_uncompressed": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "http@response_content_length": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "http@route": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "http@scheme": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "http@status_code": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "http@status_text": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "http@target": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "http@url": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "http@user_agent": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "idle_ns": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "idle_time_microseconds": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "internal@span@format": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "messaging@destination": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "messaging@destination@kind": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "messaging@destination@name": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "messaging@destination_kind": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "messaging@kafka@message@offset": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "messaging@kafka@partition": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "messaging@kafka@source@partition": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "messaging@message@payload_size_bytes": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "messaging@message_id": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "messaging@message_payload_size_bytes": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "messaging@operation": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "messaging@system": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "net@host@ip": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "net@host@name": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "net@host@port": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "net@peer@ip": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "net@peer@name": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "net@peer@port": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "net@sock@peer@addr": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "net@sock@peer@port": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "net@transport": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "otel@library@name": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "otel@library@version": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "otel@status_code": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "peer@service": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "phoenix@action": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "phoenix@plug": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "query_time_microseconds": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "queue_time_microseconds": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "rpc@grpc@status_code": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "rpc@method": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "rpc@service": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "rpc@system": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "rpc@user_agent": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "sinatra@template_name": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "source": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "span@kind": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "thread@id": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "thread@name": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "total_time_microseconds": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "tags": {
+                    "type": "nested",
+                    "dynamic": "false",
+                    "properties": {
+                        "key": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "tagType": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        },
+                        "value": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "traceID": {
+                    "type": "keyword",
+                    "ignore_above": 256
+                }
+            }
+        }
+    },
+    "ecommerce": {
+        "mappings": {
+            "properties": {
+                "amazon_prime__y_or_n": {
+                    "type": "boolean"
+                },
+                "asin": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "best_seller_tag__y_or_n": {
+                    "type": "boolean"
+                },
+                "brand": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "browsenode": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "colour": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "crawl_timestamp": {
+                    "type": "date"
+                },
+                "delivery_type": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "discount_percentage": {
+                    "type": "float"
+                },
+                "formats___editions": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "image_urls__small": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "large": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "left_in_stock": {
+                    "type": "integer"
+                },
+                "medium": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "meta_keywords": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "name_of_author_for_books": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "no__of_offers": {
+                    "type": "integer"
+                },
+                "no__of_reviews": {
+                    "type": "integer"
+                },
+                "no__of_sellers": {
+                    "type": "integer"
+                },
+                "other_items_customers_buy": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "product_name": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "product_url": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "rating": {
+                    "type": "float"
+                },
+                "sales_price": {
+                    "type": "float"
+                },
+                "sales_rank_in_parent_category": {
+                    "properties": {
+                        "AmazonLaunchpad": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "BabyProducts": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "BagsWalletsandLuggage": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "Beauty": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "Books": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "CarMotorbike": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "ClothingAccessories": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "ComputersAccessories": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "Electronics": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "GroceryGourmetFoods": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "HealthPersonalCare": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "HomeImprovement": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "HomeKitchen": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "IndustrialScientific": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "MusicalInstruments": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "PetSupplies": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "ShoesHandbags": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "SportsFitnessOutdoors": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "ToysGames": {
+                            "type": "text",
+                            "fields": {
+                                "keyword": {
+                                    "type": "keyword",
+                                    "ignore_above": 256
+                                }
+                            }
+                        }
+                    }
+                },
+                "seller_id": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "seller_name": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "uniq_id": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "weight": {
+                    "type": "float"
+                }
+            }
+        }
+    },
+    "travel": {
+        "mappings": {
+            "properties": {
+                "Accommodation cost": {
+                    "type": "double"
+                },
+                "Accommodation type": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "Destination": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "Duration (days)": {
+                    "type": "integer"
+                },
+                "End date": {
+                    "type": "date"
+                },
+                "Start date": {
+                    "type": "date"
+                },
+                "Transportation cost": {
+                    "type": "double"
+                },
+                "Transportation type": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "Traveler age": {
+                    "type": "integer"
+                },
+                "Traveler gender": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "Traveler name": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "Traveler nationality": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "Trip ID": {
+                    "type": "long"
+                }
+            }
+        }
+    }
+}
