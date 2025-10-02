@@ -1,0 +1,49 @@
+@baseUrl = http://localhost:9200
+
+###
+GET {{baseUrl}}/_cat/indices
+
+###
+POST {{baseUrl}}/_plugins/_ppl
+Content-Type: application/x-ndjson
+
+{
+    "query": "source=test"
+}
+
+
+###
+PUT {{baseUrl}}/test
+Content-Type: application/x-ndjson
+
+{
+  "mappings": {
+    "properties": {
+      "@timestamp" : {
+        "type" : "date",
+        "format" : "yyyy-MM-dd HH:mm:ss" 
+      }
+    }
+  }
+}
+
+###
+POST {{baseUrl}}/test/_bulk
+Content-Type: application/x-ndjson
+
+{"index": {"_id": 1}}
+{"timestamp" : "2025-05-01 05:49:00","v": 1, "a": "1"}
+{"index": {"_id": 2}}
+{"timestamp" : "2025-05-01 06:49:00","v": 2, "b": "2"}
+{"index": {"_id": 3}}
+{"timestamp" : "2025-05-01 07:49:00","v": 3, "c": "3"}
+
+###
+PUT {{baseUrl}}/test/_settings
+Content-Type: application/x-ndjson
+
+{
+  "index": {
+    "max_result_window": 1
+  }
+}
