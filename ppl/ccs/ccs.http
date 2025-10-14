@@ -1,0 +1,106 @@
+@local = http://localhost:9200
+@remote = http://localhost:19200
+
+###
+GET {{local}}/_cat/indices
+
+###
+GET {{remote}}/_cat/indices
+
+###
+POST {{local}}/products,b:products/_search
+Content-Type: application/x-ndjson
+
+
+{"size":0,"aggs":{"by_category":{"terms":{"field":"id","size":10}}}}
+
+###
+GET {{remote}}/top_queries-2025.10.14-55813/_search
+
+###
+POST {{local}}/_plugins/_ppl
+Content-Type: application/x-ndjson
+
+{
+    "query": "source=`products,b:products` | stats count() by id"
+}
+
+###
+GET {{local}}/b:products/_mappings
+
+###
+GET {{local}}/b:products/_field_caps?fields=*
+
+
+### Cluster settings
+PUT {{local}}/_cluster/settings
+Content-Type: application/x-ndjson
+
+{
+  "persistent": {
+    "cluster": {
+      "remote": {
+        "remoteCluster": {
+          "seeds": ["opensearch-b:9300"],
+          "skip_unavailable": true
+        }
+      }
+    }
+  }
+}
+
+
+###
+PUT {{remote}}/products
+Content-Type: application/x-ndjson
+
+{
+  "mappings": {
+    "properties": {
+      "id":       { "type": "keyword" },
+      "name":     { "type": "keyword" },
+      "category": { "type": "keyword" },
+      "price":    { "type": "double" }
+    }
+  }
+}
+
+###
+POST {{remote}}/_bulk 
+Content-Type: application/x-ndjson
+
+{ "index": { "_index": "products", "_id": "1" } }
+{ "id":"1","name":"OpenSearch Hoodie","category":"apparel","price":49.99 }
+{ "index": { "_index": "products", "_id": "2" } }
+{ "id":"2","name":"Query Language Mug","category":"merch","price":14.95 }
+{ "index": { "_index": "products", "_id": "3" } }
+{ "id":"3","name":"Calcite Hat","category":"apparel","price":24.50 }
+
+###
+PUT {{local}}/products
+Content-Type: application/x-ndjson
+
+{
+  "mappings": {
+    "properties": {
+      "id":       { "type": "keyword" },
+      "name":     { "type": "keyword" },
+      "category": { "type": "keyword" },
+      "price":    { "type": "double" }
+    }
+  }
+}
+
+###
+POST {{local}}/_bulk 
+Content-Type: application/x-ndjson
+
+{ "index": { "_index": "products", "_id": "4" } }
+{ "id":"4","name":"Data Hoodie","category":"apparel","price":39.99 }
+{ "index": { "_index": "products", "_id": "5" } }
+{ "id":"5","name":"PPL Sticker","category":"merch","price":2.99 }
+{ "index": { "_index": "products", "_id": "6" } }
+{ "id":"6","name":"Observability T-shirt","category":"apparel","price":19.99 }
+
+###
+DELETE {{local}}/products
