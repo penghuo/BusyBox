@@ -104,17 +104,6 @@ Content-Type: application/x-ndjson
 }
 
 ###
-PUT {{baseUrl}}/_plugins/_query/settings
-Content-Type: application/x-ndjson
-
-{
-  "transient" : {
-    "plugins.calcite.enabled" : true,
-    "plugins.calcite.pushdown.enabled": false
-  }
-}
-
-###
 GET {{baseUrl}}/_cat/indices
 
 

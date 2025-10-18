@@ -1,0 +1,249 @@
+@baseUrl = http://localhost:9200
+
+###
+GET {{baseUrl}}/_cat/indices
+
+###
+GET {{baseUrl}}/sso_logs-nginx-prod-2024.05.08
+
+###
+PUT {{baseUrl}}/_plugins/_query/settings
+Content-Type: application/x-ndjson
+
+{
+  "transient" : {
+    "plugins.calcite.enabled" : true
+  }
+}
+
+###
+PUT {{baseUrl}}/_plugins/_query/settings
+Content-Type: application/x-ndjson
+
+{
+  "transient" : {
+    "plugins.calcite.pushdown.enabled": true
+  }
+}
+
+### JOIN
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+    "query": "source=sso_logs-nginx-prod-2024.05.08 | where ISPRESENT(code) | join type=inner left=SUCCESS right=FAILED on SUCCESS.remote = FAILED.ClientIP [ source=sso_logs-nginx-prod-2024.05.08 | where ISPRESENT(log) | parse log '.+client: (?<ClientIP>.+?),.*' | head 10000 ] | dedup ClientIP, agent"
+}
+
+### JOIN
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+    "query": "source=sso_logs-nginx-prod-2024.05.08 | where ISPRESENT(code) | join type=inner left=SUCCESS right=FAILED on SUCCESS.remote = FAILED.ClientIP [ source=sso_logs-nginx-prod-2024.05.08 | where ISPRESENT(log) | parse log '.+client: (?<ClientIP>.+?),.*' | head 10000 ]"
+}
+
+### Issue 1
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+    "query": "source=sso_logs-nginx-prod-2024.05.08 | where ISPRESENT(log) | parse log '.*request:\\s*\"(?<HttpRequest>.+?)\",.*' | stats count() by HttpRequest"
+}
+
+### OS 3.2 Pass Calcite=True
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+    "query": "source=sso_logs-nginx-prod-2024.05.08 | where ISPRESENT(log) | parse log 'request:\\s*\"(?<HttpRequest>.+?)\"' | fields HttpRequest"
+}
+
+
+### OS 3.3 Failed Calcite=True
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+    "query": "source=sso_logs-nginx-prod-2024.05.08 | where ISPRESENT(log) | parse log 'request:\\s*\"(?<HttpRequest>.+?)\"' | fields HttpRequest"
+}
+
+
+### OS 3.3 Pass Calcite=True
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+    "query": "source=sso_logs-nginx-prod-2024.05.08 | where ISPRESENT(log) | rex field=log 'request:\\s*\"(?<HttpRequest>.+?)\"' | fields HttpRequest"
+}
+
+### OS 3.3 Pass Calcite=True
+POST {{baseUrl}}/_plugins/_ppl/_explain
+Content-Type: application/x-ndjson
+
+{
+    "query": "source=sso_logs-nginx-prod-2024.05.08 | where ISPRESENT(log) | rex field=log 'request:\\s*\"(?<HttpRequest>.+?)\"' | top HttpRequest"
+}
+
+
+### OS 3.3 FAIL Calcite=True
+POST {{baseUrl}}/_plugins/_ppl
+Content-Type: application/x-ndjson
+
+{
+    "query": "source=sso_logs-nginx-prod-2024.05.08 | where ISPRESENT(log) | rex field=log 'request:\\s*\"(?<HttpRequest>.+?)\"' | top HttpRequest"
+}
+
+
+### OS 3.2 Failed Calcite=True
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+    "query": "source=sso_logs-nginx-prod-2024.05.08 | where ISPRESENT(log) | parse log 'request:\\s*\"(?<HttpRequest>.+?)\"' | stats count() by HttpRequest"
+}
+
+### OS 3.2 Failed Calcite=True
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+    "query": "source=sso_logs-nginx-prod-2024.05.08 | where ISPRESENT(log) | stats count() by HttpRequest"
+}
+
+###
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+    "query": "source=test | where ISPRESENT(log) | parse log 'request:\\s*\"(?<HttpRequest>.+?)\"' | stats count() by HttpRequest"
+}
+
+###
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+    "query": "source=test | where ISPRESENT(log) | rex field=log 'request:\\s*\"(?<HttpRequest>.+?)\"' | stats count() by HttpRequest"
+}
+
+###
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+    "query": "source=sso_logs-nginx-prod-2024.05.08 | regex log='timed out' | fields log"
+}
+
+###
+DELETE {{baseUrl}}/sso_logs-nginx-prod-2024.05.08
+
+###
+POST {{baseUrl}}/test/_bulk
+Content-Type: application/x-ndjson
+
+{"index":{"_index":"test","_id":"45"}}
+{"@timestamp":"2024-05-08T00:02:31.176Z","log":"2024/05/08 00:02:31 [error] 28#28: *13312301 upstream timed out (110: Connection timed out) while reading response header from upstream, client: 10.0.1.151, server: , request: \"POST /api/checkout HTTP/1.1\", upstream: \"http://172.20.78.151:8080/api/checkout\", host: \"nginx-service:90\""}
+
+###
+PUT {{baseUrl}}/test
+Content-Type: application/x-ndjson
+
+{
+        "mappings": {
+            "properties": {
+                "@timestamp": {
+                    "type": "date"
+                },
+                "agent": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "code": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "host": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "log": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "method": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "path": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "referer": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "remote": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "size": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "user": {
+                    "type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                }
+            }
+        }
+    }

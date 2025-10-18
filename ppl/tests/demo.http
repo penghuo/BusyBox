@@ -9,7 +9,7 @@ Content-Type: application/x-ndjson
 
 {
   "persistent" : {
-    "plugins.calcite.enabled" : true
+    "plugins.calcite.enabled" : false
   }
 }
 
@@ -233,4 +233,254 @@ Content-Type: application/x-ndjson
       }
     }
   }
+}
+
+###
+DELETE {{baseUrl}}/demo-index
+
+###
+POST {{baseUrl}}/demo-index/_bulk
+Content-Type: application/x-ndjson
+
+{ "index": {} }
+{ "region": "us-east", "sales": 100 }
+{ "index": {} }
+{ "region": "us-east", "sales": 200 }
+{ "index": {} }
+{ "region": "us-west", "sales": 300 }
+{ "index": {} }
+{ "region": "us-west", "sales": 400 }
+
+
+###
+POST {{baseUrl}}/_plugins/_sql/
+Content-Type: application/x-ndjson
+
+{
+    "query": "select count(sales) from demo-index"
+}
+
+###
+POST {{baseUrl}}/_plugins/_sql/
+Content-Type: application/x-ndjson
+
+{
+    "query": "select sum(sales) from demo-index"
+}
+
+
+###
+POST {{baseUrl}}/_plugins/_ppl/_explain?format=dsl
+Content-Type: application/x-ndjson
+
+{
+    "query": "source=demo-index | where region='us-east'"
+}
+
+###
+POST {{baseUrl}}/_plugins/_ppl/_explain
+Content-Type: application/x-ndjson
+
+{
+    "query": "source=demo-index | fields _id"
+}
+
+###
+POST {{baseUrl}}/_plugins/_sql/_explain?format=dsl
+Content-Type: application/x-ndjson
+
+{
+    "query": "select _id from demo-index"
+}
+
+###
+GET {{baseUrl}}/log00001
+
+
+###
+PUT {{baseUrl}}/log00001
+Content-Type: application/x-ndjson
+
+{
+  "mappings": {
+    "properties": {
+      "@timestamp": {
+        "type": "date"
+      },
+      "v": {
+        "type": "integer"
+      },
+      "other": {
+        "type": "text"
+      }      
+    }
+  }
+}
+
+###
+POST {{baseUrl}}/log00001/_bulk
+Content-Type: application/x-ndjson
+
+{ "index": { "_id": 1 } }
+{"@timestamp":"2025-08-19T04:53:24Z","v":1,"other":"10"}
+{ "index": { "_id": 2 } }
+{"@timestamp":"2025-08-20T04:53:24Z","v":2,"other":"20"}
+
+###
+POST {{baseUrl}}/_search?format=yaml
+Content-Type: application/x-ndjson
+
+{
+  "query"
+}
+
+
+
+###
+POST {{baseUrl}}/_plugins/_ppl?format=yaml
+Content-Type: application/x-ndjson
+
+{
+    "query": "source=log00001 20"
+}
+
+
+###
+POST {{baseUrl}}/_plugins/_ppl/_explain
+Content-Type: application/x-ndjson
+
+{
+    "query": "source=log00001 20"
+}
+
+###
+POST {{baseUrl}}/_plugins/_ppl/_explain?format=yaml
+Content-Type: application/x-ndjson
+
+{
+    "query": "source=log00001 20"
+}
+
+###
+POST {{baseUrl}}/_plugins/_ppl/_explain?format=nosupported
+Content-Type: application/x-ndjson
+
+{
+    "query": "source=log00001 20"
+}
+
+###
+POST {{baseUrl}}/_plugins/_ppl/_explain?format=yaml
+Content-Type: application/x-ndjson
+
+{
+    "query": "source=log0000"
+}
+
+###
+POST {{baseUrl}}/_plugins/_ppl/_explain?format=yaml
+Content-Type: application/x-ndjson
+
+{
+    "query": "explain codegen source=log00001 | join type=inner left=l right=r on l.v=r.v [source=log00001]"
+}
+
+###
+POST {{baseUrl}}/_plugins/_ppl/_explain?format=yaml
+Content-Type: application/x-ndjson
+
+{
+    "query": "explain codegen source=log00001 | timechart span=1d count() by other"
+}
+
+
+
+###
+DELETE {{baseUrl}}/log00001
+
+
+###
+POST {{baseUrl}}/log00001/_bulk
+Content-Type: application/x-ndjson
+
+{ "index": { "_id": 6 } }
+{"@timestamp":"2025-10-10T04:00:00Z","v":1,"other":"10"}
+{ "index": { "_id": 1 } }
+{"@timestamp":"2025-10-14T04:00:00Z","v":1,"other":"10"}
+{ "index": { "_id": 2 } }
+{"@timestamp":"2025-10-14T04:10:00Z","v":2,"other":"20"}
+{ "index": { "_id": 3 } }
+{"@timestamp":"2025-10-14T04:20:00Z","v":3,"other":"20"}
+{ "index": { "_id": 4 } }
+{"@timestamp":"2025-10-14T04:30:00Z","v":4,"other":"20"}
+{ "index": { "_id": 5 } }
+{"@timestamp":"2025-10-14T04:40:00Z","v":5,"other":"20"}
+
+###
+GET {{baseUrl}}/log00001/_field_caps?fields=*
+
+###
+POST {{baseUrl}}/_plugins/_sql/_explain
+Content-Type: application/x-ndjson
+
+{
+    "query": "select v from log00001 where `@timestamp`>'2025-10-14 04:00:00' and `@timestamp`<'2025-10-14 04:40:00'"
+}
+
+###
+POST {{baseUrl}}/_plugins/_sql/_explain
+Content-Type: application/x-ndjson
+
+{
+    "query": "select v from log00001 where `@timestamp`>1760414400000 and `@timestamp`<1760416800000"
+}
+
+###
+POST {{baseUrl}}/_plugins/_sql/_explain
+Content-Type: application/x-ndjson
+
+{
+    "query": "select v from log00001 where unix_timestamp(@timestamp) * 1000 > 1760414400000 and unix_timestamp(@timestamp) * 1000 < 1760416800000"
+}
+
+
+###
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+    "query": "source=log00001 @timestamp>1760414400000"
+}
+
+###
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+    "query": "source=log00001 @timestamp>1760414400"
+}
+
+###
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+    "query": "source=log00001 earliest=1760414400"
+}
+
+###
+POST {{baseUrl}}/_plugins/_ppl/_explain
+Content-Type: application/x-ndjson
+
+{
+    "query": "source=log00001 earliest=1760414400000"
+}
+
+
+###
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+    "query": "source=log00001 earliest=1760414400 latest=1760416800"
 }

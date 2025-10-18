@@ -3,49 +3,75 @@
 ###
 GET {{baseUrl}}/_cat/indices
 
-
-### DynamicSchema 
-POST {{baseUrl}}/_plugins/_ppl/
-Content-Type: application/x-ndjson
-
-{
-    "query": "source=test | fields v, a, b, c"
-}
-
-### DynamicSchema 
-POST {{baseUrl}}/_plugins/_ppl/
-Content-Type: application/x-ndjson
-
-{
-    "query": "source=test | eval aa=v+a"
-}
-
-### DynamicSchema 
-POST {{baseUrl}}/_plugins/_ppl/
+### MAP PASS
+POST {{baseUrl}}/_plugins/_ppl
 Content-Type: application/x-ndjson
 
 {
     "query": "source=test"
 }
 
-### MAP 
+### PASS
 POST {{baseUrl}}/_plugins/_ppl/
 Content-Type: application/x-ndjson
 
 {
-    "query": "explain extended source=test | fields `_MAP['v']`"
+    "query": "source=test | fields _MAP.v"
 }
 
-
-###
-PUT {{baseUrl}}/_plugins/_query/settings
+### PASS
+POST {{baseUrl}}/_plugins/_ppl/_explain
 Content-Type: application/x-ndjson
 
 {
-  "transient" : {
-    "plugins.calcite.enabled" : true
+    "query": "source=test | where _MAP.v=1"
+}
+
+### PASS
+POST {{baseUrl}}/_plugins/_ppl/_explain
+Content-Type: application/x-ndjson
+
+{
+    "query": "source=test | stats count by _MAP.v"
+}
+
+
+
+###
+PUT {{baseUrl}}/test
+Content-Type: application/x-ndjson
+
+{
+  "mappings": {
+    "dynamic": "false",
+    "properties": {
+      "v" : {
+        "type" : "integer"
+      }
+    }
   }
 }
+
+###
+POST {{baseUrl}}/test/_bulk
+Content-Type: application/x-ndjson
+
+{"index": {"_id": 1}}
+{"v": 1, "a": "1"}
+{"index": {"_id": 2}}
+{"v": 2, "b": "2"}
+{"index": {"_id": 3}}
+{"v": 3, "c": "3"}
+
+
+
+
+
+
+
+
+
+
 
 ###
 PUT {{baseUrl}}/test

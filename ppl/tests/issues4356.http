@@ -1,0 +1,119 @@
+@baseUrl = http://localhost:9200
+
+###
+DELETE {{baseUrl}}/log00001
+
+###
+PUT {{baseUrl}}/log00001
+Content-Type: application/x-ndjson
+
+{
+  "mappings": {
+    "properties": {
+      "v": {
+        "type": "text"
+      }
+    }
+  }
+}
+
+###
+POST {{baseUrl}}/log00001/_bulk
+Content-Type: application/x-ndjson
+
+{"index": { "_id": 1 }}
+{"v": "value=1", "a": 1, "vint": 1, "vdouble": 1.0}
+{"index": { "_id": 2 }}
+{"v": "value=1.5", "a": 2, "vint": 1, "vdouble": 1.0}
+{"index": { "_id": 3 }}
+{"v": "value=true", "a": 3, "vint": 1, "vdouble": 1.0}
+{"index": { "_id": 4 }}
+{"v": "value=abcde", "a": 4, "vint": 1, "vdouble": 1.0}
+
+
+### PASS
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+  "query": "source=log00001 | rex field=v 'value=(?<digits>[\\w\\d\\.]*)' | eval m=digits * 10 | eval d=digits/10 | sort a | fields m, d"
+}
+
+### PASS
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+  "query": "source=log00001 | rex field=v 'value=(?<digits>[\\w\\d\\.]*)' | eval r=concat('v-', digits) | sort a | fields r"
+}
+
+### PASS
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+  "query": "source=log00001 | rex field=v 'value=(?<digits>[\\w\\d\\.]*)' | stats count(digits) as cnt, sum(digits) as sum, avg(digits) as avg"
+}
+
+### PASS
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+  "query": "source=log00001 | rex field=v 'value=(?<digits>[\\w\\d\\.]*)' | eval dd=digits==1"
+}
+
+###
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+  "query": "source=log00001 | eval c=vint==vdouble"
+}
+
+
+
+
+###
+DELETE {{baseUrl}}/log00001
+
+###
+PUT {{baseUrl}}/log00001
+Content-Type: application/x-ndjson
+
+{
+  "mappings": {
+    "properties": {
+      "v": {
+        "type": "text"
+      }
+    }
+  }
+}
+
+###
+POST {{baseUrl}}/log00001/_bulk
+Content-Type: application/x-ndjson
+
+{"index": { "_id": 1 }}
+{"v": "1"}
+{"index": { "_id": 2 }}
+{"v": "1.1"}
+{"index": { "_id": 3 }}
+{"v": "1.5"}
+
+###
+POST {{baseUrl}}/_plugins/_sql/
+Content-Type: application/x-ndjson
+
+{
+  "query": "select v = true from log00001"
+}
+
+###
+POST {{baseUrl}}/_plugins/_sql/
+Content-Type: application/x-ndjson
+
+{
+  "query": "select v * 10 from log00001"
+}
