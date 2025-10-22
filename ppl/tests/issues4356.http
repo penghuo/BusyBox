@@ -10,9 +10,11 @@ Content-Type: application/x-ndjson
 {
   "mappings": {
     "properties": {
-      "v": {
-        "type": "text"
-      }
+      "v": {"type": "text"},
+      "strnum": {"type": "keyword"},
+      "vint": {"type": "integer"},
+      "vdouble": {"type": "double"},
+      "vboolean": {"type": "boolean"}
     }
   }
 }
@@ -22,14 +24,147 @@ POST {{baseUrl}}/log00001/_bulk
 Content-Type: application/x-ndjson
 
 {"index": { "_id": 1 }}
-{"v": "value=1", "a": 1, "vint": 1, "vdouble": 1.0}
+{"v": "value=1", "a": 1, "vint": 1, "vdouble": 1.0, "strnum": "1"}
 {"index": { "_id": 2 }}
-{"v": "value=1.5", "a": 2, "vint": 1, "vdouble": 1.0}
+{"v": "value=1.5", "a": 2, "vint": 1, "vdouble": 1.5, "strnum": "2"}
 {"index": { "_id": 3 }}
-{"v": "value=true", "a": 3, "vint": 1, "vdouble": 1.0}
+{"v": "value=true", "a": 3, "vint": 1, "vdouble": 1.0, "vboolean":true, "strnum": "3"}
 {"index": { "_id": 4 }}
-{"v": "value=abcde", "a": 4, "vint": 1, "vdouble": 1.0}
+{"v": "value=abcde", "a": 4, "vint": 1, "vdouble": 1.0, "strnum": "unknown"}
 
+### PASS
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+  "query": "source=log00001 | rex field=v 'value=(?<digits>[\\w\\d\\.]*)' | eval r=if(digits, 1, 0) | fields r"
+}
+
+
+### PASS
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+  "query": "source=log00001 | eval r=if(true, 1, 0) | fields r"
+}
+
+### PASS
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+  "query": "source=log00001 | eval e='1000'==1000, en='1000'!=1000, ed='1000'==1000.0, edn='1000'!=1000.0, l='1001'>1000, ld='1001'>1000.0 | fields e, en, ed, edn, l, ld"
+}
+
+### PASS
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+  "query": "source=log00001 | eval e='1000'==1000, ed='1000'==1000.0, el='1001'>1000, ed='1001'>1000.0 | fields e, ed, el"
+}
+
+
+### PASS
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+  "query": "source=log00001 | rex field=v 'value=(?<digits>[\\w\\d\\.]*)' | eventstats sum(digits) as sum, count(digits) as cnt by strnum| fields a, sum, cnt"
+}
+
+
+### PASS
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+  "query": "source=log00001 | rex field=v 'value=(?<digits>[\\w\\d\\.]*)' | eventstats sum(a) as sum by vdouble | fields sum"
+}
+
+
+### PASS
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+  "query": "source=log00001 | eval f =round(\"1.5\") | fields f"
+}
+
+### PASS
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+  "query": "source=log00001 | eval f =round(1.5, 1) | fields f"
+}
+
+
+### PASS
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+  "query": "source=log00001 | eval f =\"5\" - 10 | fields f"
+}
+
+### PASS
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+  "query": "source=log00001 | eval f=floor(\"5.2\") | fields f"
+}
+
+### PASS
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+  "query": "source=log00001 | eval f=ceil(\"5.2\") | fields f"
+}
+
+### PASS
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+  "query": "source=log00001 | eval f=ceiling(\"6.2\") | fields f"
+}
+
+
+### PASS
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+  "query": "source=log00001 | eval minus=\"5\" - 10 | eval r=round(\"1.5\",  1) | eval f=floor(\"5.2\") | eval c=ceil(\"5.2\") | fields minus, r, f, c"
+}
+
+### PASS
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+  "query": "source=log00001 | eval minus=\"5\" - 10 | fields minus"
+}
+
+### PASS
+POST {{baseUrl}}/_plugins/_ppl/_explain
+Content-Type: application/x-ndjson
+
+{
+  "query": "source=log00001 | eval v=abs('5') | fields v"
+}
+
+### PASS
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+  "query": "source=log00001 | eval v=max('5') | fields v"
+}
 
 ### PASS
 POST {{baseUrl}}/_plugins/_ppl/
@@ -56,22 +191,36 @@ Content-Type: application/x-ndjson
 }
 
 ### PASS
+POST {{baseUrl}}/_plugins/_ppl
+Content-Type: application/x-ndjson
+
+{
+  "query": "source=log00001 | rex field=v 'value=(?<digits>[\\w\\d\\.]*)' | eval i=digits==vint, d=digits==vdouble, b=digits==vboolean| fields i, d, b"
+}
+
+### PASS
+POST {{baseUrl}}/_plugins/_ppl
+Content-Type: application/x-ndjson
+
+{
+  "query": "source=log00001 | rex field=v 'value=(?<digits>[\\w\\d\\.]*)' | eval isNull=isnull(digits) | fields isNull"
+}
+
+### PASS
 POST {{baseUrl}}/_plugins/_ppl/
 Content-Type: application/x-ndjson
 
 {
-  "query": "source=log00001 | rex field=v 'value=(?<digits>[\\w\\d\\.]*)' | eval dd=digits==1"
+  "query": "source=log00001 | stats count(strnum) as cnt, sum(strnum) as sum, avg(strnum) as avg"
 }
 
-###
+### PASS
 POST {{baseUrl}}/_plugins/_ppl/
 Content-Type: application/x-ndjson
 
 {
-  "query": "source=log00001 | eval c=vint==vdouble"
+  "query": "source=log00001 | rex field=v 'value=(?<digits>[\\w\\d\\.]*)' | eval m=digits + digits, d=digits * digits | sort a | fields m, d"
 }
-
-
 
 
 ###

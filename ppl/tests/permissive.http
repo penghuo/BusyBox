@@ -36,6 +36,15 @@ Content-Type: application/x-ndjson
 }
 
 
+###
+PUT {{baseUrl}}/_plugins/_query/settings
+Content-Type: application/x-ndjson
+
+{
+  "transient" : {
+    "plugins.ppl.query.permissive" : true
+  }
+}
 
 ###
 PUT {{baseUrl}}/test
@@ -64,11 +73,13 @@ Content-Type: application/x-ndjson
 {"v": 3, "c": "3"}
 
 
+### PASS
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
 
-
-
-
-
+{
+    "query": "source=test | fields v, a"
+}
 
 
 
