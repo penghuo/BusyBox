@@ -24,20 +24,21 @@ POST {{baseUrl}}/log00001/_bulk
 Content-Type: application/x-ndjson
 
 {"index": { "_id": 1 }}
-{"v": "value=1", "a": 1, "vint": 1, "vdouble": 1.0, "strnum": "1"}
+{"v": "value=11.0", "a": 1, "vint": 1, "vdouble": 11.0, "strnum": "1"}
 {"index": { "_id": 2 }}
 {"v": "value=1.5", "a": 2, "vint": 1, "vdouble": 1.5, "strnum": "2"}
 {"index": { "_id": 3 }}
-{"v": "value=true", "a": 3, "vint": 1, "vdouble": 1.0, "vboolean":true, "strnum": "3"}
+{"v": "value=2.0", "a": 3, "vint": 1, "vdouble": 1.0, "vboolean":true, "strnum": "3"}
 {"index": { "_id": 4 }}
-{"v": "value=abcde", "a": 4, "vint": 1, "vdouble": 1.0, "strnum": "unknown"}
+{"v": "value=abc", "a": 4, "vint": 1, "vdouble": 0.9, "strnum": "unknown"}
+
 
 ### PASS
 POST {{baseUrl}}/_plugins/_ppl/
 Content-Type: application/x-ndjson
 
 {
-  "query": "source=log00001 | rex field=v 'value=(?<digits>[\\w\\d\\.]*)' | eval r=if(digits, 1, 0) | fields r"
+  "query": "source=log00001 | rex field=v 'value=(?<digits>[\\d\\.])' | stats count(digits)"
 }
 
 
@@ -46,8 +47,10 @@ POST {{baseUrl}}/_plugins/_ppl/
 Content-Type: application/x-ndjson
 
 {
-  "query": "source=log00001 | eval r=if(true, 1, 0) | fields r"
+  "query": "source=log00001 | rex field=v 'value=(?<digits>[d\\.]*)' | eventstats sum(digits) as sum, count(digits) as cnt by strnum| fields a, sum, cnt"
 }
+
+
 
 ### PASS
 POST {{baseUrl}}/_plugins/_ppl/
@@ -97,15 +100,6 @@ POST {{baseUrl}}/_plugins/_ppl/
 Content-Type: application/x-ndjson
 
 {
-  "query": "source=log00001 | eval f =round(1.5, 1) | fields f"
-}
-
-
-### PASS
-POST {{baseUrl}}/_plugins/_ppl/
-Content-Type: application/x-ndjson
-
-{
   "query": "source=log00001 | eval f =\"5\" - 10 | fields f"
 }
 
@@ -124,15 +118,6 @@ Content-Type: application/x-ndjson
 {
   "query": "source=log00001 | eval f=ceil(\"5.2\") | fields f"
 }
-
-### PASS
-POST {{baseUrl}}/_plugins/_ppl/
-Content-Type: application/x-ndjson
-
-{
-  "query": "source=log00001 | eval f=ceiling(\"6.2\") | fields f"
-}
-
 
 ### PASS
 POST {{baseUrl}}/_plugins/_ppl/
@@ -171,7 +156,7 @@ POST {{baseUrl}}/_plugins/_ppl/
 Content-Type: application/x-ndjson
 
 {
-  "query": "source=log00001 | rex field=v 'value=(?<digits>[\\w\\d\\.]*)' | eval m=digits * 10 | eval d=digits/10 | sort a | fields m, d"
+  "query": "source=log00001 | rex field=v 'value=(?<digits>[\\w\\d\\.]*)' | eval m=digits * 10 | eval d=digits/10 | sort a | fields digits, m, d"
 }
 
 ### PASS
@@ -187,7 +172,15 @@ POST {{baseUrl}}/_plugins/_ppl/
 Content-Type: application/x-ndjson
 
 {
-  "query": "source=log00001 | rex field=v 'value=(?<digits>[\\w\\d\\.]*)' | stats count(digits) as cnt, sum(digits) as sum, avg(digits) as avg"
+  "query": "source=log00001 | rex field=v 'value=(?<digits>[\\w\\d\\.]*)' | fields digits"
+}
+
+### PASS
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+  "query": "source=log00001 | rex field=v 'value=(?<digits>[\\w\\d\\.]*)' | stats max(digits) as max, max(vdouble), min(digits) as min, min(vdouble) "
 }
 
 ### PASS
@@ -199,12 +192,21 @@ Content-Type: application/x-ndjson
 }
 
 ### PASS
-POST {{baseUrl}}/_plugins/_ppl
+POST {{baseUrl}}/_plugins/_ppl/
 Content-Type: application/x-ndjson
 
 {
-  "query": "source=log00001 | rex field=v 'value=(?<digits>[\\w\\d\\.]*)' | eval isNull=isnull(digits) | fields isNull"
+  "query": "source=log00001 | rex field=v 'value=(?<digits>[\\w\\d\\.]*)' | stats sum(digits)"
 }
+
+### PASS
+POST {{baseUrl}}/_plugins/_ppl/
+Content-Type: application/x-ndjson
+
+{
+  "query": "source=log00001 | rex field=v 'value=(?<digits>[\\w\\d\\.]*)' | eventstats sum(digits) as s | fields v, s"
+}
+
 
 ### PASS
 POST {{baseUrl}}/_plugins/_ppl/
@@ -212,57 +214,4 @@ Content-Type: application/x-ndjson
 
 {
   "query": "source=log00001 | stats count(strnum) as cnt, sum(strnum) as sum, avg(strnum) as avg"
-}
-
-### PASS
-POST {{baseUrl}}/_plugins/_ppl/
-Content-Type: application/x-ndjson
-
-{
-  "query": "source=log00001 | rex field=v 'value=(?<digits>[\\w\\d\\.]*)' | eval m=digits + digits, d=digits * digits | sort a | fields m, d"
-}
-
-
-###
-DELETE {{baseUrl}}/log00001
-
-###
-PUT {{baseUrl}}/log00001
-Content-Type: application/x-ndjson
-
-{
-  "mappings": {
-    "properties": {
-      "v": {
-        "type": "text"
-      }
-    }
-  }
-}
-
-###
-POST {{baseUrl}}/log00001/_bulk
-Content-Type: application/x-ndjson
-
-{"index": { "_id": 1 }}
-{"v": "1"}
-{"index": { "_id": 2 }}
-{"v": "1.1"}
-{"index": { "_id": 3 }}
-{"v": "1.5"}
-
-###
-POST {{baseUrl}}/_plugins/_sql/
-Content-Type: application/x-ndjson
-
-{
-  "query": "select v = true from log00001"
-}
-
-###
-POST {{baseUrl}}/_plugins/_sql/
-Content-Type: application/x-ndjson
-
-{
-  "query": "select v * 10 from log00001"
 }
